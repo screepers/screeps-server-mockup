@@ -23,10 +23,11 @@ async function go () {
   const modules = {
     main: `module.exports.loop = function(){ console.log('Tick!',Game.time); Game.spawns.Spawn1.createCreep([MOVE]); _.each(Game.creeps, c=>c.move(Math.ceil(Math.random()*8))) }`
   }
-  await fs.readdirAsync('../screeps-quorum/dist')
-    .filter(file => file.match(/js$/))
-    .map(file => fs.readFileAsync(`../screeps-quorum/dist/${file}`, 'utf8').then(data => ({ file, data })))
-    .each(({ file, data }) => (modules[path.basename(file).slice(0, -3)] = data))
+  // The following code loads the bot code from a local folder
+  // await fs.readdirAsync('../screeps-quorum/dist')
+  //   .filter(file => file.match(/js$/))
+  //   .map(file => fs.readFileAsync(`../screeps-quorum/dist/${file}`, 'utf8').then(data => ({ file, data })))
+  //   .each(({ file, data }) => (modules[path.basename(file).slice(0, -3)] = data))
 
   await Promise.resolve(Object.keys(db))
     .map(col => db[col])
@@ -46,16 +47,16 @@ async function go () {
   ])
 
   await addBot({
-    name: 'Quorum',
+    username: 'Bot',
     room: 'W0N0',
     x: 25,
     y: 25,
     modules
   })
 
-  function addBot ({ name, room, x, y, spawnName = 'Spawn1', modules = {}}) {
+  function addBot ({ username, room, x, y, spawnName = 'Spawn1', modules = {}}) {
     return Promise.resolve()
-      .then(() => db.users.insert({ _id: 'bot', username: 'bot', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 1 }))
+      .then(() => db.users.insert({ username, cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 10000 }))
       .then(user => Promise.all([
         db['users.code'].insert({ user: user._id, branch: 'default', modules, activeWorld: true }),
         db.rooms.update({ _id: room }, { $set: { active: true } }),
