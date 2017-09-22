@@ -1,0 +1,465 @@
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 9868
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 10871
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 18441
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 19038
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 19446
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 19685
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 20099
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 20481
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 21004
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 21280
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 22366
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 22864
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 23054
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 23654
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 24598
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 24927
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 25166
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 25631
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 26048
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 27461
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 27601
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 27931
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 28198
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 31691
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 32240
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 32715
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 1328
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 2232
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 2853
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 3627
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+ - /home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js
+New child runtime process 13721
+Loading mods from "/home/adam/projects/screeps/unit-test/mods.json"
+Error loading "/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/index.js": TypeError: Cannot convert undefined or null to object
+    at Function.assign (<anonymous>)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/driver/index.js:14:10)
+    at engine (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/engine/index.js:4:22)
+    at module.exports (/home/adam/projects/screeps/unit-test/node_modules/screepsmod-mongo/lib/index.js:4:41)
+    at modsJson.mods.forEach.file (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:37:21)
+    at Array.forEach (<anonymous>)
+    at Object.exports.load (/home/adam/projects/screeps/unit-test/node_modules/@screeps/common/lib/config-manager.js:29:23)
+    at Object.exports.connect (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/index.js:77:26)
+    at Object.<anonymous> (/home/adam/projects/screeps/unit-test/node_modules/@screeps/driver/lib/runtime/runtime.js:92:29)
+    at Module._compile (module.js:573:30)
