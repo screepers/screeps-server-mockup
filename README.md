@@ -15,7 +15,7 @@ possibilities for testing bots in a fixed, known environment.
 # Usage
 
 1. Install via `npm install screepers/screeps-server-test`
-2. Write a test script (See example.js for a sample)
+2. Write a test script (See test.js for a sample)
 3. Run test script!
 
 NOTE: While the library itself works in node 6, the example.js file requires node 8 or transpiling due to using async/await
