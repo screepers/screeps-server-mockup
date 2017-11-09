@@ -22,7 +22,7 @@ class ScreepsServer {
   setOpts(opts = {}) {
     // Assign options
     opts = this.opts = Object.assign({
-      port: 21025,
+      port:     21025,
       logdir:   path.join(__dirname, '..', 'server', 'logs'),
       modfile:  path.join(__dirname, '..', 'server', 'mods.json'),
       assetdir: path.join(__dirname, '..', 'server', 'assets'),

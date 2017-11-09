@@ -101,6 +101,14 @@ class World {
   }
 
   /**
+    Get the roomObjects list for requested roomName
+  */
+  async roomObjects (roomName) {
+    const { C, db, env } = await this.load()
+    return db['rooms.objects'].find({ room: roomName })
+  }
+
+  /**
     Add a new user to the server world
   */
   async addBot ({ username, room, x, y, spawnName = 'Spawn1', modules = {} }) {
@@ -119,4 +127,4 @@ class World {
   }
 }
 
-module.exports = World;
+module.exports = World

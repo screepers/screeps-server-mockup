@@ -37,7 +37,8 @@ class User extends EventEmitter {
     return this.getData('lastUsedCpu')
   }
   get memory () {
-    throw new Error('unimplemented (yet)')
+    const { env } = this._server.common.storage
+    return env.get(env.keys.MEMORY + this.id)
   }
 
   /**
@@ -62,4 +63,4 @@ class User extends EventEmitter {
   }
 }
 
-module.exports = User;
+module.exports = User

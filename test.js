@@ -43,15 +43,8 @@ process.on('unhandledPromiseRejection', (err) => {
       await server.tick()
     }
     console.log('Game time:', await server.world.gameTime)
-
-    // Show bot's objects
-    /*
-    let objs = await db['rooms.objects'].find()
-    console.log("Bot's Objects:")
-    objs.forEach(obj => {
-      console.log(`${obj.type} (${obj.x}, ${obj.y}) ${obj.name || ''}`)
-    })
-    */
+    console.log(await user.memory)
+    console.log(await server.world.roomObjects('W0N0'))
 
     // Stop server
     console.log('Done, killing process.')
