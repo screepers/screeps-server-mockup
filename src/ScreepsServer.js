@@ -61,6 +61,7 @@ class ScreepsServer {
     } catch (err) {
       throw new Error(`Error connecting to driver: ${err.stack}`)
     }
+    return this
   }
   async tick (opts = {}) {
     const stages = opts.stages || [
@@ -89,6 +90,7 @@ class ScreepsServer {
     } finally {
       await this.finishStage()
     }
+    return this
   }
   startStage () {
     this.resetTimeout = setTimeout(() => {
@@ -178,6 +180,7 @@ class ScreepsServer {
   }
   stop () {
     _.each(this.processes, process => process.kill())
+    return this
   }
 }
 

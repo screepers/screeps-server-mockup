@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const { EventEmitter } = require('events')
+const User = require('./user')
 const zlib = require('zlib')
 
 function getBoxTerrain () {
@@ -115,12 +115,7 @@ class World {
       db['rooms.objects'].insert({ room, type: 'spawn', x: 25, y: 25, user: user._id, name: spawnName, energy: C.SPAWN_ENERGY_START, energyCapacity: C.SPAWN_ENERGY_CAPACITY, hits: C.SPAWN_HITS, hitsMax: C.SPAWN_HITS, spawning: null, notifyWhenAttacked: true }),
     ])
     // Subscribe to console notificaiton and return emitter
-    let emitter = new EventEmitter()
-    await pubsub.subscribe(`user:${user._id}/console`, (event) => {
-      const { messages: { log = [] } } = JSON.parse(event)
-      emitter.emit('console', log, user._id, user.username)
-    })
-    return emitter
+    return new User(this.server, user).init()
   }
 }
 

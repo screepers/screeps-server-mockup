@@ -28,8 +28,8 @@ process.on('unhandledPromiseRejection', (err) => {
     //   .filter(file => file.match(/js$/))
     //   .map(file => fs.readFileAsync(`../screeps-quorum/dist/${file}`, 'utf8').then(data => ({ file, data })))
     //   .each(({ file, data }) => (modules[path.basename(file).slice(0, -3)] = data))
-    let bot = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules })
-    bot.on('console', (log, userid, username) => {
+    let user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules })
+    user.on('console', (log, userid, username) => {
       log.map(l => console.log('[console]', username, l))
     })
 
@@ -40,7 +40,7 @@ process.on('unhandledPromiseRejection', (err) => {
     // Run several ticks
     console.log('Game time:', await server.world.gameTime)
     for (let i = 0; i < 10; i++) {
-      await server.tick() // Execute exactly 1 complete tick
+      await server.tick()
     }
     console.log('Game time:', await server.world.gameTime)
 
@@ -59,5 +59,6 @@ process.on('unhandledPromiseRejection', (err) => {
     setTimeout(() => process.exit(), 1000) // needed due to open db connections keeping process open
   } catch(err) {
     console.log(err, err.stack)
+    process.exit()
   }
 })()
