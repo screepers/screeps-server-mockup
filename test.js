@@ -1,4 +1,4 @@
-const ScreepsServer = require('./src/ScreepsServer')
+const ScreepsServer = require('./')
 const zlib = require('zlib')
 const path = require('path')
 const fs = require('fs')
