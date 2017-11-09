@@ -1,5 +1,7 @@
 # screeps-server-mockup
 
+_Based on https://github.com/screepers/screeps-server-test_
+
 ## Private server package for unit tests
 
 This is a project that runs the screeps private server one tick at a time, allowing to easily check
