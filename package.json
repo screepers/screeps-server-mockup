@@ -1,6 +1,5 @@
 {
-  "name": "screeps-server-test",
-  "version": "1.0.0",
+  "name": "screeps-server-mockup",
   "main": "./src/ScreepsServer.js",
   "license": "MIT",
   "dependencies": {
@@ -9,10 +8,13 @@
   },
   "devDependencies": {
     "lodash": "^4.17.4",
+    "publish": "^0.6.0",
     "standard": "*"
   },
   "scripts": {
+    "publish": "publish",
     "lint": "standard src test",
     "test": "node test.js"
-  }
+  },
+  "version": "0.1.0"
 }

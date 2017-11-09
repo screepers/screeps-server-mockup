@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const User = require('./user')
-const zlib = require('zlib')
+const Promise = require('bluebird')
+const zlib = Promise.promisifyAll(require('zlib'))
 
 function getBoxTerrain () {
   let res = ''
