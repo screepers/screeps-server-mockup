@@ -1,36 +1,73 @@
-process.env.MODFILE = 'mods.json'
-process.env.DRIVER_MODULE = '@screeps/driver'
-
 const Promise = require('bluebird')
 const _ = require('lodash')
-const driver = require('@screeps/driver')
 const common = require('@screeps/common')
-const path = require('path')
 const cp = require('child_process')
+const driver = require('@screeps/driver')
 const fs = Promise.promisifyAll(require('fs'))
+const path = require('path')
+const World = require('./world')
 
 class ScreepsServer {
-  constructor () {
+  constructor (opts) {
     this.driver = driver
     this.common = common
     this.config = common.configManager.config
     this.constants = this.config.common.constants
     this.lastAccessibleRoomsUpdate = -20
     this.processes = {}
+    this.world = new World(this)
+    this.setOpts(opts)
   }
-  connect () {
-    return driver.connect('main')
-      .then(() => Promise.all([
-        driver.queue.create('users', 'write'),
-        driver.queue.create('rooms', 'write')
-      ]))
-      .then((data) => {
-        this.usersQueue = data[0]
-        this.roomsQueue = data[1]
+  setOpts(opts = {}) {
+    // Assign options
+    opts = this.opts = Object.assign({
+      steam_api_key: 'abc123',
+      port: 21025,
+      host: '0.0.0.0',
+      password: '',
+      cli_port: 21026,
+      cli_host: 'localhost',
+      runners_cnt: 1,
+      processors_cnt: 1,
+      logdir: 'logs',
+      modfile: 'mods.json',
+      assetdir: 'assets',
+      db: 'db.json'
+    }, opts)
+    // Define environment parameters
+    process.env.MODFILE = 'mods.json'
+    process.env.DRIVER_MODULE = '@screeps/driver'
+    process.env.STORAGE_PORT = opts.port;
+    return this
+  }
+  async connect () {
+    // Ensure logdir exists
+    await fs.mkdirAsync(this.opts.logdir).catch(() => {})
+    // Start storage process
+    console.log('Starting storage process.')
+    const process = await this.startProcess(`storage`, path.resolve(path.dirname(require.resolve('@screeps/storage')), '../bin/start.js'), {
+      MODFILE: this.opts.modfile,
+      STORAGE_PORT: this.opts.port,
+      DB_PATH: this.opts.db
+    })
+    await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject('Could not launch the storage process (timeout).'), 5000);
+      process.on('message', message => {
+        if(message !== 'storageLaunched') return
+        clearTimeout(timeout)
+        resolve()
       })
-      .catch((error) => console.log('Error connecting to driver:', error))
+    })
+	  // Connect to storage process
+	  try {
+      await driver.connect('main')
+      this.usersQueue = await driver.queue.create('users', 'write')
+      this.roomsQueue = await driver.queue.create('rooms', 'write')
+    } catch (err) {
+      throw new Error(`Error connecting to driver: ${err.stack}`)
+    }
   }
-  tick (opts = {}) {
+  async tick (opts = {}) {
     const stages = opts.stages || [
       'start',
       'getUsers',
@@ -47,16 +84,16 @@ class ScreepsServer {
       'custom',
       'finish'
     ]
-    let chain = Promise.resolve()
-    stages.forEach(stage => {
-      this.stage = stage
-      chain = chain.then((arg) => {
-        driver.config.emit('mainLoopStage', stage, arg)
-        return this[`${stage}Stage`](arg)
-      })
-    })
-    return chain
-      .catch((err) => Promise.resolve(this.finishStage()).then(() => { throw err }))
+    try {
+      let ret = undefined
+      for(let stage of stages) {
+        this.stage = stage
+        driver.config.emit('mainLoopStage', stage, ret)
+        ret = await this[`${stage}Stage`](ret)
+      }
+    } finally {
+      await this.finishStage()
+    }
   }
   startStage () {
     this.resetTimeout = setTimeout(() => {
@@ -92,15 +129,13 @@ class ScreepsServer {
   commit2Stage () {
     return driver.commitDbBulk()
   }
-  incrementGameTimeStage () {
-    return driver.incrementGameTime()
-      .then(gameTime => {
-        if (+gameTime > this.lastAccessibleRoomsUpdate + 20) {
-          this.lastAccessibleRoomsUpdate = +gameTime
-          driver.updateAccessibleRoomsList()
-        }
-        return gameTime
-      })
+  async incrementGameTimeStage () {
+    const gameTime = await driver.incrementGameTime()
+    if (+gameTime > this.lastAccessibleRoomsUpdate + 20) {
+      this.lastAccessibleRoomsUpdate = +gameTime
+      driver.updateAccessibleRoomsList()
+    }
+    return gameTime
   }
   notifyRoomsDoneStage (gameTime) {
     return driver.notifyRoomsDone(gameTime)
@@ -111,61 +146,40 @@ class ScreepsServer {
   finishStage () {
     clearTimeout(this.resetTimeout)
   }
-  startProcess (name, execPath, env) {
-    return fs.openAsync(path.resolve(this.opts.logdir, `${name}.log`), 'a')
-      .then(fd => {
-        this.processes[name] = cp.fork(path.resolve(execPath), {
-          stdio: [0, fd, fd, 'ipc'],
-          env
-        })
-        console.log(`[${name}] process ${this.processes[name].pid} started`)
-        this.processes[name].on('exit', (code, signal) => {
-          fs.closeAsync(fd).then(() => {
-            if (code) {
-              console.log(`[${name}] process ${this.processes[name].pid} exited with code ${code}, restarting...`)
-              this.startProcess(name, execPath, env)
-            } else {
-              console.log(`[${name}] process ${this.processes[name].pid} exited by signal ${signal}`)
-            }
-          })
-        })
-        return this.processes[name]
-      })
+  async startProcess (name, execPath, env) {
+    const fd = await fs.openAsync(path.resolve(this.opts.logdir, `${name}.log`), 'a')
+    this.processes[name] = cp.fork(path.resolve(execPath), { stdio: [0, fd, fd, 'ipc'], env })
+    console.log(`[${name}] process ${this.processes[name].pid} started`)
+    this.processes[name].on('exit', async (code, signal) => {
+      await fs.closeAsync(fd)
+      if (code && code !== 0) {
+        console.log(`[${name}] process ${this.processes[name].pid} exited with code ${code}, restarting...`)
+        this.startProcess(name, execPath, env)
+      } else if (code === 0) {
+        console.log(`[${name}] process ${this.processes[name].pid} stopped`)
+      } else {
+        console.log(`[${name}] process ${this.processes[name].pid} exited by signal ${signal}`)
+      }
+    })
+    return this.processes[name]
   }
-  start (opts = {}) {
-    opts = this.opts = Object.assign({
-      steam_api_key: 'abc123',
-      port: 21025,
-      host: '0.0.0.0',
-      password: '',
-      cli_port: 21026,
-      cli_host: 'localhost',
-      runners_cnt: 1,
-      processors_cnt: 1,
-      logdir: 'logs',
-      modfile: 'mods.json',
-      assetdir: 'assets',
-      db: 'db.json'
-    }, opts)
-    return Promise.resolve()
-      .then(() => this.connect())
-      .then(() => fs.mkdirAsync(opts.logdir).catch(() => {}))
-      .then(() => {
-        console.log(`Server version ${require('screeps').version}`)
-        console.log('Starting all processes.')
-        return ['runner', 'processor']
-      })
-      .map(type => this.startProcess(`engine_${type}`, path.resolve(path.dirname(require.resolve('@screeps/engine')), `${type}.js`), {
-        MODFILE: opts.modfile,
-        DRIVER_MODULE: '@screeps/driver'
-      }))
-      .all()
+  start () {
+    console.log(`Server version ${require('screeps').version}`)
+    console.log('Starting engine processes.')
+    this.startProcess('engine_runner', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'runner.js'), {
+      MODFILE: this.opts.modfile,
+      DRIVER_MODULE: '@screeps/driver',
+      STORAGE_PORT: this.opts.port
+    })
+    this.startProcess('engine_processor', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'processor.js'), {
+      MODFILE: this.opts.modfile,
+      DRIVER_MODULE: '@screeps/driver',
+      STORAGE_PORT: this.opts.port
+    })
+    return this
   }
   stop () {
-    for (let k in this.processes) {
-      let p = this.processes[k]
-      p.kill()
-    }
+    _.each(this.processes, process => process.kill())
   }
 }
 

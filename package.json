@@ -5,7 +5,6 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.0",
-    "screeps": "^2.9.0",
-    "screepsmod-mongo": "^2.0.0"
+    "screeps": "^2.9.0"
   }
 }

@@ -9,8 +9,6 @@ possibilities for testing bots in a fixed, known environment.
 # Requirements
 
 * node 6+
-* mongodb
-* redis
 
 # Usage
 

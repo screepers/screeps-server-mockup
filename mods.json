@@ -1,6 +1,5 @@
 {
 	"mods":[
-		"node_modules/screepsmod-mongo/index.js"		
 	],
 	"bots":{}
 }
