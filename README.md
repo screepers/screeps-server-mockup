@@ -1,6 +1,6 @@
 # screeps-server-mockup
 
-## Private server packadge for unit tests
+## Private server package for unit tests
 
 This is a project that runs the screeps private server one tick at a time, allowing to easily check
 data in between ticks and opens the possibilities for automatic testings in a reproductible

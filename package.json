@@ -6,5 +6,13 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "screeps": "^2.9.0"
+  },
+  "devDependencies": {
+    "lodash": "^4.17.4",
+    "standard": "*"
+  },
+  "scripts": {
+    "lint": "standard src test",
+    "test": "node test.js"
   }
 }

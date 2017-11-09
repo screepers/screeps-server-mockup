@@ -42,10 +42,10 @@ async function updateTerrainData (db, env) {
     let m = room._id.match(/(W|E)(\d+)(N|S)(\d+)/)
     let roomH = m[1] + (+m[2] + 1) + m[3] + m[4]
     let roomV = m[1] + m[2] + m[3] + (+m[4] + 1)
-    if (!_.any(terrain, {room: roomH})) {
+    if (!_.some(terrain, {room: roomH})) {
       terrain.push({room: roomH, terrain: walled})
     }
-    if (!_.any(terrain, {room: roomV})) {
+    if (!_.some(terrain, {room: roomV})) {
       terrain.push({room: roomV, terrain: walled})
     }
   })
