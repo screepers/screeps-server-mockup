@@ -32,8 +32,8 @@ process.on('unhandledPromiseRejection', (err) => {
       await server.tick()
     }
     console.log('Game time:', await server.world.gameTime)
-    console.log(await user.memory)
-    console.log(await server.world.roomObjects('W0N0'))
+    //console.log(await user.memory)
+    //console.log(await server.world.roomObjects('W0N0'))
 
     // Stop server
     console.log('Done, killing process.')

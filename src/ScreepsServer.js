@@ -3,12 +3,16 @@ const _ = require('lodash')
 const common = require('@screeps/common')
 const cp = require('child_process')
 const driver = require('@screeps/driver')
+const { EventEmitter } = require('events')
 const fs = Promise.promisifyAll(require('fs'))
 const path = require('path')
 const World = require('./world')
 
-class ScreepsServer {
+const oldLog = console.log;
+
+class ScreepsServer extends EventEmitter {
   constructor (opts) {
+    super()
     this.driver = driver
     this.common = common
     this.config = common.configManager.config
@@ -38,7 +42,7 @@ class ScreepsServer {
     // Ensure logdir exists
     await fs.mkdirAsync(this.opts.logdir).catch(() => {})
     // Start storage process
-    console.log('Starting storage process.')
+    this.emit('info', 'Starting storage process.')
     const process = await this.startProcess(`storage`, path.resolve(path.dirname(require.resolve('@screeps/storage')), '../bin/start.js'), {
       MODFILE: this.opts.modfile,
       STORAGE_PORT: this.opts.port,
@@ -54,7 +58,9 @@ class ScreepsServer {
     })
 	  // Connect to storage process
 	  try {
+      console.log = function() {} // disable console
       await driver.connect('main')
+      console.log = oldLog // enable console
       this.usersQueue = await driver.queue.create('users', 'write')
       this.roomsQueue = await driver.queue.create('rooms', 'write')
       this.connected = true
@@ -64,22 +70,9 @@ class ScreepsServer {
     return this
   }
   async tick (opts = {}) {
-    const stages = opts.stages || [
-      'start',
-      'getUsers',
-      'addUsersToQueue',
-      'waitForUsers',
-      'getRooms',
-      'addRoomsToQueue',
-      'waitForRooms',
-      'commit1',
-      'global',
-      'commit2',
-      'incrementGameTime',
-      'notifyRoomsDone',
-      'custom',
-      'finish'
-    ]
+    const stages = opts.stages || [ 'start', 'getUsers', 'addUsersToQueue', 'waitForUsers',
+      'getRooms', 'addRoomsToQueue', 'waitForRooms', 'commit1', 'global', 'commit2',
+      'incrementGameTime', 'notifyRoomsDone', 'custom', 'finish' ]
     try {
       let ret = undefined
       for(let stage of stages) {
@@ -94,7 +87,7 @@ class ScreepsServer {
   }
   startStage () {
     this.resetTimeout = setTimeout(() => {
-      console.error('Main loop reset! Stage:', this.stage)
+      this.emit('error', `Main loop reset at stage ${this.stag}`)
       driver.queue.resetAll()
     }, driver.config.mainLoopResetInterval)
     return driver.notifyTickStarted()
@@ -146,26 +139,26 @@ class ScreepsServer {
   async startProcess (name, execPath, env) {
     const fd = await fs.openAsync(path.resolve(this.opts.logdir, `${name}.log`), 'a')
     this.processes[name] = cp.fork(path.resolve(execPath), { stdio: [0, fd, fd, 'ipc'], env })
-    console.log(`[${name}] process ${this.processes[name].pid} started`)
+    this.emit('info', `[${name}] process ${this.processes[name].pid} started`)
     this.processes[name].on('exit', async (code, signal) => {
       await fs.closeAsync(fd)
       if (code && code !== 0) {
-        console.log(`[${name}] process ${this.processes[name].pid} exited with code ${code}, restarting...`)
+        this.emit('error', `[${name}] process ${this.processes[name].pid} exited with code ${code}, restarting...`)
         this.startProcess(name, execPath, env)
       } else if (code === 0) {
-        console.log(`[${name}] process ${this.processes[name].pid} stopped`)
+        this.emit('info', `[${name}] process ${this.processes[name].pid} stopped`)
       } else {
-        console.log(`[${name}] process ${this.processes[name].pid} exited by signal ${signal}`)
+        this.emit('info', `[${name}] process ${this.processes[name].pid} exited by signal ${signal}`)
       }
     })
     return this.processes[name]
   }
   async start () {
-    console.log(`Server version ${require('screeps').version}`)
+    this.emit('info', `Server version ${require('screeps').version}`)
     if (!this.connected) {
       await this.connect()
     }
-    console.log('Starting engine processes.')
+    this.emit('info', 'Starting engine processes.')
     this.startProcess('engine_runner', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'runner.js'), {
       MODFILE: this.opts.modfile,
       DRIVER_MODULE: '@screeps/driver',
