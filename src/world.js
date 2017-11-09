@@ -26,35 +26,31 @@ function generateMineral (room, x, y) {
   return { type: 'mineral', mineralType, density, mineralAmount: 100000, x, y, room }
 }
 
-function updateTerrainData (db, env) {
+async function updateTerrainData (db, env) {
   let walled = ''
   for (let i = 0; i < 2500; i++) {
     walled += '1'
   }
-  return Promise.all([
+  const [rooms, terrain] = await Promise.all([
     db.rooms.find(),
     db['rooms.terrain'].find()
   ])
-    .then(result => {
-      let [rooms, terrain] = result
-      rooms.forEach(room => {
-        if (room.status === 'out of borders') {
-          _.find(terrain, {room: room._id}).terrain = walled
-        }
-        let m = room._id.match(/(W|E)(\d+)(N|S)(\d+)/)
-        let roomH = m[1] + (+m[2] + 1) + m[3] + m[4]
-        let roomV = m[1] + m[2] + m[3] + (+m[4] + 1)
-        if (!_.any(terrain, {room: roomH})) {
-          terrain.push({room: roomH, terrain: walled})
-        }
-        if (!_.any(terrain, {room: roomV})) {
-          terrain.push({room: roomV, terrain: walled})
-        }
-      })
-      return zlib.deflateAsync(JSON.stringify(terrain))
-    })
-    .then(compressed => env.set(env.keys.TERRAIN_DATA, compressed.toString('base64')))
-    .then(() => 'OK')
+  rooms.forEach(room => {
+    if (room.status === 'out of borders') {
+      _.find(terrain, {room: room._id}).terrain = walled
+    }
+    let m = room._id.match(/(W|E)(\d+)(N|S)(\d+)/)
+    let roomH = m[1] + (+m[2] + 1) + m[3] + m[4]
+    let roomV = m[1] + m[2] + m[3] + (+m[4] + 1)
+    if (!_.any(terrain, {room: roomH})) {
+      terrain.push({room: roomH, terrain: walled})
+    }
+    if (!_.any(terrain, {room: roomV})) {
+      terrain.push({room: roomV, terrain: walled})
+    }
+  })
+  const compressed = await zlib.deflateAsync(JSON.stringify(terrain))
+  await env.set(env.keys.TERRAIN_DATA, compressed.toString('base64'))
 }
 
 class World {
@@ -65,17 +61,28 @@ class World {
     this.server = server
   }
 
+  /**
+    Getters
+  */
   get gameTime () {
-    const { env } = this.server.common.storage
-    return env.get('gameTime')
+    return this.load().then(({ env }) => env.get('gameTime'))
+  }
+
+  /**
+    Getters
+  */
+  async load () {
+    if (!this.server.connected) await this.server.connect()
+    const { db, env, pubsub } = this.server.common.storage
+    const C = this.server.constants
+    return { C, db, env, pubsub }
   }
 
   /**
     Reset worl data to a baren world with invaders and source keepers users plus one room (W0N0)
   */
   async reset () {
-    const { db, env } = this.server.common.storage
-    const C = this.server.constants
+    const { C, db, env } = await this.load()
     // Clear database
     await Promise.all(_.map(db, col => col.clear()))
     await env.set('gameTime', 1)
@@ -97,10 +104,9 @@ class World {
     Add a new user to the server world
   */
   async addBot ({ username, room, x, y, spawnName = 'Spawn1', modules = {} }) {
-    const { db, env, pubsub } = this.server.common.storage
-    const C = this.server.constants
+    const { C, db, env, pubsub } = await this.load()
     // Insert user and update data
-    const user = db.users.insert({ username, cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 10000 })
+    const user = await db.users.insert({ username, cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 10000 })
     await Promise.all([
       env.set(env.keys.MEMORY + user._id, '{}'),
       db.rooms.update({ _id: room }, { $set: { active: true } }),
@@ -110,19 +116,11 @@ class World {
     ])
     // Subscribe to console notificaiton and return emitter
     let emitter = new EventEmitter()
-    await pubsub.subscribe(`user:${username}/console`, (event) => {
-      const { messages: { log = [] } = {}, userId } = JSON.parse(event)
-      log.map(l => console.log('[console]', userId, l))
-      emitter.emit('console', log, userId)
+    await pubsub.subscribe(`user:${user._id}/console`, (event) => {
+      const { messages: { log = [] } } = JSON.parse(event)
+      emitter.emit('console', log, user._id, user.username)
     })
     return emitter
-  }
-
-  /**
-    Constructor
-  */
-  console(server) {
-    this.server = server
   }
 }
 

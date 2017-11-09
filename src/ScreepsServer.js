@@ -13,6 +13,7 @@ class ScreepsServer {
     this.common = common
     this.config = common.configManager.config
     this.constants = this.config.common.constants
+    this.connected = false
     this.lastAccessibleRoomsUpdate = -20
     this.processes = {}
     this.world = new World(this)
@@ -21,21 +22,14 @@ class ScreepsServer {
   setOpts(opts = {}) {
     // Assign options
     opts = this.opts = Object.assign({
-      steam_api_key: 'abc123',
       port: 21025,
-      host: '0.0.0.0',
-      password: '',
-      cli_port: 21026,
-      cli_host: 'localhost',
-      runners_cnt: 1,
-      processors_cnt: 1,
-      logdir: 'logs',
-      modfile: 'mods.json',
-      assetdir: 'assets',
-      db: 'db.json'
+      logdir:   path.join(__dirname, '..', 'server', 'logs'),
+      modfile:  path.join(__dirname, '..', 'server', 'mods.json'),
+      assetdir: path.join(__dirname, '..', 'server', 'assets'),
+      db:       path.join(__dirname, '..', 'server', 'db.json'),
     }, opts)
     // Define environment parameters
-    process.env.MODFILE = 'mods.json'
+    process.env.MODFILE = opts.modfile
     process.env.DRIVER_MODULE = '@screeps/driver'
     process.env.STORAGE_PORT = opts.port;
     return this
@@ -63,6 +57,7 @@ class ScreepsServer {
       await driver.connect('main')
       this.usersQueue = await driver.queue.create('users', 'write')
       this.roomsQueue = await driver.queue.create('rooms', 'write')
+      this.connected = true
     } catch (err) {
       throw new Error(`Error connecting to driver: ${err.stack}`)
     }
@@ -163,8 +158,11 @@ class ScreepsServer {
     })
     return this.processes[name]
   }
-  start () {
+  async start () {
     console.log(`Server version ${require('screeps').version}`)
+    if (!this.connected) {
+      await this.connect()
+    }
     console.log('Starting engine processes.')
     this.startProcess('engine_runner', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'runner.js'), {
       MODFILE: this.opts.modfile,

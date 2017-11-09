@@ -1,19 +1,39 @@
-# screeps-server-test
+# screeps-server-mockup
 
-## Private server setup for testing
+## Private server packadge for unit tests
 
-This is a project that runs the Screeps private server one tick at a time, 
-this allows you to easily check data in between ticks and opens the
-possibilities for testing bots in a fixed, known environment.
+This is a project that runs the screeps private server one tick at a time, allowing to easily check
+data in between ticks and opens the possibilities for automatic testings in a reproductible
+environment.
 
-# Requirements
+## Requirements
 
-* node 6+
+* node 8+
 
-# Usage
+## Usage
 
-1. Install via `npm install screepers/screeps-server-test`
-2. Write a test script (See test.js for a sample)
-3. Run test script!
+1. Install via npm or yarn
+2. Write a test script (see `test.js` for details)
+3. Run the test script
 
-NOTE: While the library itself works in node 6, the example.js file requires node 8 or transpiling due to using async/await
+Script example:
+```
+const ScreepsServer = require('./ScreepsServer');
+const server = new ScreepsServer();
+
+// Reset world and add our bot
+await server.world.reset();
+const modules = {
+  main: `module.exports.loop = function(){ console.log('Tick!',Game.time); }`;
+}
+let bot = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules })
+
+// Print console logs every tick
+bot.on('console', (log, userid, username) => {
+  log.map(l => console.log('[console]', username, l))
+})
+
+// Start engine processes and run a tick
+await server.start()
+await server.tick() // Execute exactly 1 complete tick
+```

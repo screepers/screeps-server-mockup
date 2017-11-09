@@ -1,4 +1,4 @@
-const ScreepsServer = require('./ScreepsServer')
+const ScreepsServer = require('./src/ScreepsServer')
 const zlib = require('zlib')
 const path = require('path')
 const fs = require('fs')
@@ -14,9 +14,7 @@ process.on('unhandledPromiseRejection', (err) => {
 
 ;(async function () {
   try {
-    // Initialize server
     const server = new ScreepsServer()
-    await server.connect()
 
     // Reset batabase
     await server.world.reset()
@@ -31,8 +29,8 @@ process.on('unhandledPromiseRejection', (err) => {
     //   .map(file => fs.readFileAsync(`../screeps-quorum/dist/${file}`, 'utf8').then(data => ({ file, data })))
     //   .each(({ file, data }) => (modules[path.basename(file).slice(0, -3)] = data))
     let bot = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules })
-    bot.on('console', (log, userId) => {
-      log.map(l => console.log('[console]', userId, l))
+    bot.on('console', (log, userid, username) => {
+      log.map(l => console.log('[console]', username, l))
     })
 
     // Start engine processes
@@ -41,7 +39,7 @@ process.on('unhandledPromiseRejection', (err) => {
 
     // Run several ticks
     console.log('Game time:', await server.world.gameTime)
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 10; i++) {
       await server.tick() // Execute exactly 1 complete tick
     }
     console.log('Game time:', await server.world.gameTime)
