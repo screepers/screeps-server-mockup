@@ -4,6 +4,7 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.0",
+    "fs-extra-promise": "^1.0.1",
     "screeps": "^2.9.0"
   },
   "devDependencies": {

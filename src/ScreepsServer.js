@@ -1,10 +1,9 @@
-const Promise = require('bluebird')
 const _ = require('lodash')
 const common = require('@screeps/common')
 const cp = require('child_process')
 const driver = require('@screeps/driver')
 const { EventEmitter } = require('events')
-const fs = Promise.promisifyAll(require('fs'))
+const fs = require('fs-extra-promise')
 const path = require('path')
 const World = require('./world')
 
@@ -38,7 +37,8 @@ class ScreepsServer extends EventEmitter {
     return this
   }
   async connect () {
-    // Ensure logdir exists
+    // Ensure directories exist
+    await fs.mkdirAsync(this.opts.path).catch(() => {})
     await fs.mkdirAsync(this.opts.logdir).catch(() => {})
     // Copy assets into server directory
     await Promise.all([

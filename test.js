@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const fs = require('fs-extra-promise')
 const path = require('path')
 const ScreepsServer = require('./')
 
@@ -7,6 +8,8 @@ process.on('unhandledPromiseRejection', (err) => {
 })
 
 ;(async function () {
+  await fs.removeAsync(path.join(__dirname, 'server')).catch(err => console.error(err))
+
   try {
     const server = new ScreepsServer()
 
