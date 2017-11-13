@@ -8,7 +8,8 @@ const fs = Promise.promisifyAll(require('fs'))
 const path = require('path')
 const World = require('./world')
 
-const oldLog = console.log;
+const MOD_FILE = 'mods.json';
+const DB_FILE = 'db.json';
 
 class ScreepsServer extends EventEmitter {
   constructor (opts) {
@@ -25,28 +26,31 @@ class ScreepsServer extends EventEmitter {
   }
   setOpts(opts = {}) {
     // Assign options
-    opts = this.opts = Object.assign({
-      port:     21025,
-      logdir:   path.join(__dirname, '..', 'server', 'logs'),
-      modfile:  path.join(__dirname, '..', 'server', 'mods.json'),
-      assetdir: path.join(__dirname, '..', 'server', 'assets'),
-      db:       path.join(__dirname, '..', 'server', 'db.json'),
+    this.opts = Object.assign({
+      path:   path.resolve('server'),
+      logdir: path.resolve('server', 'logs'),
+      port:   21025,
     }, opts)
     // Define environment parameters
-    process.env.MODFILE = opts.modfile
+    process.env.MODFILE = this.opts.modfile
     process.env.DRIVER_MODULE = '@screeps/driver'
-    process.env.STORAGE_PORT = opts.port;
+    process.env.STORAGE_PORT = this.opts.port
     return this
   }
   async connect () {
     // Ensure logdir exists
     await fs.mkdirAsync(this.opts.logdir).catch(() => {})
+    // Copy assets into server directory
+    await Promise.all([
+      fs.copyFileAsync(path.join(__dirname, DB_FILE), path.join(this.opts.path, DB_FILE)),
+      fs.copyFileAsync(path.join(__dirname, MOD_FILE), path.join(this.opts.path, MOD_FILE)),
+    ])
     // Start storage process
     this.emit('info', 'Starting storage process.')
     const process = await this.startProcess(`storage`, path.resolve(path.dirname(require.resolve('@screeps/storage')), '../bin/start.js'), {
-      MODFILE: this.opts.modfile,
+      MODFILE: path.resolve(this.opts.path, DB_FILE),
       STORAGE_PORT: this.opts.port,
-      DB_PATH: this.opts.db
+      DB_PATH: path.resolve(this.opts.path, DB_FILE),
     })
     await new Promise((resolve, reject) => {
       const timeout = setTimeout(() => reject('Could not launch the storage process (timeout).'), 5000);
@@ -58,6 +62,7 @@ class ScreepsServer extends EventEmitter {
     })
 	  // Connect to storage process
 	  try {
+      const oldLog = console.log;
       console.log = function() {} // disable console
       await driver.connect('main')
       console.log = oldLog // enable console
@@ -160,14 +165,14 @@ class ScreepsServer extends EventEmitter {
     }
     this.emit('info', 'Starting engine processes.')
     this.startProcess('engine_runner', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'runner.js'), {
-      MODFILE: this.opts.modfile,
+      MODFILE: path.resolve(this.opts.path, DB_FILE),
       DRIVER_MODULE: '@screeps/driver',
-      STORAGE_PORT: this.opts.port
+      STORAGE_PORT: this.opts.port,
     })
     this.startProcess('engine_processor', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'processor.js'), {
-      MODFILE: this.opts.modfile,
+      MODFILE: path.resolve(this.opts.path, DB_FILE),
       DRIVER_MODULE: '@screeps/driver',
-      STORAGE_PORT: this.opts.port
+      STORAGE_PORT: this.opts.port,
     })
     return this
   }
