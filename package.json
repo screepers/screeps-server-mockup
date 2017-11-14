@@ -17,5 +17,5 @@
     "lint": "standard src test",
     "test": "node test.js"
   },
-  "version": "0.3.1"
+  "version": "0.3.2"
 }
