@@ -42,6 +42,14 @@ class User extends EventEmitter {
   }
 
   /**
+    Set a new console command to run next tick
+  */
+  async console (cmd) {
+    const { db } = this._server.common.storage
+    return db['users.console'].insert({ user: this._id, expression: cmd, hidden: false });
+  }
+
+  /**
     Return the current value of the requested user data
   */
   async getData (name) {

@@ -22,7 +22,7 @@ process.on('unhandledPromiseRejection', (err) => {
     }
     let user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules })
     user.on('console', (log, userid, username) => {
-      log.map(l => console.log('[console]', username, l))
+      log.forEach(l => console.log('[console]', l))
     })
 
     // Start engine processes
@@ -32,6 +32,7 @@ process.on('unhandledPromiseRejection', (err) => {
     // Run several ticks
     console.log('Game time:', await server.world.gameTime)
     for (let i = 0; i < 10; i++) {
+      await user.console(`console.log(Game.time, 'should equal', ${i + 1})`)
       await server.tick()
     }
     console.log('Game time:', await server.world.gameTime)
