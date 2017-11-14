@@ -56,7 +56,7 @@ class User extends EventEmitter {
   async init () {
     const { pubsub } = this._server.common.storage
     await pubsub.subscribe(`user:${this._id}/console`, (event) => {
-      const { messages: { log = [] } } = JSON.parse(event)
+      const { messages: { log = [] } = {} } = JSON.parse(event)
       this.emit('console', log, this._id, this.username)
     })
     return this
