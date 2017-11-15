@@ -10,6 +10,7 @@ class User extends EventEmitter {
     this._id = data._id
     this._username = data.username
     this._server = server
+    this.knownNotifications = []
   }
 
   /**
@@ -40,6 +41,19 @@ class User extends EventEmitter {
     const { env } = this._server.common.storage
     return env.get(env.keys.MEMORY + this.id)
   }
+  get notifications () {
+    const { db } = this._server.common.storage
+    return db['users.notifications'].find({ user: this.id }).then((list) => {
+      return list.map(({ message, type, date, count, _id }) => {
+        this.knownNotifications.push(_id)
+        return { message, type, date, count, _id }
+      })
+    })
+  }
+  get newNotifications () {
+    let known = _.clone(this.knownNotifications)
+    return this.notifications.then(list => list.filter(notif => !known.includes(notif._id)))
+  }
 
   /**
     Set a new console command to run next tick
@@ -64,8 +78,9 @@ class User extends EventEmitter {
   async init () {
     const { pubsub } = this._server.common.storage
     await pubsub.subscribe(`user:${this._id}/console`, (event) => {
-      const { messages: { log = [] } = {} } = JSON.parse(event)
-      this.emit('console', log, this._id, this.username)
+      const { messages } = JSON.parse(event)
+      const { log = [], results = [] } = messages || {};
+      this.emit('console', log, results, this._id, this.username)
     })
     return this
   }

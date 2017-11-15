@@ -18,11 +18,17 @@ process.on('unhandledPromiseRejection', (err) => {
 
     // Add our bot and subscribe to console logs
     const modules = {
-      main: `module.exports.loop = function(){ console.log('Tick!',Game.time); Game.spawns.Spawn1.createCreep([MOVE]); _.each(Game.creeps, c=>c.move(Math.ceil(Math.random()*8))) }`
+      main: `module.exports.loop = function() {
+        console.log('Tick!', Game.time);
+        Game.spawns.Spawn1.createCreep([MOVE]);
+        _.each(Game.creeps, c => c.move(Math.ceil(Math.random() * 8)))
+        if (Game.time === 5) throw new Error('error')
+      }`
     }
     let user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules })
-    user.on('console', (log, userid, username) => {
-      log.forEach(l => console.log('[console]', l))
+    user.on('console', (log, results, userid, username) => {
+      log.forEach(l => console.log('[console.log]', l))
+      results.forEach(r => console.log('[console.results]', r))
     })
 
     // Start engine processes
@@ -32,11 +38,13 @@ process.on('unhandledPromiseRejection', (err) => {
     // Run several ticks
     console.log('Game time:', await server.world.gameTime)
     for (let i = 0; i < 10; i++) {
-      await user.console(`console.log(Game.time, 'should equal', ${i + 1})`)
       await server.tick()
+      await user.console(`console.log(Game.time, 'should equal', ${i + 1})`)
+    ;(await user.newNotifications).forEach(n => console.log('[notification]', n))
     }
     console.log('Game time:', await server.world.gameTime)
-    //console.log(await user.memory)
+    ;(await user.notifications).forEach(n => console.log('[notification]', n))
+    console.log('[memory]', await user.memory)
     //console.log(await server.world.roomObjects('W0N0'))
 
     // Stop server
