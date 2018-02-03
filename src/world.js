@@ -64,7 +64,7 @@ class World {
     const { db } = this.server.common.storage
     const data = await db.rooms.find({ _id: room })
     if (data.length > 0) {
-      await db.rooms.update({ _id: room, status, active })
+      await db.rooms.update({ _id: room }, { $set: { status, active } })
     } else {
       await db.rooms.insert({ _id: room, status, active })
     }
@@ -74,7 +74,7 @@ class World {
     SImplified allias for setRoom()
   */
   async addRoom (room) {
-    this.setRoom(room)
+    return this.setRoom(room)
   }
 
   /**
@@ -128,7 +128,7 @@ class World {
     }
     // Inject data in database
     const object = Object.assign({ room, x, y, type }, attributes)
-    await db['rooms.objects'].insert(object)
+    return db['rooms.objects'].insert(object)
   }
 
   /**
@@ -167,10 +167,10 @@ class World {
   /**
     Add a new user to the world
   */
-  async addBot ({ username, room, x, y, spawnName = 'Spawn1', modules = {} }) {
+  async addBot ({ username, room, x, y, gcl = 1, cpu = 100, cpuAvailable = 10000, active = 10000, spawnName = 'Spawn1', modules = {} }) {
     const { C, db, env, pubsub } = await this.load()
     // Insert user and update data
-    const user = await db.users.insert({ username, cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 10000 })
+    const user = await db.users.insert({ username, cpu, cpuAvailable, gcl, active })
     await Promise.all([
       env.set(env.keys.MEMORY + user._id, '{}'),
       db.rooms.update({ _id: room }, { $set: { active: true } }),

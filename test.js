@@ -50,7 +50,7 @@ process.on('unhandledPromiseRejection', (err) => {
         if (Game.time === 1) console.log(\`Terrain at 20:20 = \${Game.map.getTerrainAt(20, 20, 'W0N0')}\`)
       }`
     }
-    let user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules })
+    const user = await server.world.addBot('bot', 'W0N0', 25, 25, modules)
     user.on('console', (log, results, userid, username) => {
       log.forEach(l => console.log('[console.log]', l))
       results.forEach(r => console.log('[console.results]', r))
