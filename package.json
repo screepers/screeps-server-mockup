@@ -1,6 +1,6 @@
 {
   "name": "screeps-server-mockup",
-  "main": "./src/ScreepsServer.js",
+  "main": "./src/main.js",
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.0",
@@ -9,13 +9,14 @@
   },
   "devDependencies": {
     "lodash": "^4.17.4",
+    "mocha": "latest",
     "publish": "^0.6.0",
     "standard": "*"
   },
   "scripts": {
     "publish": "publish",
     "lint": "standard src test",
-    "test": "node test.js"
+    "test": "mocha --ui tdd --exit"
   },
   "version": "0.4.0"
 }
