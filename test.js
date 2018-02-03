@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const fs = require('fs-extra-promise')
 const path = require('path')
-const ScreepsServer = require('./')
+const { ScreepsServer, TerrainMatrix } = require('./')
 
 process.on('unhandledPromiseRejection', (err) => {
   console.error(err, err.stack)
@@ -16,6 +16,29 @@ process.on('unhandledPromiseRejection', (err) => {
     // Reset batabase
     await server.world.reset()
 
+    // Add a new room (W1N0)
+    server.world.addRoom('W1N0')
+    let terrain = new TerrainMatrix()
+    terrain.set(0, 0, 'wall')
+    terrain.get(0, 0)
+    terrain.get(0, 10)
+    const serial = terrain.serialize()
+    console.log('terrain.serialize():', serial)
+    terrain = TerrainMatrix.unserialize(serial)
+    console.log('terrain.get(0, 0):', terrain.get(0, 0))
+    await server.world.setTerrain('W1N0', terrain)
+    terrain.set(0, 1, 'wall')
+    terrain.set(1, 0, 'swamp')
+    await server.world.setTerrain('W1N0', terrain)
+    terrain = await server.world.getTerrain('W1N0')
+    console.log('terrain.serialize():', terrain.serialize())
+
+    // Populate W1N0 RoomObjects
+    server.world.addRoomObject('W1N0', 'controller', 10, 10, { level: 0 })
+    server.world.addRoomObject('W1N0', 'source', 10, 40, { energy: 0, energyCapacity: 1000, ticksToRegeneration: 1 })
+    server.world.addRoomObject('W1N0', 'source', 40, 10, { energy: 0, energyCapacity: 1000, ticksToRegeneration: 1 })
+    server.world.addRoomObject('W1N0', 'mineral', 40, 40, { mineralType: 'H', density: 4, mineralAmount: 100000 })
+
     // Add our bot and subscribe to console logs
     const modules = {
       main: `module.exports.loop = function() {
@@ -23,6 +46,8 @@ process.on('unhandledPromiseRejection', (err) => {
         Game.spawns.Spawn1.createCreep([MOVE]);
         _.each(Game.creeps, c => c.move(Math.ceil(Math.random() * 8)))
         if (Game.time === 5) throw new Error('error')
+        if (Game.time === 1) console.log(\`Terrain at 10:10 = \${Game.map.getTerrainAt(10, 10, 'W0N0')}\`)
+        if (Game.time === 1) console.log(\`Terrain at 20:20 = \${Game.map.getTerrainAt(20, 20, 'W0N0')}\`)
       }`
     }
     let user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules })
@@ -36,19 +61,16 @@ process.on('unhandledPromiseRejection', (err) => {
     await server.start()
 
     // Run several ticks
-    console.log('Game time:', await server.world.gameTime)
     for (let i = 0; i < 10; i++) {
-      await server.tick()
+      console.log('\nGame time:', await server.world.gameTime)
       await user.console(`console.log(Game.time, 'should equal', ${i + 1})`)
-    ;(await user.newNotifications).forEach(n => console.log('[notification]', n))
+      await server.tick()
+      ;(await user.newNotifications).forEach(({ message }) => console.log('[notification]', message))
+      console.log('[memory]', await user.memory)
     }
-    console.log('Game time:', await server.world.gameTime)
-    ;(await user.notifications).forEach(n => console.log('[notification]', n))
-    console.log('[memory]', await user.memory)
-    //console.log(await server.world.roomObjects('W0N0'))
 
     // Stop server
-    console.log('Done, killing process.')
+    console.log('\nDone, killing process.')
     server.stop()
     setTimeout(() => process.exit(), 1000) // needed due to open db connections keeping process open
   } catch(err) {

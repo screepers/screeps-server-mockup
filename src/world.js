@@ -1,33 +1,10 @@
 const _ = require('lodash')
 const User = require('./user')
 const Promise = require('bluebird')
+const TerrainMatrix = require('./terrainMatrix')
 const zlib = Promise.promisifyAll(require('zlib'))
 
-function getBoxTerrain () {
-  let res = ''
-  for (let y = 0; y < 50; y++) {
-    for (let x = 0; x < 50; x++) {
-      let type = 0
-      if (x === 0 || y === 0 || x === 49 || y === 49) {
-        type = 1
-      }
-      if ((x === 10 || x === 40) && (y === 10 || y === 40)) {
-        type = 1
-      }
-      res += type
-    }
-  }
-  return res
-}
-
-function generateMineral (room, x, y) {
-  const types = ['H', 'H', 'H', 'H', 'H', 'H', 'O', 'O', 'O', 'O', 'O', 'O', 'Z', 'Z', 'Z', 'K', 'K', 'K', 'U', 'U', 'U', 'L', 'L', 'L', 'X']
-  const mineralType = types[Math.floor(Math.random() * types.length)]
-  const density = 4
-  return { type: 'mineral', mineralType, density, mineralAmount: 100000, x, y, room }
-}
-
-async function updateTerrainData (db, env) {
+async function updateEnvTerrain (db, env) {
   let walled = ''
   for (let i = 0; i < 2500; i++) {
     walled += '1'
@@ -70,7 +47,7 @@ class World {
   }
 
   /**
-    Getters
+    Connect to server (if needed) and return constants, database, env and pubsub objects
   */
   async load () {
     if (!this.server.connected) await this.server.connect()
@@ -80,25 +57,103 @@ class World {
   }
 
   /**
-    Reset worl data to a baren world with invaders and source keepers users plus one room (W0N0)
+    Set rom status (and create it if needed)
+    This function does NOT generate terrain data
+  */
+  async setRoom (room, status = 'normal', active = true) {
+    const { db } = this.server.common.storage
+    const data = await db.rooms.find({ _id: room })
+    if (data.length > 0) {
+      await db.rooms.update({ _id: room, status, active })
+    } else {
+      await db.rooms.insert({ _id: room, status, active })
+    }
+  }
+
+  /**
+    SImplified allias for setRoom()
+  */
+  async addRoom (room) {
+    this.setRoom(room)
+  }
+
+  /**
+    Return room terrain data (walls, plains and swamps)
+    Return a TerrainMatrix instance
+  */
+  async getTerrain (room) {
+    const { db } = this.server.common.storage
+    // Load data
+    const data = await db['rooms.terrain'].find({ room })
+    // Check if data actually exists
+    if (data.length === 0) {
+      throw new Error(`room ${room} doesn\'t appear to have any terrain data`)
+    }
+    // Parse and return terrain data as a TerrainMatrix
+    const serial = _.get(_.first(data), 'terrain')
+    return TerrainMatrix.unserialize(serial)
+  }
+
+  /**
+    Define room terrain data (walls, plains and swamps)
+    @terrain must be an instance of TerrainMatrix.
+  */
+  async setTerrain (room, terrain = null) {
+    const { db, env } = this.server.common.storage
+    // Check parameters
+    if (terrain == null) {
+      terrain = new TerrainMatrix()
+    } else if (!(terrain instanceof TerrainMatrix)) {
+      throw new Error('@terrain must be an instance of TerrainMatrix')
+    }
+    // Insert or update data in database
+    const data = await db['rooms.terrain'].find({ room })
+    if (data.length > 0) {
+      await db['rooms.terrain'].update({ room }, { $set: { terrain: terrain.serialize() } })
+    } else {
+      await db['rooms.terrain'].insert({ room, terrain: terrain.serialize() })
+    }
+    // Update environment cache
+    await updateEnvTerrain(db, env)
+  }
+
+  /**
+    Load (if needed) and return constants, database, env and pubsub objects
+  */
+  async addRoomObject (room, type, x, y, attributes) {
+    const { db } = this.server.common.storage
+    // Check parameters
+    if (x < 0 || y < 0 || x >= 50 || y >= 50) {
+      throw new Error('invalid x/y coordinates (they must be between 0 and 49)')
+    }
+    // Inject data in database
+    const object = Object.assign({ room, x, y, type }, attributes)
+    await db['rooms.objects'].insert(object)
+  }
+
+  /**
+    Reset worl data to a baren world with invaders and source keepers users plus one basic room (W0N0)
   */
   async reset () {
     const { C, db, env } = await this.load()
     // Clear database
     await Promise.all(_.map(db, col => col.clear()))
     await env.set('gameTime', 1)
-    // Insert basic data
+    // Generate basic terrain data
+    const terrain = new TerrainMatrix()
+    const walls = [[10, 10], [10, 40], [40, 10], [40, 40]]
+    _.each(walls, ([x, y]) => terrain.set(x, y, 'wall'))
+    // Insert basic room data
     await Promise.all([
       db.users.insert({ _id: '2', username: 'Invader', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 }),
       db.users.insert({ _id: '3', username: 'Source Keeper', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 }),
-      db.rooms.insert({ _id: 'W0N0', status: 'normal', active: true }),
-      db['rooms.terrain'].insert({ room: 'W0N0', terrain: getBoxTerrain() }),
-      db['rooms.objects'].insert({ room: 'W0N0', type: 'controller', x: 10, y: 40, level: 0 }),
-      db['rooms.objects'].insert({ room: 'W0N0', type: 'source', x: 10, y: 10, energy: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, energyCapacity: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, ticksToRegeneration: C.ENERGY_REGEN_TIME }),
-      db['rooms.objects'].insert({ room: 'W0N0', type: 'source', x: 10, y: 40, energy: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, energyCapacity: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, ticksToRegeneration: C.ENERGY_REGEN_TIME }),
-      db['rooms.objects'].insert(generateMineral('W0N0', 40, 40))
+      this.addRoom('W0N0'),
+      this.setTerrain('W0N0', terrain),
+      this.addRoomObject('W0N0', 'controller', 10, 10, { level: 0 }),
+      this.addRoomObject('W0N0', 'source', 10, 40, { energy: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, energyCapacity: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, ticksToRegeneration: C.ENERGY_REGEN_TIME }),
+      this.addRoomObject('W0N0', 'source', 40, 10, { energy: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, energyCapacity: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, ticksToRegeneration: C.ENERGY_REGEN_TIME }),
+      this.addRoomObject('W0N0', 'mineral', 40, 40, { mineralType: C.RESOURCE_HYDROGEN, density: C.DENSITY_HIGH, mineralAmount: C.MINERAL_DENSITY[C.DENSITY_HIGH] })
     ])
-    await updateTerrainData(db, env)
   }
 
   /**
@@ -110,7 +165,7 @@ class World {
   }
 
   /**
-    Add a new user to the server world
+    Add a new user to the world
   */
   async addBot ({ username, room, x, y, spawnName = 'Spawn1', modules = {} }) {
     const { C, db, env, pubsub } = await this.load()
