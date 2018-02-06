@@ -1,4 +1,4 @@
 module.exports = {
-  ScreepsServer: require('./screepsServer'),
-  TerrainMatrix: require('./terrainMatrix')
-}
+    ScreepsServer: require('./screepsServer'),
+    TerrainMatrix: require('./terrainMatrix'),
+};
