@@ -133,7 +133,6 @@ class World {
 
     /**
         Reset worl data to a baren world with invaders and source keepers users plus one basic room (W0N0)
-        todo: remove W0N0
     */
     async reset () {
         const { C, db, env } = await this.load();
@@ -147,14 +146,32 @@ class World {
         // Insert basic room data
         await Promise.all([
             db.users.insert({ _id: '2', username: 'Invader', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 }),
-            db.users.insert({ _id: '3', username: 'Source Keeper', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 }),
-            this.addRoom('W0N0'),
-            this.setTerrain('W0N0', terrain),
-            this.addRoomObject('W0N0', 'controller', 10, 10, { level: 0 }),
-            this.addRoomObject('W0N0', 'source', 10, 40, { energy: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, energyCapacity: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, ticksToRegeneration: C.ENERGY_REGEN_TIME }),
-            this.addRoomObject('W0N0', 'source', 40, 10, { energy: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, energyCapacity: C.SOURCE_ENERGY_NEUTRAL_CAPACITY, ticksToRegeneration: C.ENERGY_REGEN_TIME }),
-            this.addRoomObject('W0N0', 'mineral', 40, 40, { mineralType: C.RESOURCE_HYDROGEN, density: C.DENSITY_HIGH, mineralAmount: C.MINERAL_DENSITY[C.DENSITY_HIGH] })
+            db.users.insert({ _id: '3', username: 'Source Keeper', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 })
         ]);
+    }
+
+    /**
+        Stu a basic world by adding 9 plausible rooms with sources, minerals and controllers.
+    */
+    async stubWorld () {
+        // Clear database
+        await this.reset();
+        // Utility functions
+        const addRoom = (roomName, terrain, roomObjects) => Promise.all([
+            this.addRoom(roomName),
+            this.setTerrain(roomName, terrain),
+            addRoomObjects(roomName, roomObjects)
+        ]);
+        const addRoomObjects = (roomName, objects) => Promise.all(
+            objects.map(o => this.addRoomObject(roomName, o.type, o.x, o.y, o.attributes))
+        );
+        // Add rooms
+        const rooms = require('../assets/rooms.json');
+        await Promise.all(_.map(rooms, (data, roomName) => {
+            const terrain = TerrainMatrix.unserialize(data.serial);
+// console.log(roomName, data.serial, terrain.serialize())
+            return addRoom(roomName, terrain, data.objects);
+        }));
     }
 
     /**

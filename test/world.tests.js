@@ -133,6 +133,27 @@ suite('World tests', function () {
             .catch(() => 'ok');
     });
 
+    test('Defining a stub world', async function () {
+        const data = require('../assets/rooms.json');
+        // Server initialization
+        server = new ScreepsServer();
+        const { db } = server.common.storage;
+        await server.world.reset();
+        await server.world.stubWorld();
+        // Check that rooms were added
+        const rooms = await db.rooms.find();
+        assert.equal(rooms.length, _.size(data));
+        // Check that terrains were added
+        const terrain = await db['rooms.terrain'].find();
+        assert.equal(terrain.length, _.size(data));
+        const W0N0 = _.first(await db['rooms.terrain'].find({ room: 'W0N0' }));
+        assert.equal(W0N0.terrain, data.W0N0.serial);
+        // Check that roomObject were added
+        const nbObjects = _.sumBy(_.toArray(data), room => _.size(room.objects));
+        const objects = await db['rooms.objects'].find();
+        assert.equal(objects.length, nbObjects);
+    });
+
     teardown(async function () {
         // Make sure that server is stopped in case something went wrong
         if (_.isFunction(server.stop)) {

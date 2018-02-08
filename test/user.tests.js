@@ -51,6 +51,7 @@ suite('User tests', function () {
         // Server initialization
         server = new ScreepsServer();
         await server.world.reset();
+        await server.world.stubWorld();
         // Code declaration
         const modules = {
             main: `module.exports.loop = function() {
@@ -82,6 +83,7 @@ suite('User tests', function () {
         // Server initialization
         server = new ScreepsServer();
         await server.world.reset();
+        await server.world.stubWorld();
         // Code declaration
         const modules = {
             main: `module.exports.loop = function() {
