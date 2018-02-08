@@ -35,8 +35,8 @@ class Matrix {
     */
     serialize () {
         let str = ''
-        for (let x = 0; x < 50; x += 1) {
-            for (let y = 0; y < 50; y += 1) {
+        for (let y = 0; y < 50; y += 1) {
+            for (let x = 0; x < 50; x += 1) {
                 const terrain = this.get(x, y);
                 const mask = TYPES.indexOf(terrain);
                 if (mask !== -1) {
@@ -58,10 +58,10 @@ class Matrix {
             const x = idx % 50;
             const y = Math.floor(idx / 50);
             const terrain = _.get(TYPES, mask);
-            if (terrain != null) {
-                _.set(matrix.data, `${x}:${y}`, terrain);
-            } else {
+            if (terrain == null) {
                 throw new Error(`invalid terrain mask: ${mask}`);
+            } else if (terrain !== 'plain') {
+                matrix.set(x, y, terrain);
             }
         });
         return matrix;
