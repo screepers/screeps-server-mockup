@@ -50,7 +50,6 @@ suite('Basics tests', function () {
   test('Running user code', async function () {
     // Server initialization
     server = new ScreepsServer();
-    await server.world.reset();
     await server.world.stubWorld();
     // Code declaration
     const modules = {

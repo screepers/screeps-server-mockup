@@ -50,7 +50,6 @@ suite('User tests', function () {
   test('Sending console commands and getting console logs', async function () {
     // Server initialization
     server = new ScreepsServer();
-    await server.world.reset();
     await server.world.stubWorld();
     // Code declaration
     const modules = {
@@ -82,7 +81,6 @@ suite('User tests', function () {
   test('Getting notifications and errors', async function () {
     // Server initialization
     server = new ScreepsServer();
-    await server.world.reset();
     await server.world.stubWorld();
     // Code declaration
     const modules = {

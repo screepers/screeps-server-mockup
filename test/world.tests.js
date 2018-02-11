@@ -138,7 +138,6 @@ suite('World tests', function () {
     // Server initialization
     server = new ScreepsServer();
     const { db } = server.common.storage;
-    await server.world.reset();
     await server.world.stubWorld();
     // Check that rooms were added
     const rooms = await db.rooms.find();
