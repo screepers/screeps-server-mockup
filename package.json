@@ -3,19 +3,19 @@
   "main": "./src/main.js",
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.5.0",
     "fs-extra-promise": "^1.0.1",
+    "lodash": "^4.17.4",
     "screeps": "^2.9.0"
   },
   "devDependencies": {
-    "lodash": "^4.17.4",
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb-base": "latest",
     "mocha": "latest",
-    "publish": "^0.6.0",
-    "standard": "*"
+    "publish": "^0.6.0"
   },
   "scripts": {
     "publish": "publish",
-    "lint": "standard src test",
+    "lint": "eslint --fix src test",
     "test": "mocha --ui tdd --exit"
   },
   "version": "0.5.0"
