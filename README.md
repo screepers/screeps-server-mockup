@@ -103,8 +103,11 @@ process.exit(); // required as there is no way to properly shutdown storage :(
 ```
 
 Each tick should output something like:
+
 >[tick] 1
+
 >[console|bot] Tick! 1
+
 >[memory] {"creeps":{"Arianna":{}}}
 
 
