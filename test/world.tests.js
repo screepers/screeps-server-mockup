@@ -1,15 +1,14 @@
 /* eslint prefer-arrow-callback: "off", global-require: "off", import/no-dynamic-require: "off",
 no-console: "off" */
 
-const { ScreepsServer } = require('../');
+const { ScreepsServer, stdHooks } = require('../');
 const assert = require('assert');
 const fs = require('fs-extra-promise');
 const _ = require('lodash');
 const path = require('path');
-const { hookStdWrite } = require('./utils/stdhook');
 
 // Dirty hack to prevent driver from flooding error messages
-hookStdWrite();
+stdHooks.hookWrite();
 
 suite('World tests', function () {
   this.timeout(30 * 1000);

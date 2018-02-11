@@ -5,7 +5,7 @@ module.exports = {
   /*
         Hook stdout/stderr.write() and remove driver notifications.
     */
-  hookStdWrite() {
+  hookWrite() {
     process.stdout.write = function (...args) {
       if (args[0].match(/connecting to storage/i)) {
         return 0;
@@ -23,7 +23,7 @@ module.exports = {
   /*
         Reset stdout/stderr.write() to default behavior.
     */
-  resetStdWrite() {
+  resetWrite() {
     process.stdout.write = stdout;
     process.stderr.write = stderr;
   },
