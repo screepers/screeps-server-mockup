@@ -1,5 +1,7 @@
-(async function() {
+/* eslint global-require: "off", import/no-extraneous-dependencies: "off",
+import/no-unresolved: "off", no-console: "off", no-unused-vars: "off" */
 
+(async function () {
     const _ = require('lodash');
     const { ScreepsServer, TerrainMatrix } = require('screeps-server-mockup');
 
@@ -29,7 +31,7 @@
                 const directions = [TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT];
                 _.sample(Game.spawns).createCreep([MOVE]);
                 _.each(Game.creeps, c => c.move(_.sample(directions)));
-            };`
+            };`,
         };
         const bot = await server.world.addBot({ username: 'bot', room: 'W0N1', x: 25, y: 25, modules });
 
@@ -39,7 +41,7 @@
         });
 
         // Run several ticks
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i += 1) {
             console.log('[tick]', await server.world.gameTime);
             await server.tick();
             _.each(await bot.newNotifications, ({ message }) => console.log('[notification]', message));
@@ -52,5 +54,4 @@
         server.stop();
         process.exit(); // required as there is no way to properly shutdown storage :(
     }
-
-})();
+}());
