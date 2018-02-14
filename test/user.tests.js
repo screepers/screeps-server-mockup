@@ -36,7 +36,7 @@ suite('User tests', function () {
         assert.equal(user.username, 'bot');
         assert.equal(await user.cpu, 100);
         assert.equal(await user.cpuAvailable, 10000);
-        assert(_.isNumber(await user.lastUsedCpu));
+        assert(_.isNumber(await user.lastUsedCpu), 'user.lastUsedCpu is not a number');
         assert.equal(await user.gcl, 1);
         assert.deepEqual(await user.rooms, ['W0N0']);
         // Assert if memory is correctly set and retrieved
