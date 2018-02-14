@@ -8,8 +8,7 @@ import/no-unresolved: "off", no-console: "off", no-unused-vars: "off" */
     const server = new ScreepsServer();
 
     try {
-    // Initialize server
-        await server.start();           // connect to storage and start runners
+        // Initialize server
         await server.world.reset();     // reset world but add invaders and source keepers users
         await server.world.stubWorld(); // create a stub world of 9 rooms with sources + controller
 
@@ -24,7 +23,8 @@ import/no-unresolved: "off", no-console: "off", no-unused-vars: "off" */
         };
         const bot = await server.world.addBot({ username: 'bot', room: 'W0N1', x: 15, y: 15, modules });
 
-        // Run a tick
+        // Start server and run a tick
+        await server.start();
         await server.tick();
     } catch (err) {
         console.error(err);

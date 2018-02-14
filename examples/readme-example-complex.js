@@ -9,7 +9,6 @@ import/no-unresolved: "off", no-console: "off", no-unused-vars: "off" */
 
     try {
         // Initialize server
-        await server.start(); // connect to storage and start runners
         await server.world.reset(); // reset world but add invaders and source keepers bots
 
         // Prepare the terrain for a new room
@@ -40,7 +39,8 @@ import/no-unresolved: "off", no-console: "off", no-unused-vars: "off" */
             _.each(logs, line => console.log(`[console|${username}]`, line));
         });
 
-        // Run several ticks
+        // Start server and run several ticks
+        await server.start();
         for (let i = 0; i < 10; i += 1) {
             console.log('[tick]', await server.world.gameTime);
             await server.tick();
