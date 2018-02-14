@@ -15,7 +15,7 @@
   },
   "scripts": {
     "publish": "publish",
-    "lint": "eslint --fix src examples test",
+    "lint": "eslint src examples test",
     "test": "mocha --ui tdd --exit"
   },
   "version": "1.0.0"
