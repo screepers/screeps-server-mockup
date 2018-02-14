@@ -33,11 +33,12 @@ class ScreepsServer extends EventEmitter {
         Define server options and set defaults.
     */
     setOpts(opts = {}) {
-    // Assign options
+        // Assign options
         this.opts = Object.assign({
             path:   path.resolve('server'),
             logdir: path.resolve('server', 'logs'),
             port:   21025,
+            mainLoopResetInterval: driver.config.mainLoopResetInterval,
         }, opts);
         // Define environment parameters
         process.env.MODFILE = this.opts.modfile;
@@ -50,7 +51,7 @@ class ScreepsServer extends EventEmitter {
         Start storage process and connect driver.
     */
     async connect() {
-    // Ensure directories exist
+        // Ensure directories exist
         await fs.mkdirAsync(this.opts.path).catch(() => {});
         await fs.mkdirAsync(this.opts.logdir).catch(() => {});
         // Copy assets into server directory
@@ -113,7 +114,7 @@ class ScreepsServer extends EventEmitter {
         this.resetTimeout = setTimeout(() => {
             this.emit('error', `Main loop reset at stage ${this.stage}`);
             driver.queue.resetAll();
-        }, driver.config.mainLoopResetInterval);
+        }, this.mainLoopResetInterval);
         return driver.notifyTickStarted();
     }
     getUsersStage() {

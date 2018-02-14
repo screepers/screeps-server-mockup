@@ -27,17 +27,19 @@ suite('Basics tests', function () {
     });
 
     test('Setting options in server constructor', async function () {
-    // Setup options and server
+        // Setup options and server
         const opts = {
             path:   'another_dir',
             logdir: 'another_logdir',
             port:   9999,
+            mainLoopResetInterval: 10000,
         };
         server = new ScreepsServer(opts);
         // Assert if options are correctly registered
         assert.equal(server.opts.path, opts.path);
         assert.equal(server.opts.logdir, opts.logdir);
         assert.equal(server.opts.port, opts.port);
+        assert.equal(server.opts.mainLoopResetInterval, opts.mainLoopResetInterval);
         // Start, then stop server
         await server.start();
         await server.tick();
@@ -48,7 +50,7 @@ suite('Basics tests', function () {
     });
 
     test('Running user code', async function () {
-    // Server initialization
+        // Server initialization
         server = new ScreepsServer();
         await server.world.stubWorld();
         // Code declaration
@@ -74,7 +76,7 @@ suite('Basics tests', function () {
     });
 
     test('Getting current tick', async function () {
-    // Server initialization
+        // Server initialization
         server = new ScreepsServer();
         await server.world.reset();
         assert.equal(await server.world.gameTime, 1);
@@ -89,7 +91,7 @@ suite('Basics tests', function () {
     });
 
     teardown(async function () {
-    // Make sure that server is stopped in case something went wrong
+        // Make sure that server is stopped in case something went wrong
         if (_.isFunction(server.stop)) {
             server.stop();
             server = null;

@@ -18,7 +18,7 @@ suite('User tests', function () {
     let server = null;
 
     test('Getting basic user attributes and statistics', async function () {
-    // Server initialization
+        // Server initialization
         server = new ScreepsServer();
         await server.start();
         // User / bot initialization
@@ -48,7 +48,7 @@ suite('User tests', function () {
     });
 
     test('Sending console commands and getting console logs', async function () {
-    // Server initialization
+        // Server initialization
         server = new ScreepsServer();
         await server.world.stubWorld();
         // Code declaration
@@ -79,7 +79,7 @@ suite('User tests', function () {
     });
 
     test('Getting notifications and errors', async function () {
-    // Server initialization
+        // Server initialization
         server = new ScreepsServer();
         await server.world.stubWorld();
         // Code declaration
@@ -106,7 +106,7 @@ suite('User tests', function () {
     });
 
     teardown(async function () {
-    // Make sure that server is stopped in case something went wrong
+        // Make sure that server is stopped in case something went wrong
         if (_.isFunction(server.stop)) {
             server.stop();
             server = null;
