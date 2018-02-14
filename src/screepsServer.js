@@ -38,7 +38,6 @@ class ScreepsServer extends EventEmitter {
             path:   path.resolve('server'),
             logdir: path.resolve('server', 'logs'),
             port:   21025,
-            mainLoopResetInterval: driver.config.mainLoopResetInterval,
         }, opts);
         // Define environment parameters
         process.env.MODFILE = this.opts.modfile;
@@ -94,72 +93,21 @@ class ScreepsServer extends EventEmitter {
     /*
         Run one tick.
     */
-    async tick(opts = {}) {
-        const stages = opts.stages || ['start', 'getUsers', 'addUsersToQueue', 'waitForUsers',
-            'getRooms', 'addRoomsToQueue', 'waitForRooms', 'commit1', 'global', 'commit2',
-            'incrementGameTime', 'notifyRoomsDone', 'custom', 'finish'];
-        try {
-            let ret;
-            for (const stage of stages) {
-                this.stage = stage;
-                driver.config.emit('mainLoopStage', stage, ret);
-                ret = await this[`${stage}Stage`](ret);
-            }
-        } finally {
-            await this.finishStage();
-        }
-        return this;
-    }
-    startStage() {
-        this.resetTimeout = setTimeout(() => {
-            this.emit('error', `Main loop reset at stage ${this.stage}`);
-            driver.queue.resetAll();
-        }, this.opts.mainLoopResetInterval);
-        return driver.notifyTickStarted();
-    }
-    getUsersStage() {
-        return driver.getAllUsers();
-    }
-    addUsersToQueueStage(users) {
-        return this.usersQueue.addMulti(_.map(users, user => user._id.toString()));
-    }
-    waitForUsersStage() {
-        return this.usersQueue.whenAllDone();
-    }
-    getRoomsStage() {
-        return driver.getAllRooms();
-    }
-    addRoomsToQueueStage(rooms) {
-        return this.roomsQueue.addMulti(_.map(rooms, room => room._id.toString()));
-    }
-    waitForRoomsStage() {
-        return this.roomsQueue.whenAllDone();
-    }
-    commit1Stage() {
-        return driver.commitDbBulk();
-    }
-    globalStage() {
-        return require('@screeps/engine/src/processor/global')(); // eslint-disable-line global-require
-    }
-    commit2Stage() {
-        return driver.commitDbBulk();
-    }
-    async incrementGameTimeStage() {
+    async tick() {
+        await driver.notifyTickStarted();
+        const users = await driver.getAllUsers();
+        await this.usersQueue.addMulti(_.map(users, user => user._id.toString()));
+        await this.usersQueue.whenAllDone();
+        const rooms = await driver.getAllRooms();
+        await this.roomsQueue.addMulti(_.map(rooms, room => room._id.toString()));
+        await this.roomsQueue.whenAllDone();
+        await driver.commitDbBulk();
+        await require('@screeps/engine/src/processor/global')(); // eslint-disable-line global-require
+        await driver.commitDbBulk();
         const gameTime = await driver.incrementGameTime();
-        if (+gameTime > this.lastAccessibleRoomsUpdate + 20) {
-            this.lastAccessibleRoomsUpdate = +gameTime;
-            driver.updateAccessibleRoomsList();
-        }
-        return gameTime;
-    }
-    notifyRoomsDoneStage(gameTime) {
-        return driver.notifyRoomsDone(gameTime);
-    }
-    customStage() {
-        return driver.config.mainLoopCustomStage();
-    }
-    finishStage() {
-        clearTimeout(this.resetTimeout);
+        await driver.updateAccessibleRoomsList();
+        await driver.notifyRoomsDone(gameTime);
+        await driver.config.mainLoopCustomStage();
     }
 
     /*
