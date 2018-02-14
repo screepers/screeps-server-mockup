@@ -114,7 +114,7 @@ class ScreepsServer extends EventEmitter {
         this.resetTimeout = setTimeout(() => {
             this.emit('error', `Main loop reset at stage ${this.stage}`);
             driver.queue.resetAll();
-        }, this.mainLoopResetInterval);
+        }, this.opts.mainLoopResetInterval);
         return driver.notifyTickStarted();
     }
     getUsersStage() {
