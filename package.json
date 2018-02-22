@@ -18,5 +18,5 @@
     "lint": "eslint src examples test",
     "test": "mocha --ui tdd --exit"
   },
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
