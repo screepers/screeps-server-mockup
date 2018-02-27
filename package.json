@@ -8,14 +8,16 @@
     "screeps": "^2.9.0"
   },
   "devDependencies": {
-    "eslint": "^4.11.0",
+    "eslint": "latest",
     "eslint-config-airbnb-base": "latest",
     "mocha": "latest",
-    "publish": "^0.6.0"
+    "nyc": "latest",
+    "publish": "latest"
   },
   "scripts": {
-    "publish": "publish",
+    "cover": "nyc yarn test",
     "lint": "eslint src examples test",
+    "publish": "publish",
     "test": "mocha --ui tdd --exit"
   },
   "version": "1.0.1"
