@@ -47,6 +47,37 @@ suite('User tests', function () {
         server.stop();
     });
 
+    test('Getting segments contents', async function () {
+        // Server initialization
+        server = new ScreepsServer();
+        await server.world.stubWorld();
+        // Code declaration
+        const modules = {
+            main: `module.exports.loop = function() {
+                RawMemory.setActiveSegments([0, 1]);
+                if (_.size(RawMemory.segments) > 0) {
+                    RawMemory.segments[0] = '{"foo":"bar"}';
+                    RawMemory.segments[1] = 'azerty';
+                }
+            }`,
+        };
+        // User / bot initialization
+        const user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules });
+        // Run a few ticks
+        await server.start();
+        for (let i = 0; i < 3; i += 1) {
+            await server.tick();
+        }
+        // Verify active segments in database
+        assert.deepEqual(await user.activeSegments, [0, 1]);
+        // Verify segments contents
+        const segments = await user.getSegments([0, 1]);
+        assert.equal(segments[0], '{"foo":"bar"}');
+        assert.equal(segments[1], 'azerty');
+        // Stop server (don't stop it before we get segments)
+        server.stop();
+    });
+
     test('Sending console commands and getting console logs', async function () {
         // Server initialization
         server = new ScreepsServer();

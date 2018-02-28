@@ -54,6 +54,17 @@ class User extends EventEmitter {
         const known = _.clone(this.knownNotifications);
         return this.notifications.then(list => list.filter(notif => !known.includes(notif._id)));
     }
+    get activeSegments() {
+        return this.getData('activeSegments');
+    }
+
+    /**
+        Return the content of user segments based on @list (the list of segments, ie: [0, 1, 2]).
+    */
+    async getSegments(list) {
+        const { env } = this._server.common.storage;
+        return env.hmget(env.keys.MEMORY_SEGMENTS + this._id, list);
+    }
 
     /**
         Set a new console command to run next tick
