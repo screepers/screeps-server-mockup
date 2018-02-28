@@ -1,8 +1,8 @@
 {
+    "root": true,
     "extends": "eslint-config-airbnb-base",
     "env": {
         "es6": true,
-        "mocha": true,
         "node": true
     },
     "parserOptions": {
@@ -23,8 +23,6 @@
         "func-names": "off",
         "key-spacing": "off",
         "no-await-in-loop": "off",
-        "no-multi-spaces": "off",
-        "no-param-reassign": "off",
         "no-underscore-dangle": "off",
         "object-curly-newline": "off",
         "object-property-newline": "off"

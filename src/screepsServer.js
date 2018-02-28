@@ -1,4 +1,4 @@
-/* eslint no-console: "off", no-restricted-syntax: "off" */
+/* eslint no-console: "off", no-restricted-syntax: "off", global-require: "off" */
 
 const cp = require('child_process');
 const { EventEmitter } = require('events');
@@ -103,7 +103,7 @@ class ScreepsServer extends EventEmitter {
         await this.roomsQueue.addMulti(_.map(rooms, room => room._id.toString()));
         await this.roomsQueue.whenAllDone();
         await driver.commitDbBulk();
-        await require('@screeps/engine/src/processor/global')(); // eslint-disable-line global-require
+        await require('@screeps/engine/src/processor/global')();
         await driver.commitDbBulk();
         const gameTime = await driver.incrementGameTime();
         await driver.updateAccessibleRoomsList();
@@ -136,7 +136,7 @@ class ScreepsServer extends EventEmitter {
         Start processes and connect driver.
     */
     async start() {
-        this.emit('info', `Server version ${require('screeps').version}`); // eslint-disable-line global-require
+        this.emit('info', `Server version ${require('screeps').version}`);
         if (!this.connected) {
             await this.connect();
         }

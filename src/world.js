@@ -74,12 +74,10 @@ class World {
         Define room terrain data (walls, plains and swamps)
         @terrain must be an instance of TerrainMatrix.
     */
-    async setTerrain(room, terrain = null) {
+    async setTerrain(room, terrain = new TerrainMatrix()) {
         const { db, env } = this.server.common.storage;
         // Check parameters
-        if (terrain == null) {
-            terrain = new TerrainMatrix();
-        } else if (!(terrain instanceof TerrainMatrix)) {
+        if (!(terrain instanceof TerrainMatrix)) {
             throw new Error('@terrain must be an instance of TerrainMatrix');
         }
         // Insert or update data in database

@@ -1,6 +1,3 @@
-/* eslint global-require: "off", import/no-extraneous-dependencies: "off",
-import/no-unresolved: "off", no-console: "off", no-unused-vars: "off" */
-
 (async function () {
     const _ = require('lodash');
     const { ScreepsServer, TerrainMatrix } = require('screeps-server-mockup');

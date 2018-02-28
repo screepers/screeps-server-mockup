@@ -1,0 +1,8 @@
+{
+    "rules": {
+        "global-require": "off",
+        "no-console": "off",
+        "no-unused-vars": "off",
+        "import/no-unresolved": "off"
+    }
+}

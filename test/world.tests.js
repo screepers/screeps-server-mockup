@@ -1,5 +1,4 @@
-/* eslint prefer-arrow-callback: "off", global-require: "off", import/no-dynamic-require: "off",
-no-console: "off" */
+/* eslint global-require: "off" */
 
 const { ScreepsServer, stdHooks } = require('../');
 const assert = require('assert');

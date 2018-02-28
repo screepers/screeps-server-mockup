@@ -10,12 +10,13 @@
   "devDependencies": {
     "eslint": "latest",
     "eslint-config-airbnb-base": "latest",
+    "eslint-plugin-import": "latest",
     "mocha": "latest",
     "nyc": "latest",
     "publish": "latest"
   },
   "scripts": {
-    "cover": "nyc yarn test",
+    "coverage": "nyc yarn test",
     "lint": "eslint src examples test",
     "publish": "publish",
     "test": "mocha --ui tdd --exit"
