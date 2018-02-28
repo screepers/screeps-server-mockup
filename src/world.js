@@ -6,33 +6,6 @@ const User = require('./user');
 const util = require('util');
 const zlib = require('zlib');
 
-async function updateEnvTerrain(db, env) {
-    let walled = '';
-    for (let i = 0; i < 2500; i += 1) {
-        walled += '1';
-    }
-    const [rooms, terrain] = await Promise.all([
-        db.rooms.find(),
-        db['rooms.terrain'].find()
-    ]);
-    rooms.forEach((room) => {
-        if (room.status === 'out of borders') {
-            _.find(terrain, { room: room._id }).terrain = walled;
-        }
-        const m = room._id.match(/(W|E)(\d+)(N|S)(\d+)/);
-        const roomH = m[1] + (+m[2] + 1) + m[3] + m[4];
-        const roomV = m[1] + m[2] + m[3] + (+m[4] + 1);
-        if (!_.some(terrain, { room: roomH })) {
-            terrain.push({ room: roomH, terrain: walled });
-        }
-        if (!_.some(terrain, { room: roomV })) {
-            terrain.push({ room: roomV, terrain: walled });
-        }
-    });
-    const compressed = await util.promisify(zlib.deflate)(JSON.stringify(terrain));
-    await env.set(env.keys.TERRAIN_DATA, compressed.toString('base64'));
-}
-
 class World {
     /**
         Constructor
@@ -70,6 +43,7 @@ class World {
         } else {
             await db.rooms.insert({ _id: room, status, active });
         }
+        await this.server.driver.updateAccessibleRoomsList();
     }
 
     /**
@@ -116,7 +90,7 @@ class World {
             await db['rooms.terrain'].insert({ room, terrain: terrain.serialize() });
         }
         // Update environment cache
-        await updateEnvTerrain(db, env);
+        await this.updateEnvTerrain(db, env);
     }
 
     /**
@@ -156,7 +130,7 @@ class World {
         Stub a basic world by adding 9 plausible rooms with sources, minerals and controllers
     */
     async stubWorld() {
-    // Clear database
+        // Clear database
         await this.reset();
         // Utility functions
         const addRoomObjects = (roomName, objects) => Promise.all(
@@ -199,6 +173,33 @@ class World {
         ]);
         // Subscribe to console notificaiton and return emitter
         return new User(this.server, user).init();
+    }
+
+    async updateEnvTerrain(db, env) {
+        let walled = '';
+        for (let i = 0; i < 2500; i += 1) {
+            walled += '1';
+        }
+        const [rooms, terrain] = await Promise.all([
+            db.rooms.find(),
+            db['rooms.terrain'].find()
+        ]);
+        rooms.forEach((room) => {
+            if (room.status === 'out of borders') {
+                _.find(terrain, { room: room._id }).terrain = walled;
+            }
+            const m = room._id.match(/(W|E)(\d+)(N|S)(\d+)/);
+            const roomH = m[1] + (+m[2] + 1) + m[3] + m[4];
+            const roomV = m[1] + m[2] + m[3] + (+m[4] + 1);
+            if (!_.some(terrain, { room: roomH })) {
+                terrain.push({ room: roomH, terrain: walled });
+            }
+            if (!_.some(terrain, { room: roomV })) {
+                terrain.push({ room: roomV, terrain: walled });
+            }
+        });
+        const compressed = await util.promisify(zlib.deflate)(JSON.stringify(terrain));
+        await env.set(env.keys.TERRAIN_DATA, compressed.toString('base64'));
     }
 }
 

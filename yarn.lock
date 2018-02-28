@@ -908,9 +908,9 @@ eslint-visitor-keys@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#3f3180fb2e291017716acb4c9d6d5b5c34a6a81d"
 
-eslint@^4.11.0:
-  version "4.17.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.17.0.tgz#dc24bb51ede48df629be7031c71d9dc0ee4f3ddf"
+eslint@latest:
+  version "4.18.1"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.18.1.tgz#b9138440cb1e98b2f44a0d578c6ecf8eae6150b0"
   dependencies:
     ajv "^5.3.0"
     babel-code-frame "^6.22.0"
@@ -2364,7 +2364,7 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
-nyc@^11.4.1:
+nyc@latest:
   version "11.4.1"
   resolved "https://registry.yarnpkg.com/nyc/-/nyc-11.4.1.tgz#13fdf7e7ef22d027c61d174758f6978a68f4f5e5"
   dependencies:
@@ -2674,7 +2674,7 @@ pseudomap@^1.0.1, pseudomap@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
 
-publish@^0.6.0:
+publish@latest:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/publish/-/publish-0.6.0.tgz#ca124c8b9603ee1c7f739f35c12fcefbc3776f68"
   dependencies:

@@ -20,6 +20,7 @@ class ScreepsServer extends EventEmitter {
     constructor(opts) {
         super();
         this.common = common;
+        this.driver = driver;
         this.config = common.configManager.config;
         this.constants = this.config.common.constants;
         this.connected = false;

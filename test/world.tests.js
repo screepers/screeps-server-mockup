@@ -24,7 +24,7 @@ suite('World tests', function () {
     });
 
     test('Getting game time (tick)', async function () {
-    // Start server
+        // Start server
         server = new ScreepsServer();
         await server.start();
         // Assert that game time has a correct format
@@ -39,7 +39,7 @@ suite('World tests', function () {
     });
 
     test('Reseting world', async function () {
-    // Server initialization
+        // Server initialization
         server = new ScreepsServer();
         await server.start();
         await server.tick();
@@ -49,7 +49,7 @@ suite('World tests', function () {
     });
 
     test('Adding a bot', async function () {
-    // Server initialization
+        // Server initialization
         server = new ScreepsServer();
         const { db } = await server.world.load();
         await server.world.reset();
@@ -77,7 +77,7 @@ suite('World tests', function () {
     });
 
     test('Adding rooms', async function () {
-    // Server initialization
+        // Server initialization
         server = new ScreepsServer();
         const { db } = server.common.storage;
         await server.world.reset();
@@ -93,7 +93,7 @@ suite('World tests', function () {
     });
 
     test('Getting and setting RoomObjetcs', async function () {
-    // Server initialization
+        // Server initialization
         server = new ScreepsServer();
         await server.world.reset();
         await server.world.addRoom('W0N1');
@@ -111,7 +111,7 @@ suite('World tests', function () {
     });
 
     test('Getting and setting room terrain', async function () {
-    // Server initialization
+        // Server initialization
         server = new ScreepsServer();
         await server.world.reset();
         await server.world.addRoom('W0N1');
@@ -134,27 +134,87 @@ suite('World tests', function () {
     });
 
     test('Defining a stub world', async function () {
-        const data = require('../assets/rooms.json');
+        const samples = require('../assets/rooms.json');
         // Server initialization
         server = new ScreepsServer();
         const { db } = server.common.storage;
         await server.world.stubWorld();
         // Check that rooms were added
         const rooms = await db.rooms.find();
-        assert.equal(rooms.length, _.size(data));
+        assert.equal(rooms.length, _.size(samples));
         // Check that terrains were added
         const terrain = await db['rooms.terrain'].find();
-        assert.equal(terrain.length, _.size(data));
-        const W0N0 = _.first(await db['rooms.terrain'].find({ room: 'W0N0' }));
-        assert.equal(W0N0.terrain, data.W0N0.serial);
+        assert.equal(terrain.length, _.size(samples));
+        _.each(samples, async (sourceData, roomName) => {
+            const roomData = await db['rooms.terrain'].findOne({ room: roomName });
+            assert.equal(roomData.terrain, sourceData.serial);
+        });
         // Check that roomObject were added
-        const nbObjects = _.sumBy(_.toArray(data), room => _.size(room.objects));
+        const nbObjects = _.sumBy(_.toArray(samples), room => _.size(room.objects));
         const objects = await db['rooms.objects'].find();
         assert.equal(objects.length, nbObjects);
     });
 
+    test('Reading terrain in game', async function () {
+        // Server initialization
+        server = new ScreepsServer();
+        await server.world.stubWorld();
+        // Code declaration
+        const modules = {
+            main: `module.exports.loop = function() {
+               console.log('W0N0 terrain: ' + Game.map.getTerrainAt(25, 25, 'W0N0'));
+               console.log('W0N1 terrain: ' + Game.map.getTerrainAt(15, 48, 'W0N1'));
+               console.log('W1N2 terrain: ' + Game.map.getTerrainAt(37, 0, 'W1N2'));
+            }`,
+        };
+        // User / bot initialization
+        let logs = null;
+        const user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules });
+        user.on('console', (log, results, userid, username) => {
+            logs = log;
+        });
+        // Run one tick, then stop server
+        await server.start();
+        await server.tick();
+        server.stop();
+        // Assert if terrain was correctly read
+        assert.equal(logs.filter(line => line.match('terrain')).length, 3, 'invalid logs length');
+        assert.ok(_.find(logs, line => line.match('W0N0 terrain: plain')), 'W0N0 terrain not found or incorrect');
+        assert.ok(_.find(logs, line => line.match('W0N1 terrain: wall')), 'W0N1 terrain not found or incorrect');
+        assert.ok(_.find(logs, line => line.match('W1N2 terrain: wall')), 'W1N2 terrain not found or incorrect');
+    });
+
+    test('Reading exits in game', async function () {
+        // Server initialization
+        server = new ScreepsServer();
+        await server.world.stubWorld();
+        // Code declaration
+        const modules = {
+            main: `module.exports.loop = function() {
+               console.log('W0N0 exits: ' + JSON.stringify(Game.map.describeExits('W0N0')));
+               console.log('W0N1 exits: ' + JSON.stringify(Game.map.describeExits('W0N1')));
+               console.log('W1N2 exits: ' + JSON.stringify(Game.map.describeExits('W1N2')));
+            }`,
+        };
+        // User / bot initialization
+        let logs = null;
+        const user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules });
+        user.on('console', (log, results, userid, username) => {
+            logs = log;
+        });
+        // Run one tick, then stop server
+        await server.start();
+        await server.tick();
+        server.stop();
+        // Assert if exits were correctly read
+        assert.equal(logs.filter(line => line.match('exits')).length, 3, 'invalid logs length');
+        assert.ok(_.find(logs, line => line.match('W0N0 exits: {"7":"W1N0"}')), 'W0N0 exits not found or incorrect');
+        assert.ok(_.find(logs, line => line.match('W0N1 exits: {"1":"W0N2","7":"W1N1"}')), 'W0N1 exits not found or incorrect');
+        assert.ok(_.find(logs, line => line.match('W1N2 exits: {"5":"W1N1","7":"W2N2"}')), 'W1N2 exits not found or incorrect');
+    });
+
     teardown(async function () {
-    // Make sure that server is stopped in case something went wrong
+        // Make sure that server is stopped in case something went wrong
         if (_.isFunction(server.stop)) {
             server.stop();
             server = null;
