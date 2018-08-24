@@ -1,0 +1,32 @@
+image: node:latest
+
+stages:
+ - test
+ - publish
+
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+   - node_modules
+   - .yarn-cache
+
+before_script:
+   - yarn config set cache-folder .yarn-cache
+   - yarn install --pure-lockfile
+
+lint:
+  stage: test
+  script:
+   - yarn run lint
+
+test:
+  stage: test
+  script:
+   - yarn run test
+
+publish:  
+  stage: publish
+  only: [master]
+  script:
+    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
+    - yarn run publish

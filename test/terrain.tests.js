@@ -1,7 +1,5 @@
-/* eslint prefer-arrow-callback: "off", global-require: "off", import/no-dynamic-require: "off" */
-
-const { TerrainMatrix } = require('../');
 const assert = require('assert');
+const { TerrainMatrix } = require('../');
 
 suite('TerrainMatrix tests', function () {
     test('Setting and getting values', async function () {

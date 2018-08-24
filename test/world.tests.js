@@ -1,10 +1,10 @@
 /* eslint global-require: "off" */
 
-const { ScreepsServer, stdHooks } = require('../');
 const assert = require('assert');
 const fs = require('fs-extra-promise');
 const _ = require('lodash');
 const path = require('path');
+const { ScreepsServer, stdHooks } = require('../');
 
 // Dirty hack to prevent driver from flooding error messages
 stdHooks.hookWrite();
@@ -56,7 +56,9 @@ suite('World tests', function () {
         const modules = {
             main: 'console.log(Game.time)',
         };
+        await server.world.addRoomObject('W0N1', 'controller', 20, 20);
         await server.world.addBot({ username: 'bot1', room: 'W0N1', x: 25, y: 25, spawnName: 'azerty', modules });
+        await server.world.addRoomObject('W0N2', 'controller', 25, 25);
         await server.world.addBot({ username: 'bot2', room: 'W0N2', x: 30, y: 10, gcl: 9, cpu: 110, cpuAvailable: 10000 });
         // Assert if users were correctly created in database
         const bot1 = _.first(await db.users.find({ username: 'bot1' }));
