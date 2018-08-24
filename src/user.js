@@ -1,3 +1,5 @@
+/* eslint lines-between-class-members: "off" */
+
 const { EventEmitter } = require('events');
 const _ = require('lodash');
 

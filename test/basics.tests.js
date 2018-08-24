@@ -1,11 +1,8 @@
-/* eslint prefer-arrow-callback: "off", global-require: "off", import/no-dynamic-require: "off",
-no-console: "off", no-unused-vars: "off" */
-
-const { ScreepsServer, stdHooks } = require('../');
 const assert = require('assert');
 const fs = require('fs-extra-promise');
 const _ = require('lodash');
 const path = require('path');
+const { ScreepsServer, stdHooks } = require('../');
 
 // Dirty hack to prevent driver from flooding error messages
 stdHooks.hookWrite();

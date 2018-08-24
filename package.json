@@ -3,23 +3,23 @@
   "main": "./src/main.js",
   "license": "MIT",
   "dependencies": {
-    "fs-extra-promise": "^1.0.1",
-    "lodash": "^4.17.4",
-    "screeps": "^2.9.0"
+    "fs-extra-promise": "1.0.1",
+    "lodash": "4.17.4",
+    "screeps": "2.9.0"
   },
   "devDependencies": {
-    "eslint": "latest",
-    "eslint-config-airbnb-base": "latest",
-    "eslint-plugin-import": "latest",
-    "mocha": "latest",
-    "nyc": "latest",
-    "publish": "latest"
+    "eslint": "5.4.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-plugin-import": "2.14.0",
+    "mocha": "5.2.0",
+    "nyc": "12.0.2",
+    "publish": "0.6.0"
   },
   "scripts": {
-    "coverage": "nyc yarn test",
+    "coverage": "nyc mocha --ui tdd --exit",
     "lint": "eslint src examples test",
     "publish": "publish",
     "test": "mocha --ui tdd --exit"
   },
-  "version": "1.1.0"
+  "version": "1.2.0"
 }

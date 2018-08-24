@@ -1,10 +1,10 @@
 /* eslint function-paren-newline: "off" */
 
 const _ = require('lodash');
-const TerrainMatrix = require('./terrainMatrix');
-const User = require('./user');
 const util = require('util');
 const zlib = require('zlib');
+const TerrainMatrix = require('./terrainMatrix');
+const User = require('./user');
 
 class World {
     /**
@@ -160,6 +160,11 @@ class World {
     */
     async addBot({ username, room, x, y, gcl = 1, cpu = 100, cpuAvailable = 10000, active = 10000, spawnName = 'Spawn1', modules = {} }) {
         const { C, db, env } = await this.load();
+        // Ensure that there is a controller in requested room
+        const data = await db['rooms.objects'].find({ room, type: 'controller' });
+        if (data.length === 0) {
+            throw new Error(`cannot add user in ${room}: room does not have any controller`);
+        }
         // Insert user and update data
         const user = await db.users.insert({ username, cpu, cpuAvailable, gcl, active });
         await Promise.all([
