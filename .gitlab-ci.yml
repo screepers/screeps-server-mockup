@@ -28,5 +28,5 @@ publish:
   stage: publish
   only: [master]
   script:
-    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
+    - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
     - yarn run publish
