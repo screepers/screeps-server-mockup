@@ -28,5 +28,4 @@ publish:
   stage: publish
   only: [master]
   script:
-    - npm set //registry.npmjs.org/:_authToken $NPM_TOKEN
-    - npm run publish
+   - yarn run publish
