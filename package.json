@@ -22,5 +22,5 @@
     "publish": "bash scripts/publish.sh",
     "test": "mocha --ui tdd --exit"
   },
-  "version": "1.3.1"
+  "version": "1.4.0"
 }
