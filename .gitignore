@@ -1,4 +1,5 @@
 node_modules
 server
 logs
+*.log
 .nyc_output
