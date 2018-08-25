@@ -1,9 +1,5 @@
 image: node:latest
 
-stages:
- - test
- - publish
-
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
@@ -11,21 +7,13 @@ cache:
    - .yarn-cache
 
 before_script:
-   - yarn config set cache-folder .yarn-cache
-   - yarn install --pure-lockfile
+ - yarn config set cache-folder .yarn-cache
+ - yarn install --pure-lockfile
 
 lint:
-  stage: test
   script:
    - yarn run lint
 
 test:
-  stage: test
   script:
    - yarn run test
-
-publish:  
-  stage: publish
-  only: [master]
-  script:
-   - yarn run publish
