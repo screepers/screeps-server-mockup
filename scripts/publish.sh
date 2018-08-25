@@ -2,8 +2,30 @@
 
 #
 # Publish package on npm public registry if local version is newer.
-# Expects $NPM_TOKEN environment variable to be set with a valid npm authentication token.
+#  - Expects $NPM_TOKEN environment variable to be set with a valid npm authentication token.
+#  - Expects npm to already be installed
+#  - Tested only on Debian and CentOS based systems.
 #
+
+# Check if sudo is required (on some systems, sudo is not even installed)
+if [ "$(whoami)" == "root" ]; then
+    sudo=''
+else
+    sudo='sudo'
+fi
+
+# Ensure that required packages are installed
+if [ -n "$(which yum)" ]; then
+    echo "Installing packages using yum..."
+    $sudo yum install -y --quiet curl jq
+elif [ -n "$(which apt-get)" ]; then
+    echo "Installing packages using apt-get..."
+    $sudo apt-get update
+    $sudo apt-get install --yes --quiet curl jq
+else
+    echo "No packet manager found, cannot install dependencies automatically."
+fi
+echo ""
 
 # Read package name
 PACKAGE_NAME=$(cat package.json | jq --raw-output '.name')
