@@ -61,19 +61,19 @@ suite('World tests', function () {
         await server.world.addRoomObject('W0N2', 'controller', 25, 25);
         await server.world.addBot({ username: 'bot2', room: 'W0N2', x: 30, y: 10, gcl: 9, cpu: 110, cpuAvailable: 10000 });
         // Assert if users were correctly created in database
-        const bot1 = _.first(await db.users.find({ username: 'bot1' }));
+        const bot1 = await db.users.findOne({ username: 'bot1' });
         assert.equal(bot1.gcl, 1);
-        const bot2 = _.first(await db.users.find({ username: 'bot2' }));
+        const bot2 = await db.users.findOne({ username: 'bot2' });
         assert.equal(bot2.gcl, 9);
         assert.equal(bot2.cpu, 110);
         // Assert if controller and spawn were set
-        const controller1 = _.first(await db['rooms.objects'].find({ room: 'W0N1', type: 'controller' }));
-        const spawn1 = _.first(await db['rooms.objects'].find({ room: 'W0N1', type: 'spawn' }));
+        const controller1 = await db['rooms.objects'].findOne({ $and: [{ room: 'W0N1' }, { type: 'controller' }] });
+        const spawn1 = await db['rooms.objects'].findOne({ $and: [{ room: 'W0N1' }, { type: 'spawn' }] });
         assert.equal(controller1.user, bot1._id);
         assert.equal(spawn1.user, bot1._id);
         assert.equal(spawn1.name, 'azerty');
         // Assert if code was correctly registered
-        const code = _.first(await db['users.code'].find({ user: bot1._id, branch: 'default' }));
+        const code = await db['users.code'].findOne({ $and: [{ user: bot1._id }, { branch: 'default' }] });
         assert.deepEqual(code.modules, modules);
     });
 
@@ -84,7 +84,7 @@ suite('World tests', function () {
         await server.world.reset();
         // Add W0N1 and assert if room is created
         await server.world.addRoom('W0N1');
-        const room = _.first(await db.rooms.find({ _id: 'W0N1' }));
+        const room = await db.rooms.findOne({ _id: 'W0N1' });
         assert.equal(room._id, 'W0N1');
         // Cha,ge room status and assert if modification is done without adding a new room
         await server.world.setRoom('W0N1', 'normal', false);

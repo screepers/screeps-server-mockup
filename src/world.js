@@ -161,8 +161,8 @@ class World {
     async addBot({ username, room, x, y, gcl = 1, cpu = 100, cpuAvailable = 10000, active = 10000, spawnName = 'Spawn1', modules = {} }) {
         const { C, db, env } = await this.load();
         // Ensure that there is a controller in requested room
-        const data = await db['rooms.objects'].find({ room, type: 'controller' });
-        if (data.length === 0) {
+        const data = await db['rooms.objects'].findOne({ $and: [{ room }, { type: 'controller' }] });
+        if (data == null) {
             throw new Error(`cannot add user in ${room}: room does not have any controller`);
         }
         // Insert user and update data
