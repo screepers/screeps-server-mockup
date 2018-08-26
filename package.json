@@ -5,7 +5,7 @@
   "dependencies": {
     "fs-extra-promise": "1.0.1",
     "lodash": "4.17.10",
-    "screeps": "2.9.0"
+    "screeps": "2.13.2"
   },
   "devDependencies": {
     "eslint": "5.4.0",
@@ -22,5 +22,5 @@
     "publish": "bash scripts/publish.sh",
     "test": "mocha --ui tdd --exit"
   },
-  "version": "1.4.1"
+  "version": "1.4.2"
 }
