@@ -13,7 +13,7 @@
     "eslint-plugin-import": "2.14.0",
     "mocha": "5.2.0",
     "npm-cli-login": "0.0.10",
-    "nyc": "12.0.2"
+    "nyc": "13.0.1"
   },
   "scripts": {
     "coverage": "nyc mocha --ui tdd --exit",
@@ -21,5 +21,5 @@
     "publish": "bash scripts/publish.sh",
     "test": "mocha --ui tdd --exit"
   },
-  "version": "1.4.2"
+  "version": "1.4.3"
 }
