@@ -151,7 +151,7 @@ suite('World tests', function () {
             assert.equal(roomData.terrain, sourceData.serial);
         });
         // Check that roomObject were added
-        const nbObjects = _.sumBy(_.toArray(samples), room => _.size(room.objects));
+        const nbObjects = _.sumBy(_.toArray(samples), (room) => _.size(room.objects));
         const objects = await db['rooms.objects'].find();
         assert.equal(objects.length, nbObjects);
     });
@@ -179,10 +179,10 @@ suite('World tests', function () {
         await server.tick();
         server.stop();
         // Assert if terrain was correctly read
-        assert.equal(logs.filter(line => line.match('terrain')).length, 3, 'invalid logs length');
-        assert.ok(_.find(logs, line => line.match('W0N0 terrain: plain')), 'W0N0 terrain not found or incorrect');
-        assert.ok(_.find(logs, line => line.match('W0N1 terrain: wall')), 'W0N1 terrain not found or incorrect');
-        assert.ok(_.find(logs, line => line.match('W1N2 terrain: wall')), 'W1N2 terrain not found or incorrect');
+        assert.equal(logs.filter((line) => line.match('terrain')).length, 3, 'invalid logs length');
+        assert.ok(_.find(logs, (line) => line.match('W0N0 terrain: plain')), 'W0N0 terrain not found or incorrect');
+        assert.ok(_.find(logs, (line) => line.match('W0N1 terrain: wall')), 'W0N1 terrain not found or incorrect');
+        assert.ok(_.find(logs, (line) => line.match('W1N2 terrain: wall')), 'W1N2 terrain not found or incorrect');
     });
 
     test('Reading exits in game', async function () {
@@ -208,10 +208,10 @@ suite('World tests', function () {
         await server.tick();
         server.stop();
         // Assert if exits were correctly read
-        assert.equal(logs.filter(line => line.match('exits')).length, 3, 'invalid logs length');
-        assert.ok(_.find(logs, line => line.match('W0N0 exits: {"7":"W1N0"}')), 'W0N0 exits not found or incorrect');
-        assert.ok(_.find(logs, line => line.match('W0N1 exits: {"1":"W0N2","7":"W1N1"}')), 'W0N1 exits not found or incorrect');
-        assert.ok(_.find(logs, line => line.match('W1N2 exits: {"5":"W1N1","7":"W2N2"}')), 'W1N2 exits not found or incorrect');
+        assert.equal(logs.filter((line) => line.match('exits')).length, 3, 'invalid logs length');
+        assert.ok(_.find(logs, (line) => line.match('W0N0 exits: {"7":"W1N0"}')), 'W0N0 exits not found or incorrect');
+        assert.ok(_.find(logs, (line) => line.match('W0N1 exits: {"1":"W0N2","7":"W1N1"}')), 'W0N1 exits not found or incorrect');
+        assert.ok(_.find(logs, (line) => line.match('W1N2 exits: {"5":"W1N1","7":"W2N2"}')), 'W1N2 exits not found or incorrect');
     });
 
     teardown(async function () {

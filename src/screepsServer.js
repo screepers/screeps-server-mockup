@@ -35,11 +35,17 @@ class ScreepsServer extends EventEmitter {
     */
     setOpts(opts = {}) {
         // Assign options
-        this.opts = Object.assign({
+        // this.opts = Object.assign({
+        //     path:   path.resolve('server'),
+        //     logdir: path.resolve('server', 'logs'),
+        //     port:   21025,
+        // }, opts);
+
+        this.opts = { ...{
             path:   path.resolve('server'),
             logdir: path.resolve('server', 'logs'),
             port:   21025,
-        }, opts);
+        }, ...opts };
         // Define environment parameters
         process.env.MODFILE = this.opts.modfile;
         process.env.DRIVER_MODULE = '@screeps/driver';
@@ -97,10 +103,10 @@ class ScreepsServer extends EventEmitter {
     async tick() {
         await driver.notifyTickStarted();
         const users = await driver.getAllUsers();
-        await this.usersQueue.addMulti(_.map(users, user => user._id.toString()));
+        await this.usersQueue.addMulti(_.map(users, (user) => user._id.toString()));
         await this.usersQueue.whenAllDone();
         const rooms = await driver.getAllRooms();
-        await this.roomsQueue.addMulti(_.map(rooms, room => room._id.toString()));
+        await this.roomsQueue.addMulti(_.map(rooms, (room) => room._id.toString()));
         await this.roomsQueue.whenAllDone();
         await driver.commitDbBulk();
         await require('@screeps/engine/src/processor/global')();
@@ -158,7 +164,7 @@ class ScreepsServer extends EventEmitter {
         Stop most processes (it is not perfect though as some remain).
     */
     stop() {
-        _.each(this.processes, process => process.kill());
+        _.each(this.processes, (process) => process.kill());
         return this;
     }
 }

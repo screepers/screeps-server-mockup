@@ -101,7 +101,7 @@ class World {
             throw new Error('invalid x/y coordinates (they must be between 0 and 49)');
         }
         // Inject data in database
-        const object = Object.assign({ room, x, y, type }, attributes);
+        const object = { ...{ room, x, y, type }, ...attributes };
         return db['rooms.objects'].insert(object);
     }
 
@@ -111,7 +111,7 @@ class World {
     async reset() {
         const { db, env } = await this.load();
         // Clear database
-        await Promise.all(_.map(db, col => col.clear()));
+        await Promise.all(_.map(db, (col) => col.clear()));
         await env.set('gameTime', 1);
         // Generate basic terrain data
         const terrain = new TerrainMatrix();
@@ -132,7 +132,7 @@ class World {
         await this.reset();
         // Utility functions
         const addRoomObjects = (roomName, objects) => Promise.all(
-            objects.map(o => this.addRoomObject(roomName, o.type, o.x, o.y, o.attributes))
+            objects.map((o) => this.addRoomObject(roomName, o.type, o.x, o.y, o.attributes))
         );
         const addRoom = (roomName, terrain, roomObjects) => Promise.all([
             this.addRoom(roomName),
@@ -172,7 +172,7 @@ class World {
             db.rooms.update({ _id: room }, { $set: { active: true } }),
             db['users.code'].insert({ user: user._id, branch: 'default', modules, activeWorld: true }),
             db['rooms.objects'].update({ room, type: 'controller' }, { $set: { user: user._id, level: 1, progress: 0, downgradeTime: null, safeMode: 20000 } }),
-            db['rooms.objects'].insert({ room, type: 'spawn', x, y, user: user._id, name: spawnName, energy: C.SPAWN_ENERGY_START, energyCapacity: C.SPAWN_ENERGY_CAPACITY, hits: C.SPAWN_HITS, hitsMax: C.SPAWN_HITS, spawning: null, notifyWhenAttacked: true }),
+            db['rooms.objects'].insert({ room, type: 'spawn', x, y, user: user._id, name: spawnName, store : { energy: C.SPAWN_ENERGY_START }, storeCapacityResource: { energy: C.SPAWN_ENERGY_CAPACITY }, hits: C.SPAWN_HITS, hitsMax: C.SPAWN_HITS, spawning: null, notifyWhenAttacked: true }),
         ]);
         // Subscribe to console notificaiton and return emitter
         return new User(this.server, user).init();

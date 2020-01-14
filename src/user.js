@@ -54,7 +54,9 @@ class User extends EventEmitter {
     }
     get newNotifications() {
         const known = _.clone(this.knownNotifications);
-        return this.notifications.then(list => list.filter(notif => !known.includes(notif._id)));
+        return this.notifications.then(
+            (list) => list.filter((notif) => !known.includes(notif._id))
+        );
     }
     get activeSegments() {
         return this.getData('activeSegments');

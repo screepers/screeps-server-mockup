@@ -33,7 +33,7 @@
 
         // Print console logs every tick
         bot.on('console', (logs, results, userid, username) => {
-            _.each(logs, line => console.log(`[console|${username}]`, line));
+            _.each(logs, (line) => console.log(`[console|${username}]`, line));
         });
 
         // Start server and run several ticks
