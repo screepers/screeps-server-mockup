@@ -24,8 +24,7 @@
   "scripts": {
     "coverage": "nyc mocha --ui tdd --exit",
     "lint": "eslint src examples test",
-    "publish": "bash scripts/publish.sh",
     "test": "mocha --ui tdd --exit"
   },
-  "version": "1.4.3"
+  "version": "1.5.0"
 }
