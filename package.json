@@ -16,6 +16,11 @@
     "npm-cli-login": "0.1.1",
     "nyc": "15.0.0"
   },
+  "peerDependencies": {
+    "@screeps/common": "^2.12.1",
+    "@screeps/driver": "^5.0.0",
+    "@screeps/engine": "^4.0.4"
+  },
   "scripts": {
     "coverage": "nyc mocha --ui tdd --exit",
     "lint": "eslint src examples test",
