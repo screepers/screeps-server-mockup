@@ -3,7 +3,7 @@ const { TerrainMatrix } = require('../');
 
 suite('TerrainMatrix tests', function () {
     test('Setting and getting values', async function () {
-    // Define matrix
+        // Define matrix
         const matrix = new TerrainMatrix();
         matrix.set(0, 1, 'wall');
         matrix.set(0, 1, 'swamp');
@@ -16,7 +16,7 @@ suite('TerrainMatrix tests', function () {
     });
 
     test('Serializing and unserializing', async function () {
-    // Define matrix
+        // Define matrix
         let matrix = new TerrainMatrix();
         matrix.set(1, 0, 'swamp');
         matrix.set(2, 0, 'wall');
