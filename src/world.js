@@ -92,7 +92,8 @@ class World {
     }
 
     /**
-        Load (if needed) and return constants, database, env and pubsub objects
+        Add a RoomObject to the specified room
+        Returns db operation result
     */
     async addRoomObject(room, type, x, y, attributes) {
         const { db } = this.server.common.storage;
@@ -100,13 +101,13 @@ class World {
         if (x < 0 || y < 0 || x >= 50 || y >= 50) {
             throw new Error('invalid x/y coordinates (they must be between 0 and 49)');
         }
-        // Inject data in database
+        // Inject data into database
         const object = { ...{ room, x, y, type }, ...attributes };
         return db['rooms.objects'].insert(object);
     }
 
     /**
-        Reset worl data to a baren world with invaders and source keepers users
+        Reset world data to a barren world with invaders and source keepers users
     */
     async reset() {
         const { db, env } = await this.load();

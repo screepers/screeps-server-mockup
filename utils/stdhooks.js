@@ -3,7 +3,7 @@ const stderr = process.stderr.write;
 
 module.exports = {
     /*
-        Hook stdout/stderr.write() and remove driver notifications.
+        Monkey-patch stdout/stderr.write() to remove driver notifications.
     */
     hookWrite() {
         process.stdout.write = function (...args) {
@@ -19,7 +19,7 @@ module.exports = {
             return stdout.apply(this, args);
         };
     },
-    
+
     /*
         Reset stdout/stderr.write() to default behavior.
     */

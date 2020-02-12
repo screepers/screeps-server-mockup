@@ -45,12 +45,12 @@ class User extends EventEmitter {
     }
     get notifications() {
         const { db } = this._server.common.storage;
-        return db['users.notifications'].find({ user: this.id }).then((list) => { // eslint-disable-line arrow-body-style
-            return list.map(({ message, type, date, count, _id }) => {
+        return db['users.notifications']
+            .find({ user: this.id })
+            .then((list) => list.map(({ message, type, date, count, _id }) => {
                 this.knownNotifications.push(_id);
                 return { message, type, date, count, _id };
-            });
-        });
+            }));
     }
     get newNotifications() {
         const known = _.clone(this.knownNotifications);
