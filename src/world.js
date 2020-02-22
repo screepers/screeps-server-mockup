@@ -32,7 +32,7 @@ class World {
     }
 
     /**
-        Set rom status (and create it if needed)
+        Set room status (and create it if needed)
         This function does NOT generate terrain data
     */
     async setRoom(room, status = 'normal', active = true) {
@@ -47,7 +47,7 @@ class World {
     }
 
     /**
-        SImplified allias for setRoom()
+        Simplified alias for setRoom()
     */
     async addRoom(room) {
         return this.setRoom(room);
