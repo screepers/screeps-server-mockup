@@ -1,16 +1,28 @@
-/* eslint function-paren-newline: "off" */
+import * as _ from 'lodash';
+import * as util from 'util';
+import * as zlib from 'zlib';
+import {Matrix as TerrainMatrix} from './terrainMatrix';
+import User from './user';
 
-const _ = require('lodash');
-const util = require('util');
-const zlib = require('zlib');
-const TerrainMatrix = require('./terrainMatrix');
-const User = require('./user');
+interface AddBotOptions {
+    username: string;
+    room: string;
+    x: number;
+    y: number;
+    gcl?: number;
+    cpu?: number;
+    cpuAvailable?: number;
+    active?: number;
+    spawnName?: string;
+    modules?: {};
+}
 
-class World {
+export default class World {
+    private server: any;
     /**
         Constructor
     */
-    constructor(server) {
+    constructor(server: any) {
         this.server = server;
     }
 
@@ -35,7 +47,7 @@ class World {
         Set rom status (and create it if needed)
         This function does NOT generate terrain data
     */
-    async setRoom(room, status = 'normal', active = true) {
+    async setRoom(room: string, status = 'normal', active = true) {
         const { db } = this.server.common.storage;
         const data = await db.rooms.find({ _id: room });
         if (data.length > 0) {
@@ -49,7 +61,7 @@ class World {
     /**
         SImplified allias for setRoom()
     */
-    async addRoom(room) {
+    async addRoom(room: string) {
         return this.setRoom(room);
     }
 
@@ -57,7 +69,7 @@ class World {
         Return room terrain data (walls, plains and swamps)
         Return a TerrainMatrix instance
     */
-    async getTerrain(room) {
+    async getTerrain(room: string) {
         const { db } = this.server.common.storage;
         // Load data
         const data = await db['rooms.terrain'].find({ room });
@@ -74,7 +86,7 @@ class World {
         Define room terrain data (walls, plains and swamps)
         @terrain must be an instance of TerrainMatrix.
     */
-    async setTerrain(room, terrain = new TerrainMatrix()) {
+    async setTerrain(room: string, terrain = new TerrainMatrix()) {
         const { db, env } = this.server.common.storage;
         // Check parameters
         if (!(terrain instanceof TerrainMatrix)) {
@@ -95,7 +107,7 @@ class World {
         Add a RoomObject to the specified room
         Returns db operation result
     */
-    async addRoomObject(room, type, x, y, attributes) {
+    async addRoomObject(room: string, type: string, x: number, y: number, attributes: {}) {
         const { db } = this.server.common.storage;
         // Check parameters
         if (x < 0 || y < 0 || x >= 50 || y >= 50) {
@@ -132,16 +144,16 @@ class World {
         // Clear database
         await this.reset();
         // Utility functions
-        const addRoomObjects = (roomName, objects) => Promise.all(
+        const addRoomObjects = (roomName: string, objects: Array<any>) => Promise.all(
             objects.map((o) => this.addRoomObject(roomName, o.type, o.x, o.y, o.attributes))
         );
-        const addRoom = (roomName, terrain, roomObjects) => Promise.all([
+        const addRoom = (roomName: string, terrain: any, roomObjects: Array<any>) => Promise.all([
             this.addRoom(roomName),
             this.setTerrain(roomName, terrain),
             addRoomObjects(roomName, roomObjects)
         ]);
         // Add rooms
-        const rooms = require('../assets/rooms.json'); // eslint-disable-line global-require
+        const rooms = require('../../assets/rooms.json'); // eslint-disable-line global-require
         await Promise.all(_.map(rooms, (data, roomName) => {
             const terrain = TerrainMatrix.unserialize(data.serial);
             return addRoom(roomName, terrain, data.objects);
@@ -151,7 +163,7 @@ class World {
     /**
         Get the roomObjects list for requested roomName
     */
-    async roomObjects(roomName) {
+    async roomObjects(roomName: string) {
         const { db } = await this.load();
         return db['rooms.objects'].find({ room: roomName });
     }
@@ -159,7 +171,7 @@ class World {
     /**
         Add a new user to the world
     */
-    async addBot({ username, room, x, y, gcl = 1, cpu = 100, cpuAvailable = 10000, active = 10000, spawnName = 'Spawn1', modules = {} }) {
+    async addBot({ username, room, x, y, gcl = 1, cpu = 100, cpuAvailable = 10000, active = 10000, spawnName = 'Spawn1', modules = {} }: AddBotOptions) {
         const { C, db, env } = await this.load();
         // Ensure that there is a controller in requested room
         const data = await db['rooms.objects'].findOne({ $and: [{ room }, { type: 'controller' }] });
@@ -179,7 +191,7 @@ class World {
         return new User(this.server, user).init();
     }
 
-    async updateEnvTerrain(db, env) {
+    async updateEnvTerrain(db: any, env: any) {
         let walled = '';
         for (let i = 0; i < 2500; i += 1) {
             walled += '1';
@@ -188,7 +200,7 @@ class World {
             db.rooms.find(),
             db['rooms.terrain'].find()
         ]);
-        rooms.forEach((room) => {
+        rooms.forEach((room: any) => {
             if (room.status === 'out of borders') {
                 _.find(terrain, { room: room._id }).terrain = walled;
             }
@@ -203,8 +215,6 @@ class World {
             }
         });
         const compressed = await util.promisify(zlib.deflate)(JSON.stringify(terrain));
-        await env.set(env.keys.TERRAIN_DATA, compressed.toString('base64'));
+        await env.set(env.keys.TERRAIN_DATA, (compressed as any).toString('base64'));
     }
 }
-
-module.exports = World;

@@ -1,13 +1,18 @@
 /* eslint lines-between-class-members: "off" */
 
-const { EventEmitter } = require('events');
-const _ = require('lodash');
+import { EventEmitter } from 'events';
+import * as _ from 'lodash';
 
-class User extends EventEmitter {
+export default class User extends EventEmitter {
+    knownNotifications: string[];
+    private _id: string;
+    private _username: string;
+    private _server: any;
+
     /**
         Constructor
     */
-    constructor(server, data) {
+    constructor(server: any, data: any) {
         super();
         this._id = data._id;
         this._username = data.username;
@@ -47,7 +52,7 @@ class User extends EventEmitter {
         const { db } = this._server.common.storage;
         return db['users.notifications']
             .find({ user: this.id })
-            .then((list) => list.map(({ message, type, date, count, _id }) => {
+            .then((list: any[]) => list.map(({ message, type, date, count, _id }) => {
                 this.knownNotifications.push(_id);
                 return { message, type, date, count, _id };
             }));
@@ -55,7 +60,7 @@ class User extends EventEmitter {
     get newNotifications() {
         const known = _.clone(this.knownNotifications);
         return this.notifications.then(
-            (list) => list.filter((notif) => !known.includes(notif._id))
+            (list: any[]) => list.filter((notif) => !known.includes(notif._id))
         );
     }
     get activeSegments() {
@@ -65,7 +70,7 @@ class User extends EventEmitter {
     /**
         Return the content of user segments based on @list (the list of segments, ie: [0, 1, 2]).
     */
-    async getSegments(list) {
+    async getSegments(list: number[]) {
         const { env } = this._server.common.storage;
         return env.hmget(env.keys.MEMORY_SEGMENTS + this._id, list);
     }
@@ -73,7 +78,7 @@ class User extends EventEmitter {
     /**
         Set a new console command to run next tick
     */
-    async console(cmd) {
+    async console(cmd: string) {
         const { db } = this._server.common.storage;
         return db['users.console'].insert({ user: this._id, expression: cmd, hidden: false });
     }
@@ -81,7 +86,7 @@ class User extends EventEmitter {
     /**
         Return the current value of the requested user data
     */
-    async getData(name) {
+    async getData(name: string) {
         const { db } = this._server.common.storage;
         const data = await db.users.find({ _id: this._id });
         return _.get(_.first(data), name);
@@ -92,7 +97,7 @@ class User extends EventEmitter {
     */
     async init() {
         const { pubsub } = this._server.common.storage;
-        await pubsub.subscribe(`user:${this._id}/console`, (event) => {
+        await pubsub.subscribe(`user:${this._id}/console`, (event: any) => {
             const { messages } = JSON.parse(event);
             const { log = [], results = [] } = messages || {};
             this.emit('console', log, results, this._id, this.username);
@@ -100,5 +105,3 @@ class User extends EventEmitter {
         return this;
     }
 }
-
-module.exports = User;

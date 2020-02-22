@@ -1,8 +1,9 @@
-const _ = require('lodash');
+import * as _ from 'lodash';
 
 const TYPES = ['plain', 'wall', 'swamp'];
 
-class Matrix {
+export class Matrix {
+    data: {}
     /**
         Constructor
     */
@@ -13,14 +14,14 @@ class Matrix {
     /**
         Getters
     */
-    get(x, y) {
+    get(x: number, y: number) {
         return _.get(this.data, `${x}:${y}`, 'plain');
     }
 
     /**
         Setters
     */
-    set(x, y, value) {
+    set(x: number, y: number, value: string) {
         if (TYPES.includes(value)) {
             _.set(this.data, `${x}:${y}`, value);
         } else {
@@ -51,7 +52,7 @@ class Matrix {
     /**
         Return a string representation of the matrix
     */
-    static unserialize(str) {
+    static unserialize(str: string) {
         const matrix = new Matrix();
         _.each(str.split(''), (mask, idx) => {
             const x = idx % 50;
@@ -66,5 +67,3 @@ class Matrix {
         return matrix;
     }
 }
-
-module.exports = Matrix;
