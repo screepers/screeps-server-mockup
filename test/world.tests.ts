@@ -1,11 +1,9 @@
-/* eslint global-require: "off" */
-
-const assert = require('assert');
-const fs = require('fs-extra-promise');
-const _ = require('lodash');
-const path = require('path');
-const { ScreepsServer } = require('../dist/src/screepsServer');
-const stdHooks = require('../utils/stdhooks');
+import *  as assert from 'assert';
+import * as fs from 'fs-extra-promise';
+import * as _ from 'lodash';
+import * as path from 'path';
+import { ScreepsServer } from '../src/screepsServer';
+const stdHooks = require('../../utils/stdhooks');
 
 // Dirty hack to prevent driver from flooding error messages
 stdHooks.hookWrite();
@@ -15,15 +13,15 @@ suite('World tests', function () {
     this.slow(5 * 1000);
 
     // Server variable used for the tests
-    let server = null;
+    let server: ScreepsServer|null = null;
 
-    test('Getting internal constants and objects (internal)', async function () {
+    test('Getting internal constants and objects (internal)', async () => {
         server = new ScreepsServer();
         const { C } = await server.world.load();
-        assert.equal(C.OK, 0);
+        assert.strictEqual(C.OK, 0);
     });
 
-    test('Getting game time (tick)', async function () {
+    test('Getting game time (tick)', async () => {
         // Start server
         server = new ScreepsServer();
         await server.start();
@@ -33,22 +31,22 @@ suite('World tests', function () {
         assert(initial > 0, 'Game time is not positive.');
         // Assert that game time is correct after a tick
         await server.tick();
-        assert.equal(await server.world.gameTime, initial + 1);
+        assert.strictEqual(await server.world.gameTime, initial + 1);
         // Stop server (don't stop it before we get all info)
         server.stop();
     });
 
-    test('Reseting world', async function () {
+    test('Reseting world', async () => {
         // Server initialization
         server = new ScreepsServer();
         await server.start();
         await server.tick();
         // Reset server and ensure world is correctly reset
         await server.world.reset();
-        assert(await server.world.gameTime, 1);
+        assert.strictEqual(await server.world.gameTime, 1, 'Game tme was not reset.');
     });
 
-    test('Adding a bot', async function () {
+    test('Adding a bot', async () => {
         // Server initialization
         server = new ScreepsServer();
         const { db } = await server.world.load();
@@ -63,22 +61,22 @@ suite('World tests', function () {
         await server.world.addBot({ username: 'bot2', room: 'W0N2', x: 30, y: 10, gcl: 9, cpu: 110, cpuAvailable: 10000 });
         // Assert if users were correctly created in database
         const bot1 = await db.users.findOne({ username: 'bot1' });
-        assert.equal(bot1.gcl, 1);
+        assert.strictEqual(bot1.gcl, 1);
         const bot2 = await db.users.findOne({ username: 'bot2' });
-        assert.equal(bot2.gcl, 9);
-        assert.equal(bot2.cpu, 110);
+        assert.strictEqual(bot2.gcl, 9);
+        assert.strictEqual(bot2.cpu, 110);
         // Assert if controller and spawn were set
         const controller1 = await db['rooms.objects'].findOne({ $and: [{ room: 'W0N1' }, { type: 'controller' }] });
         const spawn1 = await db['rooms.objects'].findOne({ $and: [{ room: 'W0N1' }, { type: 'spawn' }] });
-        assert.equal(controller1.user, bot1._id);
-        assert.equal(spawn1.user, bot1._id);
-        assert.equal(spawn1.name, 'azerty');
+        assert.strictEqual(controller1.user, bot1._id);
+        assert.strictEqual(spawn1.user, bot1._id);
+        assert.strictEqual(spawn1.name, 'azerty');
         // Assert if code was correctly registered
         const code = await db['users.code'].findOne({ $and: [{ user: bot1._id }, { branch: 'default' }] });
-        assert.deepEqual(code.modules, modules);
+        assert.deepStrictEqual(code.modules, modules);
     });
 
-    test('Adding rooms', async function () {
+    test('Adding rooms', async () => {
         // Server initialization
         server = new ScreepsServer();
         const { db } = server.common.storage;
@@ -86,15 +84,15 @@ suite('World tests', function () {
         // Add W0N1 and assert if room is created
         await server.world.addRoom('W0N1');
         const room = await db.rooms.findOne({ _id: 'W0N1' });
-        assert.equal(room._id, 'W0N1');
+        assert.strictEqual(room._id, 'W0N1');
         // Cha,ge room status and assert if modification is done without adding a new room
         await server.world.setRoom('W0N1', 'normal', false);
-        const rooms = await db.rooms.find({ _id: 'W0N1' });
-        assert.equal(rooms.length, 1);
-        assert.equal(_.first(rooms).active, false);
+        const rooms: Array<{active: boolean}> = await db.rooms.find({ _id: 'W0N1' });
+        assert.strictEqual(rooms.length, 1);
+        assert.strictEqual(_.first(rooms)!.active, false);
     });
 
-    test('Getting and setting RoomObjetcs', async function () {
+    test('Getting and setting RoomObjetcs', async () => {
         // Server initialization
         server = new ScreepsServer();
         await server.world.reset();
@@ -106,13 +104,13 @@ suite('World tests', function () {
         const objects = await server.world.roomObjects('W0N1');
         const source = _.find(objects, { type: 'source' });
         const mineral = _.find(objects, { type: 'mineral' });
-        assert.equal(objects.length, 2);
-        assert.equal(source.x, 10);
-        assert.equal(source.energy, 1000);
-        assert.equal(mineral.density, 3);
+        assert.strictEqual(objects.length, 2);
+        assert.strictEqual(source.x, 10);
+        assert.strictEqual(source.energy, 1000);
+        assert.strictEqual(mineral.density, 3);
     });
 
-    test('Getting and setting room terrain', async function () {
+    test('Getting and setting room terrain', async () => {
         // Server initialization
         server = new ScreepsServer();
         await server.world.reset();
@@ -135,29 +133,29 @@ suite('World tests', function () {
             .catch(() => 'ok');
     });
 
-    test('Defining a stub world', async function () {
-        const samples = require('../assets/rooms.json');
+    test('Defining a stub world', async () => {
+        const samples = require('../../assets/rooms.json');
         // Server initialization
         server = new ScreepsServer();
         const { db } = server.common.storage;
         await server.world.stubWorld();
         // Check that rooms were added
         const rooms = await db.rooms.find();
-        assert.equal(rooms.length, _.size(samples));
+        assert.strictEqual(rooms.length, _.size(samples));
         // Check that terrains were added
         const terrain = await db['rooms.terrain'].find();
-        assert.equal(terrain.length, _.size(samples));
+        assert.strictEqual(terrain.length, _.size(samples));
         _.each(samples, async (sourceData, roomName) => {
             const roomData = await db['rooms.terrain'].findOne({ room: roomName });
-            assert.equal(roomData.terrain, sourceData.serial);
+            assert.strictEqual(roomData.terrain, sourceData.serial);
         });
         // Check that roomObject were added
         const nbObjects = _.sumBy(_.toArray(samples), (room) => _.size(room.objects));
         const objects = await db['rooms.objects'].find();
-        assert.equal(objects.length, nbObjects);
+        assert.strictEqual(objects.length, nbObjects);
     });
 
-    test('Reading terrain in game', async function () {
+    test('Reading terrain in game', async () => {
         // Server initialization
         server = new ScreepsServer();
         await server.world.stubWorld();
@@ -170,7 +168,7 @@ suite('World tests', function () {
             }`,
         };
         // User / bot initialization
-        let logs = null;
+        let logs: string[] = [];
         const user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules });
         user.on('console', (log, results, userid, username) => {
             logs = log;
@@ -180,13 +178,13 @@ suite('World tests', function () {
         await server.tick();
         server.stop();
         // Assert if terrain was correctly read
-        assert.equal(logs.filter((line) => line.match('terrain')).length, 3, 'invalid logs length');
+        assert.strictEqual(logs.filter((line) => line.match('terrain')).length, 3, 'invalid logs length');
         assert.ok(_.find(logs, (line) => line.match('W0N0 terrain: plain')), 'W0N0 terrain not found or incorrect');
         assert.ok(_.find(logs, (line) => line.match('W0N1 terrain: wall')), 'W0N1 terrain not found or incorrect');
         assert.ok(_.find(logs, (line) => line.match('W1N2 terrain: wall')), 'W1N2 terrain not found or incorrect');
     });
 
-    test('Reading exits in game', async function () {
+    test('Reading exits in game', async () => {
         // Server initialization
         server = new ScreepsServer();
         await server.world.stubWorld();
@@ -199,7 +197,7 @@ suite('World tests', function () {
             }`,
         };
         // User / bot initialization
-        let logs = null;
+        let logs: string[] = [];
         const user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules });
         user.on('console', (log, results, userid, username) => {
             logs = log;
@@ -209,15 +207,15 @@ suite('World tests', function () {
         await server.tick();
         server.stop();
         // Assert if exits were correctly read
-        assert.equal(logs.filter((line) => line.match('exits')).length, 3, 'invalid logs length');
+        assert.strictEqual(logs.filter((line) => line.match('exits')).length, 3, 'invalid logs length');
         assert.ok(_.find(logs, (line) => line.match('W0N0 exits: {"7":"W1N0"}')), 'W0N0 exits not found or incorrect');
         assert.ok(_.find(logs, (line) => line.match('W0N1 exits: {"1":"W0N2","7":"W1N1"}')), 'W0N1 exits not found or incorrect');
         assert.ok(_.find(logs, (line) => line.match('W1N2 exits: {"5":"W1N1","7":"W2N2"}')), 'W1N2 exits not found or incorrect');
     });
 
-    teardown(async function () {
+    teardown(async () => {
         // Make sure that server is stopped in case something went wrong
-        if (_.isFunction(server.stop)) {
+        if (server && _.isFunction(server.stop)) {
             server.stop();
             server = null;
         }

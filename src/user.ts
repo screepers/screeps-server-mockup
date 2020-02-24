@@ -4,6 +4,8 @@ import { EventEmitter } from 'events';
 import * as _ from 'lodash';
 import { ScreepsServer } from 'screepsServer';
 
+type Notification = { message: string, type: string, date: number, count: number, _id: string }
+
 export default class User extends EventEmitter {
     private knownNotifications: string[];
     private _id: string;
@@ -49,7 +51,7 @@ export default class User extends EventEmitter {
         const { env } = this._server.common.storage;
         return env.get(env.keys.MEMORY + this.id);
     }
-    get notifications() {
+    get notifications(): Promise<Notification[]> {
         const { db } = this._server.common.storage;
         return db['users.notifications']
             .find({ user: this.id })
@@ -61,7 +63,7 @@ export default class User extends EventEmitter {
     get newNotifications() {
         const known = _.clone(this.knownNotifications);
         return this.notifications.then(
-            (list: any[]) => list.filter((notif) => !known.includes(notif._id))
+            (list) => list.filter((notif) => !known.includes(notif._id))
         );
     }
     get activeSegments() {
