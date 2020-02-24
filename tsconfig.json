@@ -4,7 +4,7 @@
     "lib": [
       "esnext"
     ],
-    "target": "ES6",
+    "target": "esnext",
     "moduleResolution": "Node",
     "outDir": "dist",
     "baseUrl": "src/",

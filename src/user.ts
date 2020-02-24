@@ -2,17 +2,18 @@
 
 import { EventEmitter } from 'events';
 import * as _ from 'lodash';
+import { ScreepsServer } from 'screepsServer';
 
 export default class User extends EventEmitter {
-    knownNotifications: string[];
+    private knownNotifications: string[];
     private _id: string;
     private _username: string;
-    private _server: any;
+    private _server: ScreepsServer;
 
     /**
         Constructor
     */
-    constructor(server: any, data: any) {
+    constructor(server: ScreepsServer, data: any) {
         super();
         this._id = data._id;
         this._username = data.username;

@@ -3,6 +3,7 @@ import * as util from 'util';
 import * as zlib from 'zlib';
 import {Matrix as TerrainMatrix} from './terrainMatrix';
 import User from './user';
+import {ScreepsServer} from 'screepsServer';
 
 interface AddBotOptions {
     username: string;
@@ -18,11 +19,11 @@ interface AddBotOptions {
 }
 
 export default class World {
-    private server: any;
+    private server: ScreepsServer;
     /**
         Constructor
     */
-    constructor(server: any) {
+    constructor(server: ScreepsServer) {
         this.server = server;
     }
 
