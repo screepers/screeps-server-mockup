@@ -13,7 +13,7 @@ export default class User extends EventEmitter {
     /**
         Constructor
     */
-    constructor(server: ScreepsServer, data: any) {
+    constructor(server: ScreepsServer, data: {_id: string, username: string}) {
         super();
         this._id = data._id;
         this._username = data.username;
@@ -30,19 +30,19 @@ export default class User extends EventEmitter {
     get username() {
         return this._username;
     }
-    get cpu() {
+    get cpu(): Promise<number> {
         return this.getData('cpu');
     }
-    get cpuAvailable() {
+    get cpuAvailable(): Promise<number> {
         return this.getData('cpuAvailable');
     }
-    get gcl() {
+    get gcl(): Promise<number> {
         return this.getData('gcl');
     }
     get rooms() {
         return this.getData('rooms');
     }
-    get lastUsedCpu() {
+    get lastUsedCpu(): Promise<number> {
         return this.getData('lastUsedCpu');
     }
     get memory() {
@@ -64,14 +64,14 @@ export default class User extends EventEmitter {
             (list: any[]) => list.filter((notif) => !known.includes(notif._id))
         );
     }
-    get activeSegments() {
+    get activeSegments(): Promise<number[]> {
         return this.getData('activeSegments');
     }
 
     /**
         Return the content of user segments based on @list (the list of segments, ie: [0, 1, 2]).
     */
-    async getSegments(list: number[]) {
+    async getSegments(list: number[]): Promise<any[]> {
         const { env } = this._server.common.storage;
         return env.hmget(env.keys.MEMORY_SEGMENTS + this._id, list);
     }
