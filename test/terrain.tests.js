@@ -1,10 +1,10 @@
 const assert = require('assert');
-const { TerrainMatrix } = require('../');
+const { Matrix } = require('../dist/src/terrainMatrix');
 
 suite('TerrainMatrix tests', function () {
     test('Setting and getting values', async function () {
         // Define matrix
-        const matrix = new TerrainMatrix();
+        const matrix = new Matrix();
         matrix.set(0, 1, 'wall');
         matrix.set(0, 1, 'swamp');
         matrix.set(0, 2, 'wall');
@@ -17,7 +17,7 @@ suite('TerrainMatrix tests', function () {
 
     test('Serializing and unserializing', async function () {
         // Define matrix
-        let matrix = new TerrainMatrix();
+        let matrix = new Matrix();
         matrix.set(1, 0, 'swamp');
         matrix.set(2, 0, 'wall');
         // Test serialization
@@ -27,7 +27,7 @@ suite('TerrainMatrix tests', function () {
         serial = serial.join('');
         assert.equal(matrix.serialize(), serial);
         // Test unserialization
-        matrix = TerrainMatrix.unserialize(serial);
+        matrix = Matrix.unserialize(serial);
         assert.equal(matrix.get(0, 0), 'plain');
         assert.equal(matrix.get(1, 0), 'swamp');
         assert.equal(matrix.get(2, 0), 'wall');

@@ -1,5 +1,5 @@
-const ScreepsServer = require('./screepsServer');
+import {ScreepsServer} from './screepsServer';
 const stdHooks = require('../utils/stdhooks');
-const TerrainMatrix = require('./terrainMatrix');
+import {Matrix as TerrainMatrix} from './terrainMatrix';
 
 module.exports = { ScreepsServer, stdHooks, TerrainMatrix };

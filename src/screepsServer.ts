@@ -1,23 +1,42 @@
-/* eslint no-console: "off", no-restricted-syntax: "off", global-require: "off" */
-
-const cp = require('child_process');
-const { EventEmitter } = require('events');
-const fs = require('fs-extra-promise');
-const _ = require('lodash');
-const path = require('path');
+import * as cp from 'child_process';
+import { EventEmitter } from 'events';
+import * as fs from 'fs-extra-promise';
+import * as _ from 'lodash';
+import * as path from 'path';
 const common = require('@screeps/common');
 const driver = require('@screeps/driver');
-const World = require('./world');
+import World from './world';
 
-const ASSETS_PATH = path.join(__dirname, '..', 'assets');
+const ASSETS_PATH = path.join(__dirname, '..', '..', 'assets');
 const MOD_FILE = 'mods.json';
 const DB_FILE = 'db.json';
 
-class ScreepsServer extends EventEmitter {
+interface ScreepServerOptions {
+    path?: string,
+    logDir?: string,
+    port? : number,
+    modFile?: string,
+}
+
+export class ScreepsServer extends EventEmitter {
+    driver: any;
+    config: any;
+    common: any;
+    constants: any;
+    connected: boolean;
+    lastAccessibleRoomsUpdate: number;
+    processes: {[name: string]: cp.ChildProcess};
+    world: World;
+
+    private usersQueue?: any
+    private roomsQueue?: any
+
+    private opts: any;
+
     /*
         Constructor.
     */
-    constructor(opts) {
+    constructor(opts: ScreepServerOptions) {
         super();
         this.common = common;
         this.driver = driver;
@@ -33,7 +52,7 @@ class ScreepsServer extends EventEmitter {
     /*
         Define server options and set defaults.
     */
-    setOpts(opts = {}) {
+    setOpts(opts: ScreepServerOptions = {}) {
         // Assign options
         // this.opts = Object.assign({
         //     path:   path.resolve('server'),
@@ -62,8 +81,8 @@ class ScreepsServer extends EventEmitter {
         await fs.mkdirAsync(this.opts.logdir).catch(() => {});
         // Copy assets into server directory
         await Promise.all([
-            fs.copyFileAsync(path.join(ASSETS_PATH, DB_FILE), path.join(this.opts.path, DB_FILE)),
-            fs.copyFileAsync(path.join(ASSETS_PATH, MOD_FILE), path.join(this.opts.path, MOD_FILE)),
+            fs.copyAsync(path.join(ASSETS_PATH, DB_FILE), path.join(this.opts.path, DB_FILE)),
+            fs.copyAsync(path.join(ASSETS_PATH, MOD_FILE), path.join(this.opts.path, MOD_FILE)),
         ]);
         // Start storage process
         this.emit('info', 'Starting storage process.');
@@ -88,8 +107,8 @@ class ScreepsServer extends EventEmitter {
             console.log = _.noop; // disable console
             await driver.connect('main');
             console.log = oldLog; // re-enable console
-            this.usersQueue = await driver.queue.create('users', 'write');
-            this.roomsQueue = await driver.queue.create('rooms', 'write');
+            this.usersQueue = await driver.queue.create('users');
+            this.roomsQueue = await driver.queue.create('rooms');
             this.connected = true;
         } catch (err) {
             throw new Error(`Error connecting to driver: ${err.stack}`);
@@ -114,15 +133,15 @@ class ScreepsServer extends EventEmitter {
         const gameTime = await driver.incrementGameTime();
         await driver.updateAccessibleRoomsList();
         await driver.notifyRoomsDone(gameTime);
-        await driver.config.mainLoopCustomStage();
+        await (driver.config as any).mainLoopCustomStage();
     }
 
     /*
         Start a child process with environment.
     */
-    async startProcess(name, execPath, env) {
+    async startProcess(name: string, execPath: string, env: NodeJS.ProcessEnv) {
         const fd = await fs.openAsync(path.resolve(this.opts.logdir, `${name}.log`), 'a');
-        this.processes[name] = cp.fork(path.resolve(execPath), { stdio: [0, fd, fd, 'ipc'], env });
+        this.processes[name] = cp.fork(path.resolve(execPath), [], { stdio: [0, fd, fd, 'ipc'], env });
         this.emit('info', `[${name}] process ${this.processes[name].pid} started`);
         this.processes[name].on('exit', async (code, signal) => {
             await fs.closeAsync(fd);
@@ -168,5 +187,3 @@ class ScreepsServer extends EventEmitter {
         return this;
     }
 }
-
-module.exports = ScreepsServer;
