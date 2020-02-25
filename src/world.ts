@@ -161,7 +161,7 @@ export default class World {
     /**
         Get the roomObjects list for requested roomName
     */
-    async roomObjects(roomName: string) {
+    async roomObjects(roomName: string): Promise<any[]> {
         const { db } = await this.load();
         return db['rooms.objects'].find({ room: roomName });
     }
