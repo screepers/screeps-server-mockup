@@ -30,7 +30,7 @@ export default class World {
     /**
         Getters
     */
-    get gameTime() {
+    get gameTime(): Promise<number> {
         return this.load().then(({ env }) => env.get('gameTime'));
     }
 
@@ -120,18 +120,15 @@ export default class World {
     }
 
     /**
-        Reset world data to a barren world with invaders and source keepers users
+        Reset world data to a barren world with no rooms, but with invaders and source keepers users
     */
     async reset() {
         const { db, env } = await this.load();
         // Clear database
         await Promise.all(_.map(db, (col) => col.clear()));
         await env.set('gameTime', 1);
-        // Generate basic terrain data
-        const terrain = new TerrainMatrix();
-        const walls = [[10, 10], [10, 40], [40, 10], [40, 40]];
-        _.each(walls, ([x, y]) => terrain.set(x, y, 'wall'));
-        // Insert basic room data
+
+        // Insert invaders and sourcekeeper users
         await Promise.all([
             db.users.insert({ _id: '2', username: 'Invader', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 }),
             db.users.insert({ _id: '3', username: 'Source Keeper', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 })
@@ -192,11 +189,7 @@ export default class World {
         return new User(this.server, user).init();
     }
 
-    async updateEnvTerrain(db: any, env: any) {
-        let walled = '';
-        for (let i = 0; i < 2500; i += 1) {
-            walled += '1';
-        }
+    private async updateEnvTerrain(db: any, env: any) {
         const [rooms, terrain] = await Promise.all([
             db.rooms.find(),
             db['rooms.terrain'].find()
@@ -219,3 +212,5 @@ export default class World {
         await env.set(env.keys.TERRAIN_DATA, (compressed as any).toString('base64'));
     }
 }
+
+const walled = '1'.repeat(2500);
