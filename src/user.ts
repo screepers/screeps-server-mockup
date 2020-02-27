@@ -45,7 +45,7 @@ export default class User extends EventEmitter {
     get lastUsedCpu(): Promise<number> {
         return this.getData('lastUsedCpu');
     }
-    get memory() {
+    get memory(): Promise<string> {
         const { env } = this._server.common.storage;
         return env.get(env.keys.MEMORY + this.id);
     }
