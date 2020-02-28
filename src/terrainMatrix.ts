@@ -1,9 +1,11 @@
 import * as _ from 'lodash';
 
-const TYPES = ['plain', 'wall', 'swamp'];
+type TerrainTypes = 'plain'|'wall'|'swamp';
+const TYPES: TerrainTypes[] = ['plain', 'wall', 'swamp'];
 
 export class Matrix {
-    data: {}
+    private data: {[coords: string]: TerrainTypes};
+
     /**
         Constructor
     */
@@ -14,14 +16,14 @@ export class Matrix {
     /**
         Getters
     */
-    get(x: number, y: number) {
+    get(x: number, y: number): TerrainTypes {
         return _.get(this.data, `${x}:${y}`, 'plain');
     }
 
     /**
         Setters
     */
-    set(x: number, y: number, value: string) {
+    set(x: number, y: number, value: TerrainTypes) {
         if (TYPES.includes(value)) {
             _.set(this.data, `${x}:${y}`, value);
         } else {
