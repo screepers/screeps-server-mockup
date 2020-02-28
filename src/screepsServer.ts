@@ -141,6 +141,7 @@ export class ScreepsServer extends EventEmitter {
         await driver.updateAccessibleRoomsList();
         await driver.notifyRoomsDone(gameTime);
         await (driver.config as any).mainLoopCustomStage();
+        return this;
     }
 
     /*
