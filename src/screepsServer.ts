@@ -36,7 +36,7 @@ export class ScreepsServer extends EventEmitter {
     /*
         Constructor.
     */
-    constructor(opts: ScreepServerOptions) {
+    constructor(opts: ScreepServerOptions = {}) {
         super();
         this.common = common;
         this.driver = driver;
@@ -71,6 +71,13 @@ export class ScreepsServer extends EventEmitter {
         process.env.STORAGE_PORT = this.opts.port;
         return this;
     }
+
+    /*
+        Get the current server options.
+    */
+   getOpts() {
+       return this.opts;
+   }
 
     /*
         Start storage process and connect driver.

@@ -29,9 +29,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "coverage": "tsc && nyc mocha --ui tdd --exit",
+    "coverage": "tsc && nyc mocha dist/test --ui tdd --exit",
     "lint": "eslint src examples test",
-    "test": "tsc && mocha --ui tdd --exit"
+    "test": "tsc && mocha dist/test --ui tdd --exit"
   },
   "version": "1.5.0"
 }

@@ -30,7 +30,7 @@ export default class World {
     /**
         Getters
     */
-    get gameTime() {
+    get gameTime(): Promise<number> {
         return this.load().then(({ env }) => env.get('gameTime'));
     }
 
@@ -108,7 +108,7 @@ export default class World {
         Add a RoomObject to the specified room
         Returns db operation result
     */
-    async addRoomObject(room: string, type: string, x: number, y: number, attributes: {}) {
+    async addRoomObject(room: string, type: string, x: number, y: number, attributes: {} = {}) {
         const { db } = this.server.common.storage;
         // Check parameters
         if (x < 0 || y < 0 || x >= 50 || y >= 50) {
