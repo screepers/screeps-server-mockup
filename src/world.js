@@ -18,7 +18,7 @@ class World {
         Getters
     */
     get gameTime() {
-        return this.load().then(({ env }) => env.get('gameTime'));
+        return this.load().then(({ env }) => env.get(env.keys.GAMETIME));
     }
 
     /**
@@ -113,7 +113,7 @@ class World {
         const { db, env } = await this.load();
         // Clear database
         await Promise.all(_.map(db, (col) => col.clear()));
-        await env.set('gameTime', 1);
+        await env.set(env.keys.GAMETIME, 1);
         // Generate basic terrain data
         const terrain = new TerrainMatrix();
         const walls = [[10, 10], [10, 40], [40, 10], [40, 40]];
