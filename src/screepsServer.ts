@@ -1,3 +1,5 @@
+/* eslint no-console: "off" */
+
 import * as cp from 'child_process';
 import { EventEmitter } from 'events';
 import * as fs from 'fs-extra-promise';
@@ -19,7 +21,7 @@ export interface ScreepServerOptions {
     modfile?: string;
 }
 
-export class ScreepsServer extends EventEmitter {
+export default class ScreepsServer extends EventEmitter {
     driver: any;
     config: any;
     common: any;
@@ -28,9 +30,10 @@ export class ScreepsServer extends EventEmitter {
     processes: {[name: string]: cp.ChildProcess};
     world: World;
 
-    private opts: ScreepServerOptions;
     private usersQueue?: any;
     private roomsQueue?: any;
+
+    private opts: ScreepServerOptions;
 
     /*
         Constructor.
@@ -137,6 +140,7 @@ export class ScreepsServer extends EventEmitter {
         await this.roomsQueue.addMulti(_.map(rooms, (room) => room._id.toString()));
         await this.roomsQueue.whenAllDone();
         await driver.commitDbBulk();
+        // eslint-disable-next-line global-require
         await require('@screeps/engine/src/processor/global')();
         await driver.commitDbBulk();
         const gameTime = await driver.incrementGameTime();
@@ -171,6 +175,7 @@ export class ScreepsServer extends EventEmitter {
         Start processes and connect driver.
     */
     async start() {
+        // eslint-disable-next-line global-require
         this.emit('info', `Server version ${require('screeps').version}`);
         if (!this.connected) {
             await this.connect();

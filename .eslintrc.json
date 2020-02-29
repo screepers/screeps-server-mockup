@@ -23,6 +23,7 @@
         }],
         "lines-between-class-members": "off",
         "import/no-extraneous-dependencies": "warn",
+        "import/no-cycle": "off",
         "indent": ["warn", 4],
         "class-methods-use-this": "off",
         "func-names": "off",

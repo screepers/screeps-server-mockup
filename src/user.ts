@@ -2,9 +2,9 @@
 
 import { EventEmitter } from 'events';
 import * as _ from 'lodash';
-import { ScreepsServer } from './screepsServer';
+import ScreepsServer from './screepsServer';
 
-type Notification = { message: string; type: string; date: number; count: number; _id: string }
+type Notification = { message: string; type: string; date: number; count: number; _id: string };
 
 export default class User extends EventEmitter {
     private knownNotifications: string[];

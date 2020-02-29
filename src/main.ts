@@ -1,4 +1,4 @@
-import { ScreepsServer } from './screepsServer';
+import ScreepsServer from './screepsServer';
 import TerrainMatrix from './terrainMatrix';
 
 /* eslint @typescript-eslint/no-var-requires: "off" */

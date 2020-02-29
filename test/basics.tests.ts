@@ -2,7 +2,11 @@ import * as assert from 'assert';
 import * as fs from 'fs-extra-promise';
 import * as _ from 'lodash';
 import * as path from 'path';
+<<<<<<< HEAD
 import {ScreepsServer, ScreepServerOptions} from '../src/screepsServer';
+=======
+import ScreepsServer from '../src/screepsServer';
+>>>>>>> Resolved lint issues in src/
 const stdHooks = require('../../utils/stdhooks');
 
 // Dirty hack to prevent driver from flooding error messages
