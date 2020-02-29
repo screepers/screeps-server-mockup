@@ -3,19 +3,20 @@ import { EventEmitter } from 'events';
 import * as fs from 'fs-extra-promise';
 import * as _ from 'lodash';
 import * as path from 'path';
+import World from './world';
+
 const common = require('@screeps/common');
 const driver = require('@screeps/driver');
-import World from './world';
 
 const ASSETS_PATH = path.join(__dirname, '..', '..', 'assets');
 const MOD_FILE = 'mods.json';
 const DB_FILE = 'db.json';
 
 export interface ScreepServerOptions {
-    path: string,
-    logdir: string,
-    port : number,
-    modfile?: string,
+    path: string;
+    logdir: string;
+    port : number;
+    modfile?: string;
 }
 
 export class ScreepsServer extends EventEmitter {
@@ -76,9 +77,9 @@ export class ScreepsServer extends EventEmitter {
     /*
         Get the current server options.
     */
-   getOpts(): ScreepServerOptions {
-       return this.opts;
-   }
+    getOpts(): ScreepServerOptions {
+        return this.opts;
+    }
 
     /*
         Start storage process and connect driver.

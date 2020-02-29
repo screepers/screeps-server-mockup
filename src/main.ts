@@ -1,5 +1,6 @@
-import {ScreepsServer} from './screepsServer';
+import { ScreepsServer } from './screepsServer';
+import { Matrix as TerrainMatrix } from './terrainMatrix';
+
 const stdHooks = require('../utils/stdhooks');
-import {Matrix as TerrainMatrix} from './terrainMatrix';
 
 export { ScreepsServer, stdHooks, TerrainMatrix };

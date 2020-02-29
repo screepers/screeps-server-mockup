@@ -4,7 +4,7 @@ import { EventEmitter } from 'events';
 import * as _ from 'lodash';
 import { ScreepsServer } from './screepsServer';
 
-type Notification = { message: string, type: string, date: number, count: number, _id: string }
+type Notification = { message: string; type: string; date: number; count: number; _id: string }
 
 export default class User extends EventEmitter {
     private knownNotifications: string[];
@@ -15,7 +15,7 @@ export default class User extends EventEmitter {
     /**
         Constructor
     */
-    constructor(server: ScreepsServer, data: {_id: string, username: string}) {
+    constructor(server: ScreepsServer, data: {_id: string; username: string}) {
         super();
         this._id = data._id;
         this._username = data.username;
