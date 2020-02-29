@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import * as util from 'util';
 import * as zlib from 'zlib';
-import { Matrix as TerrainMatrix } from './terrainMatrix';
+import TerrainMatrix from './terrainMatrix';
 import User from './user';
 import { ScreepsServer } from './screepsServer';
 
