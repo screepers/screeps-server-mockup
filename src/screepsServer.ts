@@ -16,7 +16,6 @@ export interface ScreepServerOptions {
     logdir: string,
     port : number,
     modfile?: string,
-    mainLoopResetInterval?: number,
 }
 
 export class ScreepsServer extends EventEmitter {
@@ -25,7 +24,6 @@ export class ScreepsServer extends EventEmitter {
     common: any;
     constants: any;
     connected: boolean;
-    lastAccessibleRoomsUpdate: number;
     processes: {[name: string]: cp.ChildProcess};
     world: World;
 
@@ -43,7 +41,6 @@ export class ScreepsServer extends EventEmitter {
         this.config = common.configManager.config;
         this.constants = this.config.common.constants;
         this.connected = false;
-        this.lastAccessibleRoomsUpdate = -20;
         this.processes = {};
         this.world = new World(this);
         this.opts = this.computeDefaultOpts(opts);
