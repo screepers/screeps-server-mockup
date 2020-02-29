@@ -4,6 +4,8 @@ import { EventEmitter } from 'events';
 import * as _ from 'lodash';
 import { ScreepsServer } from 'screepsServer';
 
+type Notification = { message: string, type: string, date: number, count: number, _id: string }
+
 export default class User extends EventEmitter {
     private knownNotifications: string[];
     private _id: string;
@@ -13,7 +15,7 @@ export default class User extends EventEmitter {
     /**
         Constructor
     */
-    constructor(server: ScreepsServer, data: any) {
+    constructor(server: ScreepsServer, data: {_id: string, username: string}) {
         super();
         this._id = data._id;
         this._username = data.username;
@@ -30,26 +32,26 @@ export default class User extends EventEmitter {
     get username() {
         return this._username;
     }
-    get cpu() {
+    get cpu(): Promise<number> {
         return this.getData('cpu');
     }
-    get cpuAvailable() {
+    get cpuAvailable(): Promise<number> {
         return this.getData('cpuAvailable');
     }
-    get gcl() {
+    get gcl(): Promise<number> {
         return this.getData('gcl');
     }
     get rooms() {
         return this.getData('rooms');
     }
-    get lastUsedCpu() {
+    get lastUsedCpu(): Promise<number> {
         return this.getData('lastUsedCpu');
     }
-    get memory() {
+    get memory(): Promise<string> {
         const { env } = this._server.common.storage;
         return env.get(env.keys.MEMORY + this.id);
     }
-    get notifications() {
+    get notifications(): Promise<Notification[]> {
         const { db } = this._server.common.storage;
         return db['users.notifications']
             .find({ user: this.id })
@@ -61,17 +63,17 @@ export default class User extends EventEmitter {
     get newNotifications() {
         const known = _.clone(this.knownNotifications);
         return this.notifications.then(
-            (list: any[]) => list.filter((notif) => !known.includes(notif._id))
+            (list) => list.filter((notif) => !known.includes(notif._id))
         );
     }
-    get activeSegments() {
+    get activeSegments(): Promise<number[]> {
         return this.getData('activeSegments');
     }
 
     /**
         Return the content of user segments based on @list (the list of segments, ie: [0, 1, 2]).
     */
-    async getSegments(list: number[]) {
+    async getSegments(list: number[]): Promise<any[]> {
         const { env } = this._server.common.storage;
         return env.hmget(env.keys.MEMORY_SEGMENTS + this._id, list);
     }

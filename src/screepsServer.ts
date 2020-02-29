@@ -30,8 +30,8 @@ export class ScreepsServer extends EventEmitter {
     world: World;
 
     private opts: ScreepServerOptions;
-    private usersQueue?: any
-    private roomsQueue?: any
+    private usersQueue?: any;
+    private roomsQueue?: any;
 
     /*
         Constructor.
@@ -145,6 +145,7 @@ export class ScreepsServer extends EventEmitter {
         await driver.updateAccessibleRoomsList();
         await driver.notifyRoomsDone(gameTime);
         await (driver.config as any).mainLoopCustomStage();
+        return this;
     }
 
     /*
