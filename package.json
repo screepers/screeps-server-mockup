@@ -32,6 +32,8 @@
     "build": "tsc",
     "coverage": "tsc && nyc mocha dist/test --ui tdd --exit",
     "lint": "eslint src examples test",
+    "prepare": "yarn run build",
+    "prepublishOnly": "yarn run test",
     "test": "tsc && mocha dist/test --ui tdd --exit"
   },
   "version": "1.5.0"
