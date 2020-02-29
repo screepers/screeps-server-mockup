@@ -1,9 +1,10 @@
-import *  as assert from 'assert';
+import * as assert from 'assert';
 import * as fs from 'fs-extra-promise';
 import * as _ from 'lodash';
 import * as path from 'path';
-import { ScreepsServer } from '../src/screepsServer';
-const stdHooks = require('../../utils/stdhooks');
+import ScreepsServer from '../src/screepsServer';
+
+const stdHooks = require('../utils/stdhooks');
 
 // Dirty hack to prevent driver from flooding error messages
 stdHooks.hookWrite();
@@ -134,6 +135,7 @@ suite('World tests', function () {
     });
 
     test('Defining a stub world', async () => {
+        // eslint-disable-next-line global-require, import/no-unresolved
         const samples = require('../../assets/rooms.json');
         // Server initialization
         server = new ScreepsServer();
@@ -170,7 +172,7 @@ suite('World tests', function () {
         // User / bot initialization
         let logs: string[] = [];
         const user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules });
-        user.on('console', (log, results, userid, username) => {
+        user.on('console', (log) => {
             logs = log;
         });
         // Run one tick, then stop server
@@ -199,7 +201,7 @@ suite('World tests', function () {
         // User / bot initialization
         let logs: string[] = [];
         const user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules });
-        user.on('console', (log, results, userid, username) => {
+        user.on('console', (log) => {
             logs = log;
         });
         // Run one tick, then stop server

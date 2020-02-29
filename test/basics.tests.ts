@@ -6,8 +6,13 @@ import * as path from 'path';
 import {ScreepsServer, ScreepServerOptions} from '../src/screepsServer';
 =======
 import ScreepsServer from '../src/screepsServer';
+<<<<<<< HEAD
 >>>>>>> Resolved lint issues in src/
 const stdHooks = require('../../utils/stdhooks');
+=======
+
+const stdHooks = require('../utils/stdhooks');
+>>>>>>> Fixed eslint issues in tests directory
 
 // Dirty hack to prevent driver from flooding error messages
 stdHooks.hookWrite();
