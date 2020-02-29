@@ -1,9 +1,9 @@
 import * as _ from 'lodash';
 import * as util from 'util';
 import * as zlib from 'zlib';
-import {Matrix as TerrainMatrix} from './terrainMatrix';
+import { Matrix as TerrainMatrix } from './terrainMatrix';
 import User from './user';
-import {ScreepsServer} from 'screepsServer';
+import { ScreepsServer } from './screepsServer';
 
 interface AddBotOptions {
     username: string;

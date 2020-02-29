@@ -2,7 +2,7 @@
 
 import { EventEmitter } from 'events';
 import * as _ from 'lodash';
-import { ScreepsServer } from 'screepsServer';
+import { ScreepsServer } from './screepsServer';
 
 type Notification = { message: string, type: string, date: number, count: number, _id: string }
 
