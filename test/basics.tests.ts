@@ -2,7 +2,7 @@ import * as assert from 'assert';
 import * as fs from 'fs-extra-promise';
 import * as _ from 'lodash';
 import * as path from 'path';
-import {ScreepsServer} from '../src/screepsServer';
+import {ScreepsServer, ScreepServerOptions} from '../src/screepsServer';
 const stdHooks = require('../../utils/stdhooks');
 
 // Dirty hack to prevent driver from flooding error messages
@@ -26,7 +26,7 @@ suite('Basics tests', function () {
 
     test('Setting options in server constructor', async () => {
         // Setup options and server
-        const opts = {
+        const opts: ScreepServerOptions = {
             path:   'another_dir',
             logdir: 'another_logdir',
             port:   9999,

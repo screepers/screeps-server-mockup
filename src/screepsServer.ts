@@ -11,7 +11,7 @@ const ASSETS_PATH = path.join(__dirname, '..', '..', 'assets');
 const MOD_FILE = 'mods.json';
 const DB_FILE = 'db.json';
 
-interface ScreepServerOptions {
+export interface ScreepServerOptions {
     path: string,
     logdir: string,
     port : number,
