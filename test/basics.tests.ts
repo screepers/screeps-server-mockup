@@ -30,7 +30,6 @@ suite('Basics tests', function () {
             path:   'another_dir',
             logdir: 'another_logdir',
             port:   9999,
-            mainLoopResetInterval: 10000,
         };
         server = new ScreepsServer(opts);
         // Assert if options are correctly registered
@@ -38,7 +37,6 @@ suite('Basics tests', function () {
         assert.strictEqual(serverOpts.path, opts.path);
         assert.strictEqual(serverOpts.logdir, opts.logdir);
         assert.strictEqual(serverOpts.port, opts.port);
-        assert.strictEqual(serverOpts.mainLoopResetInterval, opts.mainLoopResetInterval);
         // Start, then stop server
         await server.start();
         await server.tick();
