@@ -11,11 +11,12 @@ const ASSETS_PATH = path.join(__dirname, '..', '..', 'assets');
 const MOD_FILE = 'mods.json';
 const DB_FILE = 'db.json';
 
-interface ScreepServerOptions {
-    path?: string,
-    logDir?: string,
-    port? : number,
-    modFile?: string,
+export interface ScreepServerOptions {
+    path: string,
+    logdir: string,
+    port : number,
+    modfile?: string,
+    mainLoopResetInterval?: number,
 }
 
 export class ScreepsServer extends EventEmitter {
@@ -28,15 +29,14 @@ export class ScreepsServer extends EventEmitter {
     processes: {[name: string]: cp.ChildProcess};
     world: World;
 
-    private usersQueue?: any
-    private roomsQueue?: any
-
-    private opts: any;
+    private opts: ScreepServerOptions;
+    private usersQueue?: any;
+    private roomsQueue?: any;
 
     /*
         Constructor.
     */
-    constructor(opts: ScreepServerOptions = {}) {
+    constructor(opts: Partial<ScreepServerOptions> = {}) {
         super();
         this.common = common;
         this.driver = driver;
@@ -46,36 +46,40 @@ export class ScreepsServer extends EventEmitter {
         this.lastAccessibleRoomsUpdate = -20;
         this.processes = {};
         this.world = new World(this);
-        this.setOpts(opts);
+        this.opts = this.computeDefaultOpts(opts);
     }
 
     /*
         Define server options and set defaults.
     */
-    setOpts(opts: ScreepServerOptions = {}) {
+    private computeDefaultOpts(opts: Partial<ScreepServerOptions>) {
         // Assign options
-        // this.opts = Object.assign({
-        //     path:   path.resolve('server'),
-        //     logdir: path.resolve('server', 'logs'),
-        //     port:   21025,
-        // }, opts);
-
-        this.opts = { ...{
+        const defaults: ScreepServerOptions = {
             path:   path.resolve('server'),
             logdir: path.resolve('server', 'logs'),
             port:   21025,
-        }, ...opts };
+        };
+
+        const options = _.defaults(opts, defaults);
         // Define environment parameters
-        process.env.MODFILE = this.opts.modfile;
+        process.env.MODFILE = options.modfile;
         process.env.DRIVER_MODULE = '@screeps/driver';
-        process.env.STORAGE_PORT = this.opts.port;
+        process.env.STORAGE_PORT = '' + options.port;
+        return options;
+    }
+
+    /*
+        Set the current server options. Missing values
+    */
+    setOpts(opts: ScreepServerOptions) {
+        this.opts = this.computeDefaultOpts(opts);
         return this;
     }
 
     /*
         Get the current server options.
     */
-   getOpts() {
+   getOpts(): ScreepServerOptions {
        return this.opts;
    }
 
@@ -97,7 +101,7 @@ export class ScreepsServer extends EventEmitter {
         const process = await this.startProcess('storage', library, {
             DB_PATH:      path.resolve(this.opts.path, DB_FILE),
             MODFILE:      path.resolve(this.opts.path, MOD_FILE),
-            STORAGE_PORT: this.opts.port,
+            STORAGE_PORT: '' + this.opts.port,
         });
         await new Promise((resolve, reject) => {
             const timeout = setTimeout(() => reject(new Error('Could not launch the storage process (timeout).')), 5000);
@@ -177,12 +181,12 @@ export class ScreepsServer extends EventEmitter {
         this.startProcess('engine_runner', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'runner.js'), {
             DRIVER_MODULE: '@screeps/driver',
             MODFILE:       path.resolve(this.opts.path, DB_FILE),
-            STORAGE_PORT:  this.opts.port,
+            STORAGE_PORT:  '' + this.opts.port,
         });
         this.startProcess('engine_processor', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'processor.js'), {
             DRIVER_MODULE: '@screeps/driver',
             MODFILE:       path.resolve(this.opts.path, DB_FILE),
-            STORAGE_PORT:  this.opts.port,
+            STORAGE_PORT:  '' + this.opts.port,
         });
         return this;
     }
