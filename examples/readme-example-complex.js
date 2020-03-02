@@ -1,6 +1,9 @@
 (async function () {
     const _ = require('lodash');
+    // From JavaScript:
     const { ScreepsServer, TerrainMatrix } = require('screeps-server-mockup');
+    // Or From TypeScript:
+    // import { ScreepsServer, TerrainMatrix } from 'screeps-server-mockup');
 
     const server = new ScreepsServer();
 

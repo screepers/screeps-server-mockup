@@ -1,5 +1,8 @@
 (async function () {
+    // From JavaScript:
     const { ScreepsServer } = require('screeps-server-mockup');
+    // Or From TypeScript:
+    // import { ScreepsServer } from 'screeps-server-mockup');
     const server = new ScreepsServer();
 
     try {
