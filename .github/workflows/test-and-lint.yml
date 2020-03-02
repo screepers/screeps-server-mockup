@@ -1,0 +1,42 @@
+name: Tests and Lint
+
+on: [push]
+
+jobs:
+  test_lint:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
+    steps:
+      # Setup Runner with node
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+      # Cache yarn dependencies for future runs
+      # https://github.com/actions/cache/blob/master/examples.md#node---yarn
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - name: actions/cache@v1 (.yarn)
+      uses: actions/cache@v1
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+      # Run all CI actions
+    - name: yarn install
+      run: yarn install --frozen-lockfile
+    - name: yarn run test
+      run: yarn run test
+    - name: yarn run lint
+      run: yarn run lint
