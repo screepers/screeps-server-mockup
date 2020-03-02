@@ -65,7 +65,7 @@ export default class ScreepsServer extends EventEmitter {
         // Define environment parameters
         process.env.MODFILE = options.modfile;
         process.env.DRIVER_MODULE = '@screeps/driver';
-        process.env.STORAGE_PORT = '' + options.port;
+        process.env.STORAGE_PORT = `${options.port}`;
         return options;
     }
 
@@ -102,7 +102,7 @@ export default class ScreepsServer extends EventEmitter {
         const process = await this.startProcess('storage', library, {
             DB_PATH:      path.resolve(this.opts.path, DB_FILE),
             MODFILE:      path.resolve(this.opts.path, MOD_FILE),
-            STORAGE_PORT: '' + this.opts.port,
+            STORAGE_PORT: `${this.opts.port}`,
         });
         await new Promise((resolve, reject) => {
             const timeout = setTimeout(() => reject(new Error('Could not launch the storage process (timeout).')), 5000);
@@ -184,12 +184,12 @@ export default class ScreepsServer extends EventEmitter {
         this.startProcess('engine_runner', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'runner.js'), {
             DRIVER_MODULE: '@screeps/driver',
             MODFILE:       path.resolve(this.opts.path, DB_FILE),
-            STORAGE_PORT:  '' + this.opts.port,
+            STORAGE_PORT:  `${this.opts.port}`,
         });
         this.startProcess('engine_processor', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'processor.js'), {
             DRIVER_MODULE: '@screeps/driver',
             MODFILE:       path.resolve(this.opts.path, DB_FILE),
-            STORAGE_PORT:  '' + this.opts.port,
+            STORAGE_PORT:  `${this.opts.port}`,
         });
         return this;
     }

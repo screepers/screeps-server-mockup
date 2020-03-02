@@ -2,7 +2,9 @@ import * as assert from 'assert';
 import * as fs from 'fs-extra-promise';
 import * as _ from 'lodash';
 import * as path from 'path';
-import { ScreepsServer, ScreepServerOptions } from '../src/screepsServer';
+import ScreepsServer, { ScreepServerOptions } from '../src/screepsServer';
+
+// eslint-disable-next-line import/no-unresolved
 const stdHooks = require('../../utils/stdhooks');
 
 // Dirty hack to prevent driver from flooding error messages
