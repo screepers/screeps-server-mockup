@@ -32,6 +32,6 @@
         "no-underscore-dangle": "off",
         "object-curly-newline": "off",
         "object-property-newline": "off",
-        "@typescript-eslint/indent": ["error", 4]
+        "@typescript-eslint/indent": ["warn", 4]
     }
 }

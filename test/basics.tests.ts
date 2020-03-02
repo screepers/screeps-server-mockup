@@ -2,17 +2,8 @@ import * as assert from 'assert';
 import * as fs from 'fs-extra-promise';
 import * as _ from 'lodash';
 import * as path from 'path';
-<<<<<<< HEAD
-import {ScreepsServer, ScreepServerOptions} from '../src/screepsServer';
-=======
-import ScreepsServer from '../src/screepsServer';
-<<<<<<< HEAD
->>>>>>> Resolved lint issues in src/
+import { ScreepsServer, ScreepServerOptions } from '../src/screepsServer';
 const stdHooks = require('../../utils/stdhooks');
-=======
-
-const stdHooks = require('../utils/stdhooks');
->>>>>>> Fixed eslint issues in tests directory
 
 // Dirty hack to prevent driver from flooding error messages
 stdHooks.hookWrite();
