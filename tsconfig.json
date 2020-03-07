@@ -8,6 +8,7 @@
     "moduleResolution": "Node",
     "outDir": "dist",
     "baseUrl": "src/",
+    "allowJs": true,
     "declaration": true,
     "strict": true,
     "experimentalDecorators": true,
