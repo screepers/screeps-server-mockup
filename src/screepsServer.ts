@@ -1,24 +1,27 @@
+/* eslint no-console: "off" */
+
 import * as cp from 'child_process';
 import { EventEmitter } from 'events';
 import * as fs from 'fs-extra-promise';
 import * as _ from 'lodash';
 import * as path from 'path';
+import World from './world';
+
 const common = require('@screeps/common');
 const driver = require('@screeps/driver');
-import World from './world';
 
 const ASSETS_PATH = path.join(__dirname, '..', '..', 'assets');
 const MOD_FILE = 'mods.json';
 const DB_FILE = 'db.json';
 
 export interface ScreepServerOptions {
-    path: string,
-    logdir: string,
-    port : number,
-    modfile?: string,
+    path: string;
+    logdir: string;
+    port : number;
+    modfile?: string;
 }
 
-export class ScreepsServer extends EventEmitter {
+export default class ScreepsServer extends EventEmitter {
     driver: any;
     config: any;
     common: any;
@@ -27,9 +30,10 @@ export class ScreepsServer extends EventEmitter {
     processes: {[name: string]: cp.ChildProcess};
     world: World;
 
-    private opts: ScreepServerOptions;
     private usersQueue?: any;
     private roomsQueue?: any;
+
+    private opts: ScreepServerOptions;
 
     /*
         Constructor.
@@ -61,7 +65,7 @@ export class ScreepsServer extends EventEmitter {
         // Define environment parameters
         process.env.MODFILE = options.modfile;
         process.env.DRIVER_MODULE = '@screeps/driver';
-        process.env.STORAGE_PORT = '' + options.port;
+        process.env.STORAGE_PORT = `${options.port}`;
         return options;
     }
 
@@ -76,9 +80,9 @@ export class ScreepsServer extends EventEmitter {
     /*
         Get the current server options.
     */
-   getOpts(): ScreepServerOptions {
-       return this.opts;
-   }
+    getOpts(): ScreepServerOptions {
+        return this.opts;
+    }
 
     /*
         Start storage process and connect driver.
@@ -98,7 +102,7 @@ export class ScreepsServer extends EventEmitter {
         const process = await this.startProcess('storage', library, {
             DB_PATH:      path.resolve(this.opts.path, DB_FILE),
             MODFILE:      path.resolve(this.opts.path, MOD_FILE),
-            STORAGE_PORT: '' + this.opts.port,
+            STORAGE_PORT: `${this.opts.port}`,
         });
         await new Promise((resolve, reject) => {
             const timeout = setTimeout(() => reject(new Error('Could not launch the storage process (timeout).')), 5000);
@@ -136,6 +140,7 @@ export class ScreepsServer extends EventEmitter {
         await this.roomsQueue.addMulti(_.map(rooms, (room) => room._id.toString()));
         await this.roomsQueue.whenAllDone();
         await driver.commitDbBulk();
+        // eslint-disable-next-line global-require
         await require('@screeps/engine/src/processor/global')();
         await driver.commitDbBulk();
         const gameTime = await driver.incrementGameTime();
@@ -170,6 +175,7 @@ export class ScreepsServer extends EventEmitter {
         Start processes and connect driver.
     */
     async start() {
+        // eslint-disable-next-line global-require
         this.emit('info', `Server version ${require('screeps').version}`);
         if (!this.connected) {
             await this.connect();
@@ -178,12 +184,12 @@ export class ScreepsServer extends EventEmitter {
         this.startProcess('engine_runner', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'runner.js'), {
             DRIVER_MODULE: '@screeps/driver',
             MODFILE:       path.resolve(this.opts.path, DB_FILE),
-            STORAGE_PORT:  '' + this.opts.port,
+            STORAGE_PORT:  `${this.opts.port}`,
         });
         this.startProcess('engine_processor', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'processor.js'), {
             DRIVER_MODULE: '@screeps/driver',
             MODFILE:       path.resolve(this.opts.path, DB_FILE),
-            STORAGE_PORT:  '' + this.opts.port,
+            STORAGE_PORT:  `${this.opts.port}`,
         });
         return this;
     }

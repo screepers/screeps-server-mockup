@@ -1,13 +1,18 @@
 {
     "root": true,
-    "extends": "eslint-config-airbnb-base",
+    "extends": [
+        "airbnb-typescript/base"
+    ],
     "env": {
         "es6": true,
         "node": true
     },
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 2018,
-        "ecmaFeatures": { "impliedStrict": true }
+        "sourceType": "module",
+        "ecmaFeatures": { "impliedStrict": true },
+        "project": "./tsconfig.json"
     },
     "rules": {
         "comma-dangle": ["error", {
@@ -17,7 +22,9 @@
             "exports": "always-multiline",
             "functions": "only-multiline"
         }],
+        "lines-between-class-members": "off",
         "import/no-extraneous-dependencies": "warn",
+        "import/no-cycle": "off",
         "indent": ["warn", 4],
         "class-methods-use-this": "off",
         "func-names": "off",
@@ -25,6 +32,7 @@
         "no-await-in-loop": "off",
         "no-underscore-dangle": "off",
         "object-curly-newline": "off",
-        "object-property-newline": "off"
+        "object-property-newline": "off",
+        "@typescript-eslint/indent": ["warn", 4]
     }
 }

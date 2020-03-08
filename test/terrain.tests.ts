@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import {Matrix} from '../src/terrainMatrix';
+import Matrix from '../src/terrainMatrix';
 
 suite('TerrainMatrix tests', () => {
     test('Setting and getting values', async () => {

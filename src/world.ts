@@ -1,9 +1,9 @@
 import * as _ from 'lodash';
 import * as util from 'util';
 import * as zlib from 'zlib';
-import { Matrix as TerrainMatrix } from './terrainMatrix';
+import TerrainMatrix from './terrainMatrix';
 import User from './user';
-import { ScreepsServer } from './screepsServer';
+import ScreepsServer from './screepsServer';
 
 interface AddBotOptions {
     username: string;
@@ -17,6 +17,9 @@ interface AddBotOptions {
     spawnName?: string;
     modules?: {};
 }
+
+// Terrain string for room completely filled with walls
+const walled = '1'.repeat(2500);
 
 export default class World {
     private server: ScreepsServer;
@@ -151,7 +154,8 @@ export default class World {
             addRoomObjects(roomName, roomObjects)
         ]);
         // Add rooms
-        const rooms = require('../../assets/rooms.json'); // eslint-disable-line global-require
+        // eslint-disable-next-line global-require, import/no-unresolved
+        const rooms = require('../../assets/rooms.json');
         await Promise.all(_.map(rooms, (data, roomName) => {
             const terrain = TerrainMatrix.unserialize(data.serial);
             return addRoom(roomName, terrain, data.objects);
@@ -212,5 +216,3 @@ export default class World {
         await env.set(env.keys.TERRAIN_DATA, (compressed as any).toString('base64'));
     }
 }
-
-const walled = '1'.repeat(2500);

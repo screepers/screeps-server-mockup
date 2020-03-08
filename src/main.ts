@@ -1,5 +1,7 @@
-import {ScreepsServer} from './screepsServer';
+import ScreepsServer from './screepsServer';
+import TerrainMatrix from './terrainMatrix';
+
+/* eslint @typescript-eslint/no-var-requires: "off" */
 const stdHooks = require('../utils/stdhooks');
-import {Matrix as TerrainMatrix} from './terrainMatrix';
 
 export { ScreepsServer, stdHooks, TerrainMatrix };

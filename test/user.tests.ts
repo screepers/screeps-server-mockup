@@ -2,8 +2,9 @@ import * as assert from 'assert';
 import * as fs from 'fs-extra-promise';
 import * as _ from 'lodash';
 import * as path from 'path';
-import {ScreepsServer} from '../src/screepsServer';
-const stdHooks = require('../../utils/stdhooks');
+import ScreepsServer from '../src/screepsServer';
+
+const stdHooks = require('../utils/stdhooks');
 
 // Dirty hack to prevent driver from flooding error messages
 stdHooks.hookWrite();
@@ -127,7 +128,7 @@ suite('User tests', function () {
             await server.tick();
         }
         // Assert if code was correctly executed
-        _.each(await user.notifications, ({ message, type, date, count, _id }) => {
+        _.each(await user.notifications, ({ message, type }) => {
             assert.strictEqual(type, 'error');
             assert(message.includes('something broke!'), 'message doesn\'t cointain "something broke!"');
             assert(message.includes('main:2'), 'message doesn\'t cointain error line');
