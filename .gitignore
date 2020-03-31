@@ -3,3 +3,6 @@ server
 logs
 *.log
 .nyc_output
+
+# OS Files
+.DS_Store

@@ -53,7 +53,7 @@ suite('Basics tests', function () {
         // Code declaration
         const modules = {
             main: `module.exports.loop = function() {
-               console.log('tick', Game.time)
+               console.log('tick', Game.time);
             }`,
         };
         // User / bot initialization

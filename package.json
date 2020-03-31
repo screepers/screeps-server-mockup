@@ -6,7 +6,7 @@
   "dependencies": {
     "fs-extra-promise": "^1.0.1",
     "lodash": "^4.17.15",
-    "screeps": "^4.0.5"
+    "screeps": "^4.1.5"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
@@ -17,9 +17,9 @@
     "nyc": "^15.0.0"
   },
   "peerDependencies": {
-    "@screeps/common": "^2.12.1",
-    "@screeps/driver": "^5.0.0",
-    "@screeps/engine": "^4.0.4"
+    "@screeps/common": "^2.13.2",
+    "@screeps/driver": "^5.1.0",
+    "@screeps/engine": "^4.1.2"
   },
   "scripts": {
     "coverage": "nyc mocha --ui tdd --exit",
