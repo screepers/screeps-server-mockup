@@ -142,7 +142,7 @@ class ScreepsServer extends EventEmitter {
         Start processes and connect driver.
     */
     async start() {
-        this.emit('info', `Server version ${require('screeps').version}`);
+        // this.emit('info', `Server version ${require('screeps').version}`);
         if (!this.connected) {
             await this.connect();
         }
