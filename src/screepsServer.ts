@@ -130,14 +130,16 @@ export default class ScreepsServer extends EventEmitter {
 
     /*
         Run one tick.
+
+        Emulating @screeps/engine/main.js loop.
     */
     async tick() {
         await driver.notifyTickStarted();
         const users = await driver.getAllUsers();
         await this.usersQueue.addMulti(_.map(users, (user) => user._id.toString()));
         await this.usersQueue.whenAllDone();
-        const rooms = await driver.getAllRooms();
-        await this.roomsQueue.addMulti(_.map(rooms, (room) => room._id.toString()));
+        const rooms = await driver.getAllRoomsNames() || [];
+        await this.roomsQueue.addMulti(rooms);
         await this.roomsQueue.whenAllDone();
         await driver.commitDbBulk();
         // eslint-disable-next-line global-require
@@ -145,6 +147,7 @@ export default class ScreepsServer extends EventEmitter {
         await driver.commitDbBulk();
         const gameTime = await driver.incrementGameTime();
         await driver.updateAccessibleRoomsList();
+        await driver.updateRoomStatusData();
         await driver.notifyRoomsDone(gameTime);
         await (driver.config as any).mainLoopCustomStage();
         return this;
@@ -191,6 +194,11 @@ export default class ScreepsServer extends EventEmitter {
             MODFILE:       path.resolve(this.opts.path, DB_FILE),
             STORAGE_PORT:  `${this.opts.port}`,
         });
+
+        // Need to pre-initiailize the Room Status cache
+        await driver.updateAccessibleRoomsList();
+        await driver.updateRoomStatusData();
+
         return this;
     }
 

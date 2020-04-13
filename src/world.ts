@@ -34,7 +34,7 @@ export default class World {
         Getters
     */
     get gameTime(): Promise<number> {
-        return this.load().then(({ env }) => env.get('gameTime'));
+        return this.load().then(({ env }) => env.get(env.keys.GAMETIME));
     }
 
     /**
@@ -129,7 +129,7 @@ export default class World {
         const { db, env } = await this.load();
         // Clear database
         await Promise.all(_.map(db, (col) => col.clear()));
-        await env.set('gameTime', 1);
+        await env.set(env.keys.GAMETIME, 1);
 
         // Insert invaders and sourcekeeper users
         await Promise.all([

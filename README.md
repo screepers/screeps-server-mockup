@@ -12,8 +12,11 @@ environment.
 
 ## Requirements
 
-* node 8+
+These are necessary to build the internal [Screeps](https://github.com/screeps/screeps) server.
 
+ * Node.js 10 LTS or higher
+ * Python (for node-gyp)
+ * Build tools (`apt install build-essential` for Ubuntu, [Visual Studio](https://www.visualstudio.com/vs/) for Windows, etc) 
 
 ## Usage
 
