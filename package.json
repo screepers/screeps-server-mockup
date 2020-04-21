@@ -1,12 +1,23 @@
 {
   "name": "screeps-server-mockup",
-  "main": "./src/main.js",
   "license": "MIT",
   "repository": "https://github.com/screepers/screeps-server-mockup",
+  "version": "1.5.1",
+  "main": "./src/main.js",
+  "scripts": {
+    "coverage": "nyc mocha --ui tdd --exit",
+    "lint": "eslint src examples test",
+    "test": "mocha --ui tdd --exit"
+  },
   "dependencies": {
     "fs-extra-promise": "^1.0.1",
     "lodash": "^4.17.15",
     "screeps": "^4.1.5"
+  },
+  "peerDependencies": {
+    "@screeps/common": "^2.13.2",
+    "@screeps/driver": "^5.1.0",
+    "@screeps/engine": "^4.1.2"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
@@ -15,16 +26,5 @@
     "mocha": "^7.0.0",
     "npm-cli-login": "^0.1.1",
     "nyc": "^15.0.0"
-  },
-  "peerDependencies": {
-    "@screeps/common": "^2.13.2",
-    "@screeps/driver": "^5.1.0",
-    "@screeps/engine": "^4.1.2"
-  },
-  "scripts": {
-    "coverage": "nyc mocha --ui tdd --exit",
-    "lint": "eslint src examples test",
-    "test": "mocha --ui tdd --exit"
-  },
-  "version": "1.5.0"
+  }
 }
