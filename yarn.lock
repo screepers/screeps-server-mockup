@@ -134,7 +134,27 @@
   resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.2.tgz#26520bf09abe4a5644cd5414e37125a8954241dd"
   integrity sha512-tsAQNx32a8CoFhjhijUIhI4kccIAgmGhy8LZMZgGfmXcpMbPRUqn5LWmgRttILi6yeGmBJd2xsPkFMs0PzgPCw==
 
-"@screeps/common@^2.13.2":
+"@screeps/backend@3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@screeps/backend/-/backend-3.1.1.tgz#8d995c9a28c492f649656296095721bf8d2f862f"
+  integrity sha512-dGUW3Wu87Cw60roHi8PyGDf+tT2NV/zQ0VI61pYo0DIn7d1G+hf2NpVz7T35kutf6PcvC2Y9do5aWRiOmjXWNg==
+  dependencies:
+    body-parser "^1.15.2"
+    btoa "^1.1.2"
+    cookie-parser "^1.4.3"
+    express "^4.14.0"
+    express-session "^1.14.1"
+    lodash "^3.10.1"
+    passport "^0.3.2"
+    passport-http "^0.3.0"
+    passport-token "^0.2.0"
+    pngjs "^3.0.0"
+    q "^1.4.1"
+    q-json-response "^0.1.3"
+    sockjs "^0.3.18"
+    steam-webapi "^0.6.5"
+
+"@screeps/common@2.13.2":
   version "2.13.2"
   resolved "https://registry.yarnpkg.com/@screeps/common/-/common-2.13.2.tgz#8968172ba3e44323351ba6e270d2c122fccfcdcb"
   integrity sha512-H2PYkU238W2io3Ol8DkWZalSsQqw3LqpV89GbWFwDE/yHAOFmZrxb8Mr8rFPFC4CWDz8qO5kOZ++KcfgArwS5Q==
@@ -143,10 +163,10 @@
     lodash "^3.10.1"
     q "^1.4.1"
 
-"@screeps/driver@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@screeps/driver/-/driver-5.0.0.tgz#e18e2a96ecfe914e11567656b8fa028ef772aa46"
-  integrity sha512-uB45t0yeIRakLOQEq5sNWRY2P+p5w5mIJNwMDl65cKdgP/alNcz/lLE9Lpxiy8NuhIPUqjujcCDHkwk+DKPtpw==
+"@screeps/driver@5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@screeps/driver/-/driver-5.1.0.tgz#2f36bf30998e4be83de7a342859add2dd595889e"
+  integrity sha512-e/0ZlT7xurWY6/+3UiKTbE0oFUEMNr+QwAscFZ+k+Koj6UrnhbQMXRJhbjUESmi3I9Ku49fUiGGVXs/j7nIKsA==
   dependencies:
     generic-pool "^3.4.1"
     isolated-vm "^2.0.1"
@@ -157,10 +177,10 @@
     webpack "^3.11.0"
     webpack-shell-plugin "^0.5.0"
 
-"@screeps/engine@^4.1.2":
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/@screeps/engine/-/engine-4.1.3.tgz#fb37f4da73c25816817eed53dda40b80f3193e9a"
-  integrity sha512-YTSUoo6vV8icNJBsFjaPUPI10ytHLY2aUnmKJ4LUIn2MZJW/uHkb0B0iOJxfMGMUq2sKfBVR2D0KV/6rGWxg/A==
+"@screeps/engine@4.1.2":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@screeps/engine/-/engine-4.1.2.tgz#eae2dfb27be61bb591ea76dfe5aec7fdfe20a930"
+  integrity sha512-mv1KIXgrkj4ptfVbMpN3gfabr90E4br5CEEVPqj81QOPxjY8zScL38W8TIF7Jy8rEnXGpTgjNsXkWUd+E3eukw==
   dependencies:
     "@screeps/pathfinding" "^0.4.16"
     bulk-require "^0.2.1"
@@ -175,7 +195,7 @@
   dependencies:
     heap "0.2.5"
 
-"@screeps/storage@^5.1.1":
+"@screeps/storage@5.1.1":
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/@screeps/storage/-/storage-5.1.1.tgz#50793e5b8ba330aad237de7d78fa53dc691cca34"
   integrity sha512-YBA2iglc6oe98kBVjwaAd0+WROEfAKbLY2Ge492lNQ1LfkTXKj00UovGduordx4DPA15s1J/xZ8vVAaF8apNwg==
@@ -4835,6 +4855,19 @@ sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
+
+screeps@^4.1.5:
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/screeps/-/screeps-4.1.5.tgz#1603a8fb8bc48240a3d4d7920e5bfd4f6e72fc6f"
+  integrity sha512-wXC/ipeTvRL/480cMXHZHkaTnjvssq+ym5ykxlYRapzxADoEhMs9TiqjDi1a4n9PDCXNl7Ba0q327vrx0ElenQ==
+  dependencies:
+    "@screeps/backend" "3.1.1"
+    "@screeps/common" "2.13.2"
+    "@screeps/driver" "5.1.0"
+    "@screeps/engine" "4.1.2"
+    "@screeps/launcher" "4.0.0"
+    "@screeps/pathfinding" "0.4.16"
+    "@screeps/storage" "5.1.1"
 
 secure-keys@^1.0.0:
   version "1.0.0"
