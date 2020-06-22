@@ -70,7 +70,7 @@ export default class ScreepsServer extends EventEmitter {
     }
 
     /*
-        Set the current server options. Missing values
+        Set the current server options. Missing values will use defaults
     */
     setOpts(opts: ScreepServerOptions) {
         this.opts = this.computeDefaultOpts(opts);

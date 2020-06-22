@@ -1,19 +1,22 @@
 {
   "name": "screeps-server-mockup",
-  "main": "./dist/src/main.js",
-  "types": "./dist/src/main.d.ts",
   "license": "MIT",
   "repository": "https://github.com/screepers/screeps-server-mockup",
   "version": "1.5.1",
-  "main": "./src/main.js",
+  "main": "dist/src/main.js",
+  "types": "dist/src/main.d.ts",
   "scripts": {
     "build": "tsc",
-    "coverage": "tsc && nyc mocha dist/test --ui tdd --exit",
+    "coverage": "yarn run build && nyc mocha dist/test --ui tdd --exit",
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" \"utils/**/*.ts\"",
     "prepare": "yarn run build",
     "prepublishOnly": "yarn test && yarn run lint",
-    "test": "tsc && mocha dist/test --ui tdd --exit"
+    "test": "yarn run build && mocha dist/test --ui tdd --exit"
   },
+  "files": [
+    "dist/src",
+    "dist/utils"
+  ],
   "dependencies": {
     "@types/fs-extra-promise": "^1.0.8",
     "@types/lodash": "^4.14.149",
