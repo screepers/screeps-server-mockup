@@ -14,6 +14,7 @@
     "test": "yarn run build && mocha dist/test --ui tdd --exit"
   },
   "files": [
+    "assets",
     "dist/src",
     "dist/utils"
   ],
