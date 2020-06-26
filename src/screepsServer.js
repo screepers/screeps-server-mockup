@@ -44,6 +44,7 @@ class ScreepsServer extends EventEmitter {
         this.opts = { ...{
             path:   path.resolve('server'),
             logdir: path.resolve('server', 'logs'),
+            modfile: path.resolve('server', MOD_FILE),
             port:   21025,
         }, ...opts };
         // Define environment parameters
