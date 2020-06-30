@@ -4,6 +4,16 @@
   "types": "./dist/src/main.d.ts",
   "license": "MIT",
   "repository": "https://github.com/screepers/screeps-server-mockup",
+  "version": "1.5.1",
+  "main": "./src/main.js",
+  "scripts": {
+    "build": "tsc",
+    "coverage": "tsc && nyc mocha dist/test --ui tdd --exit",
+    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" \"utils/**/*.ts\"",
+    "prepare": "yarn run build",
+    "prepublishOnly": "yarn test && yarn run lint",
+    "test": "tsc && mocha dist/test --ui tdd --exit"
+  },
   "dependencies": {
     "@types/fs-extra-promise": "^1.0.8",
     "@types/lodash": "^4.14.149",
@@ -11,6 +21,11 @@
     "fs-extra-promise": "^1.0.1",
     "lodash": "^4.17.15",
     "screeps": "^4.1.5"
+  },
+  "peerDependencies": {
+    "@screeps/common": "^2.13.2",
+    "@screeps/driver": "^5.1.0",
+    "@screeps/engine": "^4.1.2"
   },
   "devDependencies": {
     "@types/mocha": "^7.0.1",
@@ -25,19 +40,5 @@
     "npm-cli-login": "^0.1.1",
     "nyc": "^15.0.0",
     "typescript": "^3.8.2"
-  },
-  "peerDependencies": {
-    "@screeps/common": "^2.13.2",
-    "@screeps/driver": "^5.1.0",
-    "@screeps/engine": "^4.1.2"
-  },
-  "scripts": {
-    "build": "tsc",
-    "coverage": "tsc && nyc mocha dist/test --ui tdd --exit",
-    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" \"utils/**/*.ts\"",
-    "prepare": "yarn run build",
-    "prepublishOnly": "yarn test && yarn run lint",
-    "test": "tsc && mocha dist/test --ui tdd --exit"
-  },
-  "version": "1.5.0"
+  }
 }
