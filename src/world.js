@@ -161,13 +161,13 @@ class World {
         Taken from https://github.com/screeps/backend-local/blob/master/lib/cli/bots.js#L37.
      */
     genRandomBadge() {
-        var badge = {};
-        badge.type = Math.floor(Math.random()*24)+1;
-        badge.color1 = '#'+Math.floor(Math.random()*0xffffff).toString(16);
-        badge.color2 = '#'+Math.floor(Math.random()*0xffffff).toString(16);
-        badge.color3 = '#'+Math.floor(Math.random()*0xffffff).toString(16);
+        const badge = {};
+        badge.type = Math.floor(Math.random() * 24) + 1;
+        badge.color1 = `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
+        badge.color2 = `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
+        badge.color3 = `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
         badge.flip = Math.random() > 0.5;
-        badge.param = Math.floor(Math.random()*200) - 100;
+        badge.param = Math.floor(Math.random() * 200) - 100;
         return badge;
     }
 
@@ -182,7 +182,9 @@ class World {
             throw new Error(`cannot add user in ${room}: room does not have any controller`);
         }
         // Insert user and update data
-        const user = await db.users.insert({ username, cpu, cpuAvailable, gcl, active, badge: this.genRandomBadge()});
+        const user = await db.users.insert(
+            { username, cpu, cpuAvailable, gcl, active, badge: this.genRandomBadge() }
+        );
         await Promise.all([
             env.set(env.keys.MEMORY + user._id, '{}'),
             env.sadd(env.keys.ACTIVE_ROOMS, room),
