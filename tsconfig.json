@@ -2,16 +2,15 @@
   "compilerOptions": {
     "module": "CommonJS",
     "lib": [
-      "esnext"
+      "ES2018"
     ],
-    "target": "esnext",
+    "target": "ES2018",
     "moduleResolution": "Node",
     "outDir": "dist",
     "baseUrl": "src/",
     "allowJs": true,
     "declaration": true,
     "strict": true,
-    "experimentalDecorators": true,
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false
