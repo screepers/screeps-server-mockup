@@ -16,6 +16,12 @@ suite('Basics tests', function () {
 
     test('Starting server and running a few ticks without error', async function () {
         server = new ScreepsServer();
+        server.on('error', (msg) => {
+            console.log(`error: ${msg}`)
+        });
+        server.on('info', (msg) => {
+            console.log(`info: ${msg}`)
+        });
         await server.start();
         for (let i = 0; i < 5; i += 1) {
             await server.tick();
@@ -32,6 +38,12 @@ suite('Basics tests', function () {
             mainLoopResetInterval: 10000,
         };
         server = new ScreepsServer(opts);
+        server.on('error', (msg) => {
+            console.log(`error: ${msg}`)
+        });
+        server.on('info', (msg) => {
+            console.log(`info: ${msg}`)
+        });
         // Assert if options are correctly registered
         assert.equal(server.opts.path, opts.path);
         assert.equal(server.opts.logdir, opts.logdir);
@@ -49,6 +61,12 @@ suite('Basics tests', function () {
     test('Running user code', async function () {
         // Server initialization
         server = new ScreepsServer();
+        server.on('error', (msg) => {
+            console.log(`error: ${msg}`)
+        });
+        server.on('info', (msg) => {
+            console.log(`info: ${msg}`)
+        });
         await server.world.stubWorld();
         // Code declaration
         const modules = {
@@ -75,6 +93,12 @@ suite('Basics tests', function () {
     test('Getting current tick', async function () {
         // Server initialization
         server = new ScreepsServer();
+        server.on('error', (msg) => {
+            console.log(`error: ${msg}`)
+        });
+        server.on('info', (msg) => {
+            console.log(`info: ${msg}`)
+        });
         await server.world.reset();
         assert.equal(await server.world.gameTime, 1);
         // Run a few ticks and assert if tick is correct

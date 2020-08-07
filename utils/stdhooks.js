@@ -13,9 +13,9 @@ module.exports = {
             return stdout.apply(this, args);
         };
         process.stderr.write = function (...args) {
-            if (args[0].match(/storage connection lost/i)) {
-                return 0;
-            }
+            // if (args[0].match(/storage connection lost/i)) {
+            //     return 0;
+            // }
             return stdout.apply(this, args);
         };
     },
