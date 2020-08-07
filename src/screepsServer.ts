@@ -58,6 +58,7 @@ export default class ScreepsServer extends EventEmitter {
         const defaults: ScreepServerOptions = {
             path:   path.resolve('server'),
             logdir: path.resolve('server', 'logs'),
+            modfile: path.resolve('server', MOD_FILE),
             port:   21025,
         };
 
