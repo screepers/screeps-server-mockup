@@ -6,6 +6,15 @@ import ScreepsServer from './screepsServer';
 
 type Notification = { message: string; type: string; date: number; count: number; _id: string };
 
+export interface UserBadge {
+    type: number;
+    color1: string;
+    color2: string;
+    color3: string;
+    flip: boolean;
+    param: number;
+}
+
 export default class User extends EventEmitter {
     private knownNotifications: string[];
     private _id: string;

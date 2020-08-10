@@ -7,7 +7,7 @@
         await server.world.reset(); // reset world but add invaders and source keepers users
         await server.world.stubWorld(); // create a stub world of 9 rooms with sources + controller
 
-        // Add a bot in W0N0
+        // Add a bot in W0N1
         const modules = {
             main: `module.exports.loop = function() {
           console.log('Tick!',Game.time);

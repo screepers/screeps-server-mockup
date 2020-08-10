@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as util from 'util';
 import * as zlib from 'zlib';
 import TerrainMatrix from './terrainMatrix';
-import User from './user';
+import User, { UserBadge } from './user';
 import ScreepsServer from './screepsServer';
 
 interface AddBotOptions {
@@ -171,6 +171,22 @@ export default class World {
     }
 
     /**
+        Generate a random badge for a user.
+        Taken from https://github.com/screeps/backend-local/blob/master/lib/cli/bots.js#L37.
+     */
+    genRandomBadge(): UserBadge {
+        const badge: UserBadge = {
+            type : Math.floor(Math.random() * 24) + 1,
+            color1 : `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
+            color2 : `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
+            color3 : `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
+            flip : Math.random() > 0.5,
+            param : Math.floor(Math.random() * 200) - 100,
+        };
+        return badge;
+    }
+
+    /**
         Add a new user to the world
     */
     async addBot({ username, room, x, y, gcl = 1, cpu = 100, cpuAvailable = 10000, active = 10000, spawnName = 'Spawn1', modules = {} }: AddBotOptions) {
@@ -181,9 +197,12 @@ export default class World {
             throw new Error(`cannot add user in ${room}: room does not have any controller`);
         }
         // Insert user and update data
-        const user = await db.users.insert({ username, cpu, cpuAvailable, gcl, active });
+        const user = await db.users.insert(
+            { username, cpu, cpuAvailable, gcl, active, badge: this.genRandomBadge() }
+        );
         await Promise.all([
             env.set(env.keys.MEMORY + user._id, '{}'),
+            env.sadd(env.keys.ACTIVE_ROOMS, room),
             db.rooms.update({ _id: room }, { $set: { active: true } }),
             db['users.code'].insert({ user: user._id, branch: 'default', modules, activeWorld: true }),
             db['rooms.objects'].update({ room, type: 'controller' }, { $set: { user: user._id, level: 1, progress: 0, downgradeTime: null, safeMode: 20000 } }),

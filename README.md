@@ -16,7 +16,7 @@ These are necessary to build the internal [Screeps](https://github.com/screeps/s
 
  * Node.js 10 LTS or higher
  * Python (for node-gyp)
- * Build tools (`apt install build-essential` for Ubuntu, [Visual Studio](https://www.visualstudio.com/vs/) for Windows, etc) 
+ * Build tools (`apt install build-essential` for Ubuntu, [Visual Studio](https://www.visualstudio.com/vs/) for Windows, etc)
 
 ## Usage
 
@@ -34,9 +34,9 @@ const { ScreepsServer, TerrainMatrix } = require('screeps-server-mockup');
 // Initialize server
 const server = new ScreepsServer();
 await server.world.reset();     // reset world but add invaders and source keepers users
-await server.world.stubWorld(); // create a tub world composed of 9 rooms with sources and controller
+await server.world.stubWorld(); // create a stub world composed of 9 rooms with sources and controller
 
-// Add a bot in W0N0
+// Add a bot in W0N1
 const modules = {
     main: `module.exports.loop = function() {
         console.log('Tick!',Game.time);
