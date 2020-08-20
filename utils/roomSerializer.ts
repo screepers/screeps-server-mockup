@@ -1,4 +1,4 @@
-(function(roomName) {
+(function (roomName) {
     let str = '';
     const TYPES = ['plain', 'wall', 'swamp'];
     for (let y = 0; y < 50; y += 1) {
@@ -12,4 +12,4 @@
         }
     }
     return str;
-})('W15S1'); // <---------------------------------------------------| adjust room name to your needs
+}('W15S1')); // <---------------------------------------------------| adjust room name to your needs

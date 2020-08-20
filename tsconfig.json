@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "lib": [
+      "ES2018"
+    ],
+    "target": "ES2018",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "baseUrl": "src/",
+    "allowJs": true,
+    "declaration": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "src/",
+    "utils/",
+    "test/",
+  ]
+}

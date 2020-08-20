@@ -1,8 +1,11 @@
-const _ = require('lodash');
+import * as _ from 'lodash';
 
-const TYPES = ['plain', 'wall', 'swamp'];
+type TerrainTypes = 'plain'|'wall'|'swamp';
+const TYPES: TerrainTypes[] = ['plain', 'wall', 'swamp'];
 
-class Matrix {
+export default class Matrix {
+    private data: {[coords: string]: TerrainTypes};
+
     /**
         Constructor
     */
@@ -13,14 +16,14 @@ class Matrix {
     /**
         Getters
     */
-    get(x, y) {
+    get(x: number, y: number): TerrainTypes {
         return _.get(this.data, `${x}:${y}`, 'plain');
     }
 
     /**
         Setters
     */
-    set(x, y, value) {
+    set(x: number, y: number, value: TerrainTypes): this {
         if (TYPES.includes(value)) {
             _.set(this.data, `${x}:${y}`, value);
         } else {
@@ -32,7 +35,7 @@ class Matrix {
     /**
         Serialize the terrain for database storage
     */
-    serialize() {
+    serialize(): string {
         let str = '';
         for (let y = 0; y < 50; y += 1) {
             for (let x = 0; x < 50; x += 1) {
@@ -51,7 +54,7 @@ class Matrix {
     /**
         Return a string representation of the matrix
     */
-    static unserialize(str) {
+    static unserialize(str: string): Matrix {
         const matrix = new Matrix();
         _.each(str.split(''), (mask, idx) => {
             const x = idx % 50;
@@ -66,5 +69,3 @@ class Matrix {
         return matrix;
     }
 }
-
-module.exports = Matrix;

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Typescript Support (TODO: Add link to final pull request typescript -> master)
+
 ## [1.5.1] - 2020-04-21
 
 ### Added

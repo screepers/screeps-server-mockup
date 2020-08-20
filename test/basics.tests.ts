@@ -1,8 +1,11 @@
-const assert = require('assert');
-const fs = require('fs-extra-promise');
-const _ = require('lodash');
-const path = require('path');
-const { ScreepsServer, stdHooks } = require('../');
+import * as assert from 'assert';
+import * as fs from 'fs-extra-promise';
+import * as _ from 'lodash';
+import * as path from 'path';
+import ScreepsServer, { ScreepServerOptions } from '../src/screepsServer';
+
+// eslint-disable-next-line import/no-unresolved
+const stdHooks = require('../../utils/stdhooks');
 
 // Dirty hack to prevent driver from flooding error messages
 stdHooks.hookWrite();
@@ -12,9 +15,9 @@ suite('Basics tests', function () {
     this.slow(5 * 1000);
 
     // Server variable used for the tests
-    let server = null;
+    let server: ScreepsServer|null = null;
 
-    test('Starting server and running a few ticks without error', async function () {
+    test('Starting server and running a few ticks without error', async () => {
         server = new ScreepsServer();
         await server.start();
         for (let i = 0; i < 5; i += 1) {
@@ -23,30 +26,29 @@ suite('Basics tests', function () {
         server.stop();
     });
 
-    test('Setting options in server constructor', async function () {
+    test('Setting options in server constructor', async () => {
         // Setup options and server
-        const opts = {
+        const opts: ScreepServerOptions = {
             path:   'another_dir',
             logdir: 'another_logdir',
             port:   9999,
-            mainLoopResetInterval: 10000,
         };
         server = new ScreepsServer(opts);
         // Assert if options are correctly registered
-        assert.equal(server.opts.path, opts.path);
-        assert.equal(server.opts.logdir, opts.logdir);
-        assert.equal(server.opts.port, opts.port);
-        assert.equal(server.opts.mainLoopResetInterval, opts.mainLoopResetInterval);
+        const serverOpts = server.getOpts();
+        assert.strictEqual(serverOpts.path, opts.path);
+        assert.strictEqual(serverOpts.logdir, opts.logdir);
+        assert.strictEqual(serverOpts.port, opts.port);
         // Start, then stop server
         await server.start();
         await server.tick();
         server.stop();
         // Assert if files where actually created in the good directory
-        await fs.accessAsync(path.resolve(opts.path));
-        await fs.accessAsync(path.resolve(opts.logdir));
+        fs.accessSync(path.resolve(opts.path));
+        fs.accessSync(path.resolve(opts.logdir));
     });
 
-    test('Running user code', async function () {
+    test('Running user code', async () => {
         // Server initialization
         server = new ScreepsServer();
         await server.world.stubWorld();
@@ -57,7 +59,7 @@ suite('Basics tests', function () {
             }`,
         };
         // User / bot initialization
-        let logs = [];
+        let logs: string[] = [];
         const user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules });
         user.on('console', (log) => {
             logs = logs.concat(log);
@@ -69,27 +71,27 @@ suite('Basics tests', function () {
         }
         server.stop();
         // Assert if code was correctly executed
-        assert.deepEqual(logs, ['tick 1', 'tick 2', 'tick 3', 'tick 4', 'tick 5']);
+        assert.deepStrictEqual(logs, ['tick 1', 'tick 2', 'tick 3', 'tick 4', 'tick 5']);
     });
 
-    test('Getting current tick', async function () {
+    test('Getting current tick', async () => {
         // Server initialization
         server = new ScreepsServer();
         await server.world.reset();
-        assert.equal(await server.world.gameTime, 1);
+        assert.strictEqual(await server.world.gameTime, 1);
         // Run a few ticks and assert if tick is correct
         await server.start();
         for (let time = 2; time <= 5; time += 1) {
             await server.tick();
-            assert.equal(await server.world.gameTime, time);
+            assert.strictEqual(await server.world.gameTime, time);
         }
         // Stop server
         server.stop();
     });
 
-    teardown(async function () {
+    teardown(async () => {
         // Make sure that server is stopped in case something went wrong
-        if (_.isFunction(server.stop)) {
+        if (server && _.isFunction(server.stop)) {
             server.stop();
             server = null;
         }

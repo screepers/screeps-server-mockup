@@ -3,13 +3,25 @@
   "license": "MIT",
   "repository": "https://github.com/screepers/screeps-server-mockup",
   "version": "1.5.1",
-  "main": "./src/main.js",
+  "main": "dist/src/main.js",
+  "types": "dist/src/main.d.ts",
   "scripts": {
-    "coverage": "nyc mocha --ui tdd --exit",
-    "lint": "eslint src examples test",
-    "test": "mocha --ui tdd --exit"
+    "build": "tsc",
+    "coverage": "yarn run build && nyc mocha dist/test --ui tdd --exit",
+    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" \"utils/**/*.ts\"",
+    "prepare": "yarn run build",
+    "prepublishOnly": "yarn test && yarn run lint",
+    "test": "yarn run build && mocha dist/test --ui tdd --exit"
   },
+  "files": [
+    "assets",
+    "dist/src",
+    "dist/utils"
+  ],
   "dependencies": {
+    "@types/fs-extra-promise": "^1.0.8",
+    "@types/lodash": "^4.14.149",
+    "@types/screeps": "^3.0.0",
     "fs-extra-promise": "^1.0.1",
     "lodash": "^4.17.15",
     "screeps": "^4.1.5"
@@ -20,11 +32,17 @@
     "@screeps/engine": "^4.1.2"
   },
   "devDependencies": {
+    "@types/mocha": "^7.0.1",
+    "@types/node": "10.17.16",
+    "@typescript-eslint/eslint-plugin": "^2.21.0",
+    "@typescript-eslint/parser": "^2.21.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-airbnb-typescript": "^7.0.0",
     "eslint-plugin-import": "^2.20.0",
     "mocha": "^7.0.0",
     "npm-cli-login": "^0.1.1",
-    "nyc": "^15.0.0"
+    "nyc": "^15.0.0",
+    "typescript": "^3.8.2"
   }
 }
