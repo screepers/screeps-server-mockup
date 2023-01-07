@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import * as path from 'path';
 import ScreepsServer, { ScreepServerOptions } from '../src/screepsServer';
 
-// eslint-disable-next-line import/no-unresolved
+// eslint-disable-next-line import/no-unresolved, import/extensions
 const stdHooks = require('../../utils/stdhooks');
 
 // Dirty hack to prevent driver from flooding error messages
@@ -15,7 +15,7 @@ suite('Basics tests', function () {
     this.slow(5 * 1000);
 
     // Server variable used for the tests
-    let server: ScreepsServer|null = null;
+    let server: ScreepsServer | null = null;
 
     test('Starting server and running a few ticks without error', async () => {
         server = new ScreepsServer();
@@ -27,11 +27,11 @@ suite('Basics tests', function () {
     });
 
     test('Setting options in server constructor', async () => {
-        // Setup options and server
+    // Setup options and server
         const opts: ScreepServerOptions = {
-            path:   'another_dir',
+            path: 'another_dir',
             logdir: 'another_logdir',
-            port:   9999,
+            port: 9999,
         };
         server = new ScreepsServer(opts);
         // Assert if options are correctly registered
@@ -49,7 +49,7 @@ suite('Basics tests', function () {
     });
 
     test('Running user code', async () => {
-        // Server initialization
+    // Server initialization
         server = new ScreepsServer();
         await server.world.stubWorld();
         // Code declaration
@@ -60,7 +60,13 @@ suite('Basics tests', function () {
         };
         // User / bot initialization
         let logs: string[] = [];
-        const user = await server.world.addBot({ username: 'bot', room: 'W0N0', x: 25, y: 25, modules });
+        const user = await server.world.addBot({
+            username: 'bot',
+            room: 'W0N0',
+            x: 25,
+            y: 25,
+            modules,
+        });
         user.on('console', (log) => {
             logs = logs.concat(log);
         });
@@ -71,11 +77,17 @@ suite('Basics tests', function () {
         }
         server.stop();
         // Assert if code was correctly executed
-        assert.deepStrictEqual(logs, ['tick 1', 'tick 2', 'tick 3', 'tick 4', 'tick 5']);
+        assert.deepStrictEqual(logs, [
+            'tick 1',
+            'tick 2',
+            'tick 3',
+            'tick 4',
+            'tick 5',
+        ]);
     });
 
     test('Getting current tick', async () => {
-        // Server initialization
+    // Server initialization
         server = new ScreepsServer();
         await server.world.reset();
         assert.strictEqual(await server.world.gameTime, 1);
@@ -90,7 +102,7 @@ suite('Basics tests', function () {
     });
 
     teardown(async () => {
-        // Make sure that server is stopped in case something went wrong
+    // Make sure that server is stopped in case something went wrong
         if (server && _.isFunction(server.stop)) {
             server.stop();
             server = null;

@@ -83,6 +83,7 @@ export default class World {
         }
         // Parse and return terrain data as a TerrainMatrix
         const serial = _.get(_.first(data), 'terrain');
+        if (!serial) throw new Error('missing serial');
         return TerrainMatrix.unserialize(serial);
     }
 
@@ -99,7 +100,10 @@ export default class World {
         // Insert or update data in database
         const data = await db['rooms.terrain'].find({ room });
         if (data.length > 0) {
-            await db['rooms.terrain'].update({ room }, { $set: { terrain: terrain.serialize() } });
+            await db['rooms.terrain'].update(
+                { room },
+                { $set: { terrain: terrain.serialize() } }
+            );
         } else {
             await db['rooms.terrain'].insert({ room, terrain: terrain.serialize() });
         }
@@ -111,11 +115,19 @@ export default class World {
         Add a RoomObject to the specified room
         Returns db operation result
     */
-    async addRoomObject(room: string, type: string, x: number, y: number, attributes: {} = {}) {
+    async addRoomObject(
+        room: string,
+        type: string,
+        x: number,
+        y: number,
+        attributes: {} = {}
+    ) {
         const { db } = this.server.common.storage;
         // Check parameters
         if (x < 0 || y < 0 || x >= 50 || y >= 50) {
-            throw new Error('invalid x/y coordinates (they must be between 0 and 49)');
+            throw new Error(
+                'invalid x/y coordinates (they must be between 0 and 49)'
+            );
         }
         // Inject data into database
         const object = { ...{ room, x, y, type }, ...attributes };
@@ -133,8 +145,22 @@ export default class World {
 
         // Insert invaders and sourcekeeper users
         await Promise.all([
-            db.users.insert({ _id: '2', username: 'Invader', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 }),
-            db.users.insert({ _id: '3', username: 'Source Keeper', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 })
+            db.users.insert({
+                _id: '2',
+                username: 'Invader',
+                cpu: 100,
+                cpuAvailable: 10000,
+                gcl: 13966610.2,
+                active: 0,
+            }),
+            db.users.insert({
+                _id: '3',
+                username: 'Source Keeper',
+                cpu: 100,
+                cpuAvailable: 10000,
+                gcl: 13966610.2,
+                active: 0,
+            }),
         ]);
     }
 
@@ -151,15 +177,17 @@ export default class World {
         const addRoom = (roomName: string, terrain: any, roomObjects: Array<any>) => Promise.all([
             this.addRoom(roomName),
             this.setTerrain(roomName, terrain),
-            addRoomObjects(roomName, roomObjects)
+            addRoomObjects(roomName, roomObjects),
         ]);
         // Add rooms
         // eslint-disable-next-line global-require, import/no-unresolved
         const rooms = require('../../assets/rooms.json');
-        await Promise.all(_.map(rooms, (data, roomName) => {
-            const terrain = TerrainMatrix.unserialize(data.serial);
-            return addRoom(roomName, terrain, data.objects);
-        }));
+        await Promise.all(
+            _.map(rooms, (data, roomName) => {
+                const terrain = TerrainMatrix.unserialize(data.serial);
+                return addRoom(roomName, terrain, data.objects);
+            })
+        );
     }
 
     /**
@@ -176,12 +204,12 @@ export default class World {
      */
     genRandomBadge(): UserBadge {
         const badge: UserBadge = {
-            type : Math.floor(Math.random() * 24) + 1,
-            color1 : `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
-            color2 : `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
-            color3 : `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
-            flip : Math.random() > 0.5,
-            param : Math.floor(Math.random() * 200) - 100,
+            type: Math.floor(Math.random() * 24) + 1,
+            color1: `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
+            color2: `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
+            color3: `#${Math.floor(Math.random() * 0xffffff).toString(16)}`,
+            flip: Math.random() > 0.5,
+            param: Math.floor(Math.random() * 200) - 100,
         };
         return badge;
     }
@@ -189,24 +217,73 @@ export default class World {
     /**
         Add a new user to the world
     */
-    async addBot({ username, room, x, y, gcl = 1, cpu = 100, cpuAvailable = 10000, active = 10000, spawnName = 'Spawn1', modules = {} }: AddBotOptions) {
+    async addBot({
+        username,
+        room,
+        x,
+        y,
+        gcl = 1,
+        cpu = 100,
+        cpuAvailable = 10000,
+        active = 10000,
+        spawnName = 'Spawn1',
+        modules = {},
+    }: AddBotOptions) {
         const { C, db, env } = await this.load();
         // Ensure that there is a controller in requested room
-        const data = await db['rooms.objects'].findOne({ $and: [{ room }, { type: 'controller' }] });
+        const data = await db['rooms.objects'].findOne({
+            $and: [{ room }, { type: 'controller' }],
+        });
         if (data == null) {
-            throw new Error(`cannot add user in ${room}: room does not have any controller`);
+            throw new Error(
+                `cannot add user in ${room}: room does not have any controller`
+            );
         }
         // Insert user and update data
-        const user = await db.users.insert(
-            { username, cpu, cpuAvailable, gcl, active, badge: this.genRandomBadge() }
-        );
+        const user = await db.users.insert({
+            username,
+            cpu,
+            cpuAvailable,
+            gcl,
+            active,
+            badge: this.genRandomBadge(),
+        });
         await Promise.all([
             env.set(env.keys.MEMORY + user._id, '{}'),
             env.sadd(env.keys.ACTIVE_ROOMS, room),
             db.rooms.update({ _id: room }, { $set: { active: true } }),
-            db['users.code'].insert({ user: user._id, branch: 'default', modules, activeWorld: true }),
-            db['rooms.objects'].update({ room, type: 'controller' }, { $set: { user: user._id, level: 1, progress: 0, downgradeTime: null, safeMode: 20000 } }),
-            db['rooms.objects'].insert({ room, type: 'spawn', x, y, user: user._id, name: spawnName, store : { energy: C.SPAWN_ENERGY_START }, storeCapacityResource: { energy: C.SPAWN_ENERGY_CAPACITY }, hits: C.SPAWN_HITS, hitsMax: C.SPAWN_HITS, spawning: null, notifyWhenAttacked: true }),
+            db['users.code'].insert({
+                user: user._id,
+                branch: 'default',
+                modules,
+                activeWorld: true,
+            }),
+            db['rooms.objects'].update(
+                { room, type: 'controller' },
+                {
+                    $set: {
+                        user: user._id,
+                        level: 1,
+                        progress: 0,
+                        downgradeTime: null,
+                        safeMode: 20000,
+                    },
+                }
+            ),
+            db['rooms.objects'].insert({
+                room,
+                type: 'spawn',
+                x,
+                y,
+                user: user._id,
+                name: spawnName,
+                store: { energy: C.SPAWN_ENERGY_START },
+                storeCapacityResource: { energy: C.SPAWN_ENERGY_CAPACITY },
+                hits: C.SPAWN_HITS,
+                hitsMax: C.SPAWN_HITS,
+                spawning: null,
+                notifyWhenAttacked: true,
+            }),
         ]);
         // Subscribe to console notificaiton and return emitter
         return new User(this.server, user).init();
@@ -215,7 +292,7 @@ export default class World {
     private async updateEnvTerrain(db: any, env: any) {
         const [rooms, terrain] = await Promise.all([
             db.rooms.find(),
-            db['rooms.terrain'].find()
+            db['rooms.terrain'].find(),
         ]);
         rooms.forEach((room: any) => {
             if (room.status === 'out of borders') {
@@ -231,7 +308,12 @@ export default class World {
                 terrain.push({ room: roomV, terrain: walled });
             }
         });
-        const compressed = await util.promisify(zlib.deflate)(JSON.stringify(terrain));
-        await env.set(env.keys.TERRAIN_DATA, (compressed as any).toString('base64'));
+        const compressed = await util.promisify(zlib.deflate)(
+            JSON.stringify(terrain)
+        );
+        await env.set(
+            env.keys.TERRAIN_DATA,
+            (compressed as any).toString('base64')
+        );
     }
 }

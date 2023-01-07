@@ -17,7 +17,7 @@ const DB_FILE = 'db.json';
 export interface ScreepServerOptions {
     path: string;
     logdir: string;
-    port : number;
+    port: number;
     modfile?: string;
 }
 
@@ -27,7 +27,7 @@ export default class ScreepsServer extends EventEmitter {
     common: any;
     constants: any;
     connected: boolean;
-    processes: {[name: string]: cp.ChildProcess};
+    processes: { [name: string]: cp.ChildProcess };
     world: World;
 
     private usersQueue?: any;
@@ -56,10 +56,10 @@ export default class ScreepsServer extends EventEmitter {
     private computeDefaultOpts(opts: Partial<ScreepServerOptions>) {
         // Assign options
         const defaults: ScreepServerOptions = {
-            path:   path.resolve('server'),
+            path: path.resolve('server'),
             logdir: path.resolve('server', 'logs'),
             modfile: path.resolve('server', MOD_FILE),
-            port:   21025,
+            port: 21025,
         };
 
         const options = _.defaults(opts, defaults);
@@ -94,19 +94,31 @@ export default class ScreepsServer extends EventEmitter {
         await fs.mkdirAsync(this.opts.logdir).catch(() => {});
         // Copy assets into server directory
         await Promise.all([
-            fs.copyAsync(path.join(ASSETS_PATH, DB_FILE), path.join(this.opts.path, DB_FILE)),
-            fs.copyAsync(path.join(ASSETS_PATH, MOD_FILE), path.join(this.opts.path, MOD_FILE)),
+            fs.copyAsync(
+                path.join(ASSETS_PATH, DB_FILE),
+                path.join(this.opts.path, DB_FILE)
+            ),
+            fs.copyAsync(
+                path.join(ASSETS_PATH, MOD_FILE),
+                path.join(this.opts.path, MOD_FILE)
+            ),
         ]);
         // Start storage process
         this.emit('info', 'Starting storage process.');
-        const library = path.resolve(path.dirname(require.resolve('@screeps/storage')), '../bin/start.js');
+        const library = path.resolve(
+            path.dirname(require.resolve('@screeps/storage')),
+            '../bin/start.js'
+        );
         const process = await this.startProcess('storage', library, {
-            DB_PATH:      path.resolve(this.opts.path, DB_FILE),
-            MODFILE:      path.resolve(this.opts.path, MOD_FILE),
+            DB_PATH: path.resolve(this.opts.path, DB_FILE),
+            MODFILE: path.resolve(this.opts.path, MOD_FILE),
             STORAGE_PORT: `${this.opts.port}`,
         });
-        await new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => reject(new Error('Could not launch the storage process (timeout).')), 5000);
+        await new Promise<void>((resolve, reject) => {
+            const timeout = setTimeout(
+                () => reject(new Error('Could not launch the storage process (timeout).')),
+                5000
+            );
             process.on('message', (message) => {
                 if (message === 'storageLaunched') {
                     clearTimeout(timeout);
@@ -124,7 +136,7 @@ export default class ScreepsServer extends EventEmitter {
             this.roomsQueue = await driver.queue.create('rooms');
             this.connected = true;
         } catch (err) {
-            throw new Error(`Error connecting to driver: ${err.stack}`);
+            throw new Error(`Error connecting to driver: ${err}`);
         }
         return this;
     }
@@ -139,7 +151,7 @@ export default class ScreepsServer extends EventEmitter {
         const users = await driver.getAllUsers();
         await this.usersQueue.addMulti(_.map(users, (user) => user._id.toString()));
         await this.usersQueue.whenAllDone();
-        const rooms = await driver.getAllRoomsNames() || [];
+        const rooms = (await driver.getAllRoomsNames()) || [];
         await this.roomsQueue.addMulti(rooms);
         await this.roomsQueue.whenAllDone();
         await driver.commitDbBulk();
@@ -158,18 +170,33 @@ export default class ScreepsServer extends EventEmitter {
         Start a child process with environment.
     */
     async startProcess(name: string, execPath: string, env: NodeJS.ProcessEnv) {
-        const fd = await fs.openAsync(path.resolve(this.opts.logdir, `${name}.log`), 'a');
-        this.processes[name] = cp.fork(path.resolve(execPath), [], { stdio: [0, fd, fd, 'ipc'], env });
+        const fd = await fs.openAsync(
+            path.resolve(this.opts.logdir, `${name}.log`),
+            'a'
+        );
+        this.processes[name] = cp.fork(path.resolve(execPath), [], {
+            stdio: [0, fd, fd, 'ipc'],
+            env,
+        });
         this.emit('info', `[${name}] process ${this.processes[name].pid} started`);
         this.processes[name].on('exit', async (code, signal) => {
             await fs.closeAsync(fd);
             if (code && code !== 0) {
-                this.emit('error', `[${name}] process ${this.processes[name].pid} exited with code ${code}, restarting...`);
+                this.emit(
+                    'error',
+                    `[${name}] process ${this.processes[name].pid} exited with code ${code}, restarting...`
+                );
                 this.startProcess(name, execPath, env);
             } else if (code === 0) {
-                this.emit('info', `[${name}] process ${this.processes[name].pid} stopped`);
+                this.emit(
+                    'info',
+                    `[${name}] process ${this.processes[name].pid} stopped`
+                );
             } else {
-                this.emit('info', `[${name}] process ${this.processes[name].pid} exited by signal ${signal}`);
+                this.emit(
+                    'info',
+                    `[${name}] process ${this.processes[name].pid} exited by signal ${signal}`
+                );
             }
         });
         return this.processes[name];
@@ -185,16 +212,30 @@ export default class ScreepsServer extends EventEmitter {
             await this.connect();
         }
         this.emit('info', 'Starting engine processes.');
-        this.startProcess('engine_runner', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'runner.js'), {
-            DRIVER_MODULE: '@screeps/driver',
-            MODFILE:       path.resolve(this.opts.path, DB_FILE),
-            STORAGE_PORT:  `${this.opts.port}`,
-        });
-        this.startProcess('engine_processor', path.resolve(path.dirname(require.resolve('@screeps/engine')), 'processor.js'), {
-            DRIVER_MODULE: '@screeps/driver',
-            MODFILE:       path.resolve(this.opts.path, DB_FILE),
-            STORAGE_PORT:  `${this.opts.port}`,
-        });
+        this.startProcess(
+            'engine_runner',
+            path.resolve(
+                path.dirname(require.resolve('@screeps/engine')),
+                'runner.js'
+            ),
+            {
+                DRIVER_MODULE: '@screeps/driver',
+                MODFILE: path.resolve(this.opts.path, DB_FILE),
+                STORAGE_PORT: `${this.opts.port}`,
+            }
+        );
+        this.startProcess(
+            'engine_processor',
+            path.resolve(
+                path.dirname(require.resolve('@screeps/engine')),
+                'processor.js'
+            ),
+            {
+                DRIVER_MODULE: '@screeps/driver',
+                MODFILE: path.resolve(this.opts.path, DB_FILE),
+                STORAGE_PORT: `${this.opts.port}`,
+            }
+        );
 
         // Need to pre-initiailize the Room Status cache
         await driver.updateAccessibleRoomsList();
