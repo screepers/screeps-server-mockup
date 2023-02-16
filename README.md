@@ -20,7 +20,7 @@ These are necessary to build the internal [Screeps](https://github.com/screeps/s
 
 ## Usage
 
-1. Install via npm or yarn
+1. Install via [npm](https://www.npmjs.com/package/screeps-server-mockup) or yarn
 2. Write a test script (see `examples` and `tests` folders for details)
 3. Run the test script
 
