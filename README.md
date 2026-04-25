@@ -14,13 +14,12 @@ environment.
 
 These are necessary to build the internal [Screeps](https://github.com/screeps/screeps) server.
 
- * Node.js 10 LTS or higher
- * Python (for node-gyp)
- * Build tools (`apt install build-essential` for Ubuntu, [Visual Studio](https://www.visualstudio.com/vs/) for Windows, etc)
+ * Node.js 24.x
+ * Native build tools when `isolated-vm` or `@screeps/driver` need to be rebuilt (`apt install build-essential` for Ubuntu, [Visual Studio](https://www.visualstudio.com/vs/) for Windows, etc)
 
 ## Usage
 
-1. Install via npm or yarn
+1. Install with `npm install`
 2. Write a test script (see `examples` and `tests` folders for details)
 3. Run the test script
 
@@ -102,7 +101,6 @@ for (let i = 0; i < 10; i++) {
 
 // Stop server and disconnect storage
 server.stop();
-process.exit(); // required as there is no way to properly shutdown storage :(
 ```
 
 Each tick should output something like:
@@ -117,6 +115,6 @@ Each tick should output something like:
 ## Tests
 
 ```
-yarn lint // or npm run lint
-yarn test // or npm run test
+npm run lint
+npm test
 ```

@@ -1,19 +1,24 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "Node16",
     "lib": [
       "ES2018"
     ],
     "target": "ES2018",
-    "moduleResolution": "Node",
+    "moduleResolution": "node16",
     "outDir": "dist",
-    "baseUrl": "src/",
     "allowJs": true,
     "declaration": true,
     "strict": true,
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
-    "allowUnreachableCode": false
+    "allowUnreachableCode": false,
+    "skipLibCheck": true,
+    "types": [
+      "node",
+      "mocha",
+      "screeps"
+    ]
   },
   "exclude": [
     "node_modules"

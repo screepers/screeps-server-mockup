@@ -2,16 +2,21 @@
   "name": "screeps-server-mockup",
   "license": "MIT",
   "repository": "https://github.com/screepers/screeps-server-mockup",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "main": "dist/src/main.js",
   "types": "dist/src/main.d.ts",
+  "engines": {
+    "node": ">=24 <25"
+  },
   "scripts": {
     "build": "tsc",
-    "coverage": "yarn run build && nyc mocha dist/test --ui tdd --exit",
+    "coverage": "npm run build && nyc mocha dist/test --ui tdd --exit",
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" \"utils/**/*.ts\"",
-    "prepare": "yarn run build",
-    "prepublishOnly": "yarn test && yarn run lint",
-    "test": "yarn run build && mocha dist/test --ui tdd --exit"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "prepare:test-runtime": "npm rebuild isolated-vm @screeps/driver && npm --prefix node_modules/@screeps/driver run build",
+    "test": "node scripts/run-tests.js",
+    "test:inner": "npm run prepare:test-runtime && npm run build && mocha dist/test --ui tdd --exit"
   },
   "files": [
     "assets",
@@ -19,30 +24,34 @@
     "dist/utils"
   ],
   "dependencies": {
-    "@types/fs-extra-promise": "^1.0.8",
-    "@types/lodash": "^4.14.149",
-    "@types/screeps": "^3.0.0",
-    "fs-extra-promise": "^1.0.1",
-    "lodash": "^4.17.19",
-    "screeps": "^4.1.5"
+    "fs-extra": "^11.3.4",
+    "he": "^1.2.0",
+    "lodash": "^4.17.21",
+    "screeps": "^4.3.0"
   },
   "peerDependencies": {
-    "@screeps/common": "^2.13.2",
-    "@screeps/driver": "^5.1.0",
-    "@screeps/engine": "^4.1.2"
+    "@screeps/common": "^2.16.1",
+    "@screeps/driver": "^5.3.0",
+    "@screeps/engine": "^4.3.1"
+  },
+  "overrides": {
+    "isolated-vm": "git+https://github.com/laverdet/isolated-vm.git#cb93efcc1881c826ee98ad34e66955c08713acb2"
   },
   "devDependencies": {
-    "@types/mocha": "^7.0.1",
-    "@types/node": "10.17.16",
-    "@typescript-eslint/eslint-plugin": "^2.21.0",
-    "@typescript-eslint/parser": "^2.21.0",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-airbnb-typescript": "^7.0.0",
-    "eslint-plugin-import": "^2.20.0",
-    "mocha": "^7.0.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/lodash": "^4.17.24",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.6.0",
+    "@types/screeps": "^3.3.8",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-plugin-import": "^2.32.0",
+    "mocha": "^11.7.5",
     "npm-cli-login": "^0.1.1",
     "nyc": "^15.0.0",
-    "typescript": "^3.8.2"
+    "typescript": "^6.0.3"
   }
 }

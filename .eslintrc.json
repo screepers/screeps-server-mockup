@@ -3,6 +3,10 @@
     "extends": [
         "airbnb-typescript/base"
     ],
+    "plugins": [
+        "@typescript-eslint",
+        "import"
+    ],
     "env": {
         "es6": true,
         "node": true
@@ -25,6 +29,7 @@
         "lines-between-class-members": "off",
         "import/no-extraneous-dependencies": "warn",
         "import/no-cycle": "off",
+        "import/extensions": "off",
         "indent": ["warn", 4],
         "class-methods-use-this": "off",
         "func-names": "off",
@@ -33,6 +38,10 @@
         "no-underscore-dangle": "off",
         "object-curly-newline": "off",
         "object-property-newline": "off",
-        "@typescript-eslint/indent": ["warn", 4]
+        "@typescript-eslint/comma-dangle": "off",
+        "@typescript-eslint/indent": "off",
+        "@typescript-eslint/lines-between-class-members": "off",
+        "@typescript-eslint/object-curly-spacing": "off",
+        "@typescript-eslint/space-infix-ops": "off"
     }
 }

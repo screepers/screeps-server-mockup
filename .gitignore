@@ -7,3 +7,5 @@ logs
 
 # OS Files
 .DS_Store
+
+install-state.gz

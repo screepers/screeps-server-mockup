@@ -1,19 +1,18 @@
-image: node:latest
+image: node:24
 
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
    - node_modules
-   - .yarn-cache
+   - .npm
 
 before_script:
- - yarn config set cache-folder .yarn-cache
- - yarn install --pure-lockfile
+ - npm ci --cache .npm --prefer-offline
 
 lint:
   script:
-   - yarn run lint
+   - npm run lint
 
 test:
   script:
-   - yarn run test
+   - npm test

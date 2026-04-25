@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import * as fs from 'fs-extra-promise';
+import * as fs from 'fs-extra';
 import * as _ from 'lodash';
 import * as path from 'path';
 import ScreepsServer from '../src/screepsServer';
@@ -28,8 +28,8 @@ suite('World tests', function () {
         await server.start();
         // Assert that game time has a correct format
         const initial = await server.world.gameTime;
-        assert(_.isNumber(initial), 'Game time is not a number.');
-        assert(initial > 0, 'Game time is not positive.');
+        assert.ok(_.isNumber(initial), 'Game time is not a number.');
+        assert.ok(initial > 0, 'Game time is not positive.');
         // Assert that game time is correct after a tick
         await server.tick();
         assert.strictEqual(await server.world.gameTime, initial + 1);
@@ -119,15 +119,15 @@ suite('World tests', function () {
         // Set room terrain
         await server.world.setTerrain('W0N1'); // default terrain
         let matrix = await server.world.getTerrain('W0N1');
-        assert(matrix.get(0, 0), 'plain');
-        assert(matrix.serialize(), Array(50 * 50).fill('0').join(''));
+        assert.strictEqual(matrix.get(0, 0), 'plain');
+        assert.strictEqual(matrix.serialize(), Array(50 * 50).fill('0').join(''));
         // Reset room terrain
         matrix.set(0, 0, 'wall');
         matrix.set(25, 25, 'swamp');
         await server.world.setTerrain('W0N1', matrix);
         matrix = await server.world.getTerrain('W0N1');
-        assert(matrix.get(0, 0), 'wall');
-        assert(matrix.get(25, 25), 'swamp');
+        assert.strictEqual(matrix.get(0, 0), 'wall');
+        assert.strictEqual(matrix.get(25, 25), 'swamp');
         // Try to get terrain for an unexistant room
         await server.world.getTerrain('W1N1')
             .then(() => { throw new Error('Getting W1N1 terrain didn\'t throw any error'); })
@@ -222,6 +222,6 @@ suite('World tests', function () {
             server = null;
         }
         // Delete server files
-        await fs.removeAsync(path.resolve('server')).catch(console.error);
+        await fs.remove(path.resolve('server')).catch(console.error);
     });
 });

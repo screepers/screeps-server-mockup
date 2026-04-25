@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Typescript Support (TODO: Add link to final pull request typescript -> master)
 
+## [1.6.0] - 2026-04-25
+
+### Changed
+
+- Updated the runtime stack to Screeps 4.3.0 and the matching `@screeps/*` packages.
+- Updated the project toolchain for Node 24, modern TypeScript, Mocha, and ESLint.
+- Switched the package scripts and CI examples to npm.
+
+### Fixed
+
+- Replaced deprecated `fs-extra-promise` usage with `fs-extra`.
+- Prevented worker auto-restarts during shutdown so tests and local runs clean up reliably.
+- Disabled stale Screeps runtime snapshots at startup so native VM workers can run across rebuilt Node 24 environments.
+- Decoded HTML-escaped console output emitted by the updated Screeps runtime.
+
 ## [1.5.1] - 2020-04-21
 
 ### Added
@@ -29,4 +44,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Requirements documentation in readme ([73ecaa2](https://github.com/screepers/screeps-server-mockup/commit/73ecaa200e9406593915fd345ee75d18a1d70993))
 
 [unreleased]: https://github.com/screepers/screeps-server-mockup/compare/v1.5.1...master
+[1.6.0]: https://github.com/screepers/screeps-server-mockup/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/screepers/screeps-server-mockup/compare/v1.5.0...v1.5.1

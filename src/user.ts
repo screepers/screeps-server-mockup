@@ -4,6 +4,8 @@ import { EventEmitter } from 'events';
 import * as _ from 'lodash';
 import ScreepsServer from './screepsServer';
 
+const he = require('he');
+
 type Notification = { message: string; type: string; date: number; count: number; _id: string };
 
 export interface UserBadge {
@@ -112,7 +114,13 @@ export default class User extends EventEmitter {
         await pubsub.subscribe(`user:${this._id}/console`, (event: any) => {
             const { messages } = JSON.parse(event);
             const { log = [], results = [] } = messages || {};
-            this.emit('console', log, results, this._id, this.username);
+            this.emit(
+                'console',
+                log.map((line: string) => he.decode(line)),
+                results.map((line: string) => he.decode(line)),
+                this._id,
+                this.username,
+            );
         });
         return this;
     }

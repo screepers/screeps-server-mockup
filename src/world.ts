@@ -83,6 +83,9 @@ export default class World {
         }
         // Parse and return terrain data as a TerrainMatrix
         const serial = _.get(_.first(data), 'terrain');
+        if (!_.isString(serial)) {
+            throw new Error(`room ${room} terrain data is invalid`);
+        }
         return TerrainMatrix.unserialize(serial);
     }
 

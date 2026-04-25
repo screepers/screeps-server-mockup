@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import * as fs from 'fs-extra-promise';
+import * as fs from 'fs-extra';
 import * as _ from 'lodash';
 import * as path from 'path';
 import ScreepsServer from '../src/screepsServer';
@@ -31,11 +31,11 @@ suite('User tests', function () {
         await server.tick();
         (await user.newNotifications).forEach(({ message }) => console.log('[notification]', message));
         // Assert if attributes are correct
-        assert(_.isString(user.id) && user.id.length > 0, 'invalid user id');
+        assert.ok(_.isString(user.id) && user.id.length > 0, 'invalid user id');
         assert.strictEqual(user.username, 'bot');
         assert.strictEqual(await user.cpu, 100);
         assert.strictEqual(await user.cpuAvailable, 10000);
-        assert(_.isNumber(await user.lastUsedCpu), 'user.lastUsedCpu is not a number');
+        assert.ok(_.isNumber(await user.lastUsedCpu), 'user.lastUsedCpu is not a number');
         assert.strictEqual(await user.gcl, 1);
         assert.deepStrictEqual(await user.rooms, ['W0N0']);
         // Assert if memory is correctly set and retrieved
@@ -130,8 +130,8 @@ suite('User tests', function () {
         // Assert if code was correctly executed
         _.each(await user.notifications, ({ message, type }) => {
             assert.strictEqual(type, 'error');
-            assert(message.includes('something broke!'), 'message doesn\'t cointain "something broke!"');
-            assert(message.includes('main:2'), 'message doesn\'t cointain error line');
+            assert.ok(message.includes('something broke!'), 'message doesn\'t cointain "something broke!"');
+            assert.ok(message.includes('main:2'), 'message doesn\'t cointain error line');
         });
         // Stop server (don't stop it before we get all notifications)
         server.stop();
@@ -144,6 +144,6 @@ suite('User tests', function () {
             server = null;
         }
         // Delete server files
-        await fs.removeAsync(path.resolve('server')).catch(console.error);
+        await fs.remove(path.resolve('server')).catch(console.error);
     });
 });
