@@ -1,8 +1,9 @@
 import * as _ from 'lodash';
 import * as util from 'util';
 import * as zlib from 'zlib';
+import { RawId, RawRoomObject, Room, RoomName, UserBadge, UserId } from 'typed-screeps-server';
 import TerrainMatrix from './terrainMatrix';
-import User, { UserBadge } from './user';
+import User from './user';
 import ScreepsServer from './screepsServer';
 
 interface AddBotOptions {
@@ -17,6 +18,11 @@ interface AddBotOptions {
     spawnName?: string;
     modules?: {};
 }
+
+type RoomObjectMap = { [O in RawRoomObject as O['type']]: O };
+type RoomObjectOf<T extends RawRoomObject['type']> = RoomObjectMap[T];
+type AddRoomObjectAttrs<T extends RawRoomObject['type']> =
+    Partial<Omit<RoomObjectOf<T>, 'room' | 'x' | 'y' | 'type'>>;
 
 // Terrain string for room completely filled with walls
 const walled = '1'.repeat(2500);
@@ -51,13 +57,13 @@ export default class World {
         Set room status (and create it if needed)
         This function does NOT generate terrain data
     */
-    async setRoom(room: string, status = 'normal', active = true) {
+    async setRoom(room: string, status: Room['status'] = 'normal', active = true) {
         const { db } = this.server.common.storage;
         const data = await db.rooms.find({ _id: room });
         if (data.length > 0) {
             await db.rooms.update({ _id: room }, { $set: { status, active } });
         } else {
-            await db.rooms.insert({ _id: room, status, active });
+            await db.rooms.insert({ _id: room as RawId<Room>, status, active });
         }
         await this.server.driver.updateAccessibleRoomsList();
     }
@@ -101,7 +107,7 @@ export default class World {
         if (data.length > 0) {
             await db['rooms.terrain'].update({ room }, { $set: { terrain: terrain.serialize() } });
         } else {
-            await db['rooms.terrain'].insert({ room, terrain: terrain.serialize() });
+            await db['rooms.terrain'].insert({ room: room as RoomName, terrain: terrain.serialize() });
         }
         // Update environment cache
         await this.updateEnvTerrain(db, env);
@@ -111,15 +117,20 @@ export default class World {
         Add a RoomObject to the specified room
         Returns db operation result
     */
-    async addRoomObject(room: string, type: string, x: number, y: number, attributes: {} = {}) {
+    async addRoomObject<const T extends RawRoomObject['type']>(
+        room: string,
+        type: T,
+        x: number,
+        y: number,
+        attributes?: AddRoomObjectAttrs<T>,
+    ) {
         const { db } = this.server.common.storage;
         // Check parameters
         if (x < 0 || y < 0 || x >= 50 || y >= 50) {
             throw new Error('invalid x/y coordinates (they must be between 0 and 49)');
         }
         // Inject data into database
-        const object = { ...{ room, x, y, type }, ...attributes };
-        return db['rooms.objects'].insert(object);
+        return db['rooms.objects'].insert({ room: room as RoomName, x, y, type, ...attributes });
     }
 
     /**
@@ -133,8 +144,8 @@ export default class World {
 
         // Insert invaders and sourcekeeper users
         await Promise.all([
-            db.users.insert({ _id: '2', username: 'Invader', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 }),
-            db.users.insert({ _id: '3', username: 'Source Keeper', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 })
+            db.users.insert({ _id: '2' as UserId, username: 'Invader', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 }),
+            db.users.insert({ _id: '3' as UserId, username: 'Source Keeper', cpu: 100, cpuAvailable: 10000, gcl: 13966610.2, active: 0 })
         ]);
     }
 
@@ -206,10 +217,10 @@ export default class World {
             db.rooms.update({ _id: room }, { $set: { active: true } }),
             db['users.code'].insert({ user: user._id, branch: 'default', modules, activeWorld: true }),
             db['rooms.objects'].update({ room, type: 'controller' }, { $set: { user: user._id, level: 1, progress: 0, downgradeTime: null, safeMode: 20000 } }),
-            db['rooms.objects'].insert({ room, type: 'spawn', x, y, user: user._id, name: spawnName, store : { energy: C.SPAWN_ENERGY_START }, storeCapacityResource: { energy: C.SPAWN_ENERGY_CAPACITY }, hits: C.SPAWN_HITS, hitsMax: C.SPAWN_HITS, spawning: null, notifyWhenAttacked: true }),
+            db['rooms.objects'].insert({ room: room as RoomName, type: 'spawn', x, y, user: user._id, name: spawnName, store : { energy: C.SPAWN_ENERGY_START }, storeCapacityResource: { energy: C.SPAWN_ENERGY_CAPACITY }, hits: C.SPAWN_HITS, hitsMax: C.SPAWN_HITS, spawning: null, notifyWhenAttacked: true }),
         ]);
-        // Subscribe to console notificaiton and return emitter
-        return new User(this.server, user).init();
+        // Subscribe to console notification and return emitter
+        return new User(this.server, { _id: user._id, username }).init();
     }
 
     private async updateEnvTerrain(db: any, env: any) {

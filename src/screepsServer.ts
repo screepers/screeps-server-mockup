@@ -5,10 +5,11 @@ import { EventEmitter } from 'events';
 import * as fs from 'fs-extra-promise';
 import * as _ from 'lodash';
 import * as path from 'path';
+import type { DriverQueue, DriverQueueItem, ServerConfig, ServerConstants, ServerDriver } from 'typed-screeps-server';
 import World from './world';
 
-const common = require('@screeps/common');
-const driver = require('@screeps/driver');
+const common: typeof import('@screeps/common') = require('@screeps/common');
+const driver: ServerDriver = require('@screeps/driver');
 
 const ASSETS_PATH = path.join(__dirname, '..', '..', 'assets');
 const MOD_FILE = 'mods.json';
@@ -22,16 +23,16 @@ export interface ScreepServerOptions {
 }
 
 export default class ScreepsServer extends EventEmitter {
-    driver: any;
-    config: any;
-    common: any;
-    constants: any;
+    driver: ServerDriver;
+    config: ServerConfig;
+    common: typeof import('@screeps/common');
+    constants: ServerConstants;
     connected: boolean;
     processes: {[name: string]: cp.ChildProcess};
     world: World;
 
-    private usersQueue?: any;
-    private roomsQueue?: any;
+    private usersQueue?: DriverQueue<DriverQueueItem<'users'>>;
+    private roomsQueue?: DriverQueue<DriverQueueItem<'rooms'>>;
 
     private opts: ScreepServerOptions;
 
@@ -137,11 +138,11 @@ export default class ScreepsServer extends EventEmitter {
     async tick() {
         await driver.notifyTickStarted();
         const users = await driver.getAllUsers();
-        await this.usersQueue.addMulti(_.map(users, (user) => user._id.toString()));
-        await this.usersQueue.whenAllDone();
+        await this.usersQueue!.addMulti(_.map(users, (user) => user._id.toString()));
+        await this.usersQueue!.whenAllDone();
         const rooms = await driver.getAllRoomsNames() || [];
-        await this.roomsQueue.addMulti(rooms);
-        await this.roomsQueue.whenAllDone();
+        await this.roomsQueue!.addMulti(rooms);
+        await this.roomsQueue!.whenAllDone();
         await driver.commitDbBulk();
         // eslint-disable-next-line global-require
         await require('@screeps/engine/src/processor/global')();
@@ -150,7 +151,7 @@ export default class ScreepsServer extends EventEmitter {
         await driver.updateAccessibleRoomsList();
         await driver.updateRoomStatusData();
         await driver.notifyRoomsDone(gameTime);
-        await (driver.config as any).mainLoopCustomStage();
+        await driver.config.mainLoopCustomStage();
         return this;
     }
 

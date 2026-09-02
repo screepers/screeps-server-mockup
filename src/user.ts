@@ -2,22 +2,14 @@
 
 import { EventEmitter } from 'events';
 import * as _ from 'lodash';
+import { RawUserNotification, UserId } from 'typed-screeps-server';
 import ScreepsServer from './screepsServer';
 
-type Notification = { message: string; type: string; date: number; count: number; _id: string };
-
-export interface UserBadge {
-    type: number;
-    color1: string;
-    color2: string;
-    color3: string;
-    flip: boolean;
-    param: number;
-}
+type Notification = Pick<RawUserNotification, 'message' | 'type' | 'date' | 'count' | '_id'>;
 
 export default class User extends EventEmitter {
     private knownNotifications: string[];
-    private _id: string;
+    private _id: UserId;
     private _username: string;
     private _server: ScreepsServer;
 
@@ -26,7 +18,7 @@ export default class User extends EventEmitter {
     */
     constructor(server: ScreepsServer, data: {_id: string; username: string}) {
         super();
-        this._id = data._id;
+        this._id = data._id as UserId;
         this._username = data.username;
         this._server = server;
         this.knownNotifications = [];

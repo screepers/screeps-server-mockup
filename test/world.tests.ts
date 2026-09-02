@@ -61,19 +61,19 @@ suite('World tests', function () {
         await server.world.addRoomObject('W0N2', 'controller', 25, 25);
         await server.world.addBot({ username: 'bot2', room: 'W0N2', x: 30, y: 10, gcl: 9, cpu: 110, cpuAvailable: 10000 });
         // Assert if users were correctly created in database
-        const bot1 = await db.users.findOne({ username: 'bot1' });
+        const bot1 = (await db.users.findOne({ username: 'bot1' }))!;
         assert.strictEqual(bot1.gcl, 1);
-        const bot2 = await db.users.findOne({ username: 'bot2' });
+        const bot2 = (await db.users.findOne({ username: 'bot2' }))!;
         assert.strictEqual(bot2.gcl, 9);
         assert.strictEqual(bot2.cpu, 110);
         // Assert if controller and spawn were set
-        const controller1 = await db['rooms.objects'].findOne({ $and: [{ room: 'W0N1' }, { type: 'controller' }] });
-        const spawn1 = await db['rooms.objects'].findOne({ $and: [{ room: 'W0N1' }, { type: 'spawn' }] });
+        const controller1 = (await db['rooms.objects'].findOne({ $and: [{ room: 'W0N1' }, { type: 'controller' }] }))!;
+        const spawn1 = (await db['rooms.objects'].findOne({ $and: [{ room: 'W0N1' }, { type: 'spawn' }] }))!;
         assert.strictEqual(controller1.user, bot1._id);
         assert.strictEqual(spawn1.user, bot1._id);
         assert.strictEqual(spawn1.name, 'azerty');
         // Assert if code was correctly registered
-        const code = await db['users.code'].findOne({ $and: [{ user: bot1._id }, { branch: 'default' }] });
+        const code = (await db['users.code'].findOne({ $and: [{ user: bot1._id }, { branch: 'default' }] }))!;
         assert.deepStrictEqual(code.modules, modules);
     });
 
@@ -84,7 +84,7 @@ suite('World tests', function () {
         await server.world.reset();
         // Add W0N1 and assert if room is created
         await server.world.addRoom('W0N1');
-        const room = await db.rooms.findOne({ _id: 'W0N1' });
+        const room = (await db.rooms.findOne({ _id: 'W0N1' }))!;
         assert.strictEqual(room._id, 'W0N1');
         // Cha,ge room status and assert if modification is done without adding a new room
         await server.world.setRoom('W0N1', 'normal', false);
@@ -148,7 +148,7 @@ suite('World tests', function () {
         const terrain = await db['rooms.terrain'].find();
         assert.strictEqual(terrain.length, _.size(samples));
         _.each(samples, async (sourceData, roomName) => {
-            const roomData = await db['rooms.terrain'].findOne({ room: roomName });
+            const roomData = (await db['rooms.terrain'].findOne({ room: roomName }))!;
             assert.strictEqual(roomData.terrain, sourceData.serial);
         });
         // Check that roomObject were added

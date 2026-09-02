@@ -9,7 +9,7 @@
     "build": "tsc",
     "coverage": "npm run build && nyc mocha dist/test --ui tdd --exit",
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" \"utils/**/*.ts\"",
-    "prepare": "npm run build",
+    "prepare": "tsc --noCheck",
     "prepublishOnly": "npm test && npm run lint",
     "test": "npm run build && mocha dist/test --ui tdd --exit"
   },
@@ -24,7 +24,8 @@
     "@types/screeps": "^3.0.0",
     "fs-extra-promise": "^1.0.1",
     "lodash": "^4.17.19",
-    "screeps": "^4.3.0"
+    "screeps": "^4.3.0",
+    "typed-screeps-server": "^0.0.8"
   },
   "peerDependencies": {
     "@screeps/common": "^2.16.0",
@@ -32,6 +33,7 @@
     "@screeps/engine": "^4.3.0"
   },
   "devDependencies": {
+    "@types/express": "^4.11.1",
     "@types/mocha": "^7.0.1",
     "@types/node": "^24.12.2",
     "@typescript-eslint/eslint-plugin": "^2.21.0",
