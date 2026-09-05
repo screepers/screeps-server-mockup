@@ -197,9 +197,15 @@ export default class World {
             throw new Error(`cannot add user in ${room}: room does not have any controller`);
         }
         // Insert user and update data
-        const user = await db.users.insert(
-            { username, cpu, cpuAvailable, gcl, active, badge: this.genRandomBadge() }
-        );
+        const user = await db.users.insert({
+            username,
+            usernameLower: username.toLowerCase(),
+            cpu,
+            cpuAvailable,
+            gcl,
+            active,
+            badge: this.genRandomBadge(),
+        });
         await Promise.all([
             env.set(env.keys.MEMORY + user._id, '{}'),
             env.sadd(env.keys.ACTIVE_ROOMS, room),
